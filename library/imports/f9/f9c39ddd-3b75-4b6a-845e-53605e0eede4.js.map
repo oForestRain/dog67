@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "sources": [
+    "unknown"
+  ],
+  "names": [],
+  "mappings": "AAAA,IAAI,SAAS,GAAG;AACZ,SAAK,EAAE,WAAW;;AAElB,eAAW,EAAE,iBAAiB;AAC9B,gBAAY,EAAE,kBAAkB;AAChC,eAAW,EAAE,iBAAiB;;AAE9B,SAAK,EAAE,WAAW;AAClB,UAAM,EAAE,YAAY;AACpB,aAAS,EAAE,eAAe;AAC1B,YAAQ,EAAE,cAAc;CAC3B,CAAC;;AAEF,MAAM,CAAC,OAAO,GAAG,SAAS,CAAC",
+  "file": "unknown",
+  "sourcesContent": [
+    "var StateType = {\r\n    aIdle: \"ActorIdle\",\r\n    //move\r\n    aMovingLeft: \"ActorMovingLeft\",\r\n    aMovingRight: \"ActorMovingRight\",\r\n    aMoveToStop: \"ActorMoveToStop\",\r\n    //jump\r\n    aJump: \"ActorJump\",\r\n    aJump2: \"ActorJump2\",\r\n    aFallDown: \"ActorFallDown\",\r\n    aLanding: \"ActorLanding\",\r\n};\r\n\r\nmodule.exports = StateType;"
+  ]
+}

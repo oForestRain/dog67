@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "sources": [
+    "unknown"
+  ],
+  "names": [],
+  "mappings": "AAAA,EAAE,CAAC,KAAK,CAAC;AACL,eAAS,EAAE,CAAC,SAAS;;AAErB,cAAU,EAAE;;;;;;;;;;;AAWR,cAAM,EAAE;AACJ,uBAAS,IAAI;AACb,gBAAI,EAAE,EAAE,CAAC,IAAI;SAChB;KACJ;;;AAGD,UAAM,EAAE,kBAAY;AAChB,YAAI,CAAC,IAAI,CAAC,MAAM,EAAE;AACd,mBAAO;SACV;;AAED,YAAI,MAAM,GAAG,EAAE,CAAC,MAAM,CAAC,IAAI,CAAC,MAAM,EAAE,EAAE,CAAC,IAAI,CAAC,CAAC,EAAC,CAAC,EAAE,IAAI,EAAC,IAAI,CAAC,CAAC,CAAC;AAC7D,YAAI,CAAC,IAAI,CAAC,SAAS,CAAC,MAAM,CAAC,CAAC;KAC/B;;CAMJ,CAAC,CAAC",
+  "file": "unknown",
+  "sourcesContent": [
+    "cc.Class({\r\n    extends: cc.Component,\r\n\r\n    properties: {\r\n        // foo: {\r\n        //    default: null,      // The default value will be used only when the component attaching\r\n        //                           to a node for the first time\r\n        //    url: cc.Texture2D,  // optional, default is typeof default\r\n        //    serializable: true, // optional, default is true\r\n        //    visible: true,      // optional, default is true\r\n        //    displayName: 'Foo', // optional\r\n        //    readonly: false,    // optional, default is false\r\n        // },\r\n        // ...\r\n        target: {\r\n            default: null,\r\n            type: cc.Node\r\n        },\r\n    },\r\n\r\n    // use this for initialization\r\n    onLoad: function () {\r\n        if (!this.target) {\r\n            return;\r\n        }\r\n\r\n        var follow = cc.follow(this.target, cc.rect(0,0, 2000,2000));\r\n        this.node.runAction(follow);\r\n    },\r\n\r\n    // called every frame, uncomment this function to activate update callback\r\n    // update: function (dt) {\r\n\r\n    // },\r\n});\r\n"
+  ]
+}
