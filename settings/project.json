@@ -1,0 +1,26 @@
+{
+  "collision-matrix": [
+    [
+      false,
+      true,
+      true
+    ],
+    [
+      true,
+      false,
+      true
+    ],
+    [
+      true,
+      true,
+      false
+    ]
+  ],
+  "excluded-modules": [],
+  "group-list": [
+    "player",
+    "enemy",
+    "terrain"
+  ],
+  "start-scene": "current"
+}
