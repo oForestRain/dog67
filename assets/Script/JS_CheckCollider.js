@@ -18,6 +18,7 @@ cc.Class({
         rightOffsetRate : .3,
         topOffsetRate : .3,
         bottomOffsetRate : .3,
+        onDisableCollisionManagerEnabled : false,
     },
 
     // use this for initialization
@@ -33,8 +34,10 @@ cc.Class({
     },
     
     onDisable: function () {
-        cc.director.getCollisionManager().enabled = false;
-        cc.director.getCollisionManager().enabledDebugDraw = false;
+        if(this.onDisableCollisionManagerEnabled){
+            cc.director.getCollisionManager().enabled = false;
+            cc.director.getCollisionManager().enabledDebugDraw = false;
+        }
     },
     
     onCollisionEnter: function (other, self) {
