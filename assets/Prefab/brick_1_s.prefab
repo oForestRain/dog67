@@ -39,8 +39,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
+      "x": 919,
+      "y": 322
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -72,8 +72,8 @@
     "_texture": {
       "__uuid__": "a92b3652-0fef-41c4-a7bb-11d962810e6f"
     },
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
+    "_srcBlendFactor": 1,
+    "_dstBlendFactor": 1,
     "playOnLoad": true,
     "_autoRemoveOnFinish": false,
     "_totalParticles": 4,
@@ -93,7 +93,7 @@
       "r": 0,
       "g": 0,
       "b": 0,
-      "a": 255
+      "a": 0
     },
     "_endColor": {
       "__type__": "cc.Color",
@@ -107,7 +107,7 @@
       "r": 0,
       "g": 0,
       "b": 0,
-      "a": 255
+      "a": 0
     },
     "_angle": 90,
     "_angleVar": 45,
@@ -116,9 +116,9 @@
     "_endSize": 18,
     "_endSizeVar": 0,
     "_startSpin": 0,
-    "_startSpinVar": 0,
+    "_startSpinVar": 180,
     "_endSpin": 0,
-    "_endSpinVar": 0,
+    "_endSpinVar": 360,
     "_sourcePos": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -159,6 +159,7 @@
     "asset": {
       "__uuid__": "2aecaf47-59f6-46e1-92c8-042ea01d495a"
     },
-    "fileId": "e73d7KotJZC6Y5gnYTKXcs3"
+    "fileId": "e73d7KotJZC6Y5gnYTKXcs3",
+    "sync": false
   }
 ]
