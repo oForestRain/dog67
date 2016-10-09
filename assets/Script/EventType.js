@@ -34,6 +34,8 @@ var EventType = {
     cPartTopRight : "ConlliderPartTopRight",
     cPartBottomLeft : "ConlliderPartBottomLeft",
     cPartBottomRight : "ConlliderPartBottomRight",
+    //ObjectInteractEvent
+    brickSmash : "BrickSmash",
     
 };
 

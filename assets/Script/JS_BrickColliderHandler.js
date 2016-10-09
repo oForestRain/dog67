@@ -1,4 +1,6 @@
 var EventType = require("EventType");
+var PrefabType = require("PrefabType");
+var JS_PrefabPool = require("JS_PrefabPool");
 
 cc.Class({
     extends: cc.Component,
@@ -14,12 +16,16 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
+        
+        prefabPoolNode : cc.Node,
     },
 
     // use this for initialization
     onLoad: function () {
 
         this.initListener();
+        
+        this.prefabPool = this.prefabPoolNode.getComponent("JS_PrefabPool");
 
     },
     
@@ -85,7 +91,17 @@ cc.Class({
     },
     
     pushed: function (dt) {
+        // console.log(this.prefabPool);
+        // console.log(PrefabType.brickSmash);
+
+        var particle = this.prefabPool.getPrefab(PrefabType.brickSmash);
+        particle.position =  this.node.position;
+        particle.parent = this.node.parent;
+
         this.node.destroy();
+        
+        // var event = new cc.Event.EventCustom(EventType.brickSmash, true);
+        // this.node.dispatchEvent(event);
     },
     
 
