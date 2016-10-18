@@ -1,4 +1,4 @@
-var EventType = {
+var EventType =  cc.Enum({
     //control
     aLeftEvent: "ActorLeft",
     aRightEvent: "ActorRight",
@@ -35,8 +35,9 @@ var EventType = {
     cPartBottomLeft : "ConlliderPartBottomLeft",
     cPartBottomRight : "ConlliderPartBottomRight",
     //ObjectInteractEvent
-    brickSmash : "BrickSmash",
+    insFacChange : "instanceFactoryChange",
+    insFacAdd : "instanceFactoryAdd",
     
-};
+});
 
 module.exports = EventType;

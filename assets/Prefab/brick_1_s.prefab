@@ -39,8 +39,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 919,
-      "y": 322
+      "x": -478,
+      "y": 226
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -72,8 +72,8 @@
     "_texture": {
       "__uuid__": "a92b3652-0fef-41c4-a7bb-11d962810e6f"
     },
-    "_srcBlendFactor": 1,
-    "_dstBlendFactor": 1,
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
     "playOnLoad": true,
     "_autoRemoveOnFinish": false,
     "_totalParticles": 4,
@@ -157,9 +157,8 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "2aecaf47-59f6-46e1-92c8-042ea01d495a"
+      "__uuid__": "8c36d187-1868-4720-bdc7-96c3732350ce"
     },
-    "fileId": "e73d7KotJZC6Y5gnYTKXcs3",
-    "sync": false
+    "fileId": "0b448tbCKxLkKsz6dyNfknq"
   }
 ]

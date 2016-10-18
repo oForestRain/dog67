@@ -137,7 +137,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "prefabPoolNode": null
+    "type": 0
   },
   {
     "__type__": "cc.PrefabInfo",

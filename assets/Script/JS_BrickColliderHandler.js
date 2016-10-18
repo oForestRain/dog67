@@ -1,6 +1,6 @@
+var GlobalReference = require("GlobalReference");
 var EventType = require("EventType");
 var PrefabType = require("PrefabType");
-var JS_PrefabPool = require("JS_PrefabPool");
 
 cc.Class({
     extends: cc.Component,
@@ -16,16 +16,17 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        
-        prefabPoolNode : cc.Node,
+        type: {
+            default:PrefabType.brickSmash,
+            type:PrefabType,
+        },
+
     },
 
     // use this for initialization
     onLoad: function () {
 
         this.initListener();
-        
-        this.prefabPool = this.prefabPoolNode.getComponent("JS_PrefabPool");
 
     },
     
@@ -54,7 +55,7 @@ cc.Class({
                 break;
         }
         
-        console.log("enterHandler-->");
+        // console.log("enterHandler-->");
     },
     
     enterEnemy : function( userData ){
@@ -74,11 +75,6 @@ cc.Class({
     enterPlayerCheckBorder : function(userData){
         var part = userData.part;
 
-        var otherPreAabb = userData.other.world.preAabb;
-        var selfPreAabb = userData.actor.world.preAabb;
-        var otherAabb = userData.other.world.aabb;
-        var selfAabb = userData.actor.world.aabb;
-
         // console.log("enterPlayerCheckBorder-->",part);
         
         switch(part){
@@ -94,14 +90,16 @@ cc.Class({
         // console.log(this.prefabPool);
         // console.log(PrefabType.brickSmash);
 
-        var particle = this.prefabPool.getPrefab(PrefabType.brickSmash);
-        particle.position =  this.node.position;
-        particle.parent = this.node.parent;
-
-        this.node.destroy();
+        var event = new cc.Event.EventCustom(EventType.insFacChange , true);
         
-        // var event = new cc.Event.EventCustom(EventType.brickSmash, true);
-        // this.node.dispatchEvent(event);
+        var userData = {};
+        userData.target = this.node;
+        userData.prefabType = this.type;
+        event.setUserData(userData);
+        
+        console.log("pushed--->",userData.target,userData.prefabType);
+        
+        GlobalReference.InstanceFactory.dispatchEvent(event);
     },
     
 

@@ -1,4 +1,4 @@
-var StateType = {
+var StateType = cc.Enum({
     aIdle: "ActorIdle",
     //move
     aMovingLeft: "ActorMovingLeft",
@@ -9,6 +9,6 @@ var StateType = {
     aJump2: "ActorJump2",
     aFallDown: "ActorFallDown",
     aLanding: "ActorLanding",
-};
+});
 
 module.exports = StateType;
