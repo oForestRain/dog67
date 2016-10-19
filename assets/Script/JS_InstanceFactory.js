@@ -67,31 +67,49 @@ cc.Class({
     changeToPrefab: function (event) {
         var userData = event.getUserData();
         var target = userData.target;
+        var targetType = userData.type;
         var prefabType = userData.prefabType;
+        var pool = userData.pool;
         
-        console.log("changeToPrefab",target,prefabType);
+        console.log("changeToPrefab",targetType,target,prefabType);
         
-        var particle = this.getPrefab(prefabType);
-        particle.position =  target.position;
-        particle.parent = target.parent;
+        var prefabInstance = this.getPrefab(prefabType);
+        prefabInstance.position =  target.position;
+        prefabInstance.parent = target.parent;
 
-        target.destroy();
+        if(pool){
+            this.putBackPrefab(targetType,target);
+        }
+        else{
+            target.destroy();
+        }
     },
     
     addPrefab: function (event) {
-        console.log("addPrefab");
+        var userData = event.getUserData();
+        var target = userData.target;
+        var prefabType = userData.prefabType;
+        var position = userData.position;
+
+        console.log("addPrefab",target,prefabType);
+        
+        var prefabInstance = this.getPrefab(prefabType);
+        prefabInstance.position =  position;
+        prefabInstance.parent = target.parent;
+        
     },
     
     getPrefab: function (type) {
         if(type >= this.prefabType.length || type >= this.poolArray.length){
-            console.log("getPrefab-->undefined");
+            // console.log("getPrefab-->undefined");
             return;
         }
         if(!this.prefab[type] || !this.poolArray[type]){
-            console.log("getPrefab-->undefined",type);
+            // console.log("getPrefab-->undefined",type);
             return;  
         }
 
+        console.log("getPrefab-->",this.poolArray[type].size(),type);
         var instance = null;
         
         if (this.poolArray[type].size() > 0){
@@ -100,17 +118,22 @@ cc.Class({
         else{
             instance = cc.instantiate(this.prefab[type]);
         }
+        console.log("getPrefab-->",this.poolArray[type].size(),type);
 
         return instance;
     },
     
     putBackPrefab: function (type,instance) {
         if(type >= this.prefabType.length || type >= this.poolArray.length){
+            // console.log("putBackPrefab-->undefined");
             return;
         }
-        if(this.prefab[type]===undefined){
+        if(this.poolArray[type]===undefined){
+            // console.log("putBackPrefab-->undefined",type);
             return;  
         }
-        this.prefab[type].put(instance);
+        this.poolArray[type].put(instance);
+        
+        console.log("putBackPrefab-->",this.poolArray[type].size(),type);
     }
 });

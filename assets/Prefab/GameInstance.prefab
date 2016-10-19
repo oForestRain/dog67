@@ -204,11 +204,19 @@
     },
     "_enabled": true,
     "prefabType": [
-      0
+      0,
+      1,
+      2
     ],
     "prefab": [
       {
         "__uuid__": "8c36d187-1868-4720-bdc7-96c3732350ce"
+      },
+      {
+        "__uuid__": "3dd5efee-7663-458b-bb55-d8d0bc1e339e"
+      },
+      {
+        "__uuid__": "c820d08d-c0d5-41e2-8d32-38442198648a"
       }
     ],
     "preInstanceNum": []
