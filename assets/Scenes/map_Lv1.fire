@@ -1167,7 +1167,7 @@
     "_enabled": true,
     "type": 2,
     "pool": true,
-    "prefabType": 0
+    "prefabType": 1
   },
   {
     "__type__": "cc.PrefabInfo",

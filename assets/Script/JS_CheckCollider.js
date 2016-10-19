@@ -77,7 +77,7 @@ cc.Class({
         var leftBorder = selfCenter.x-selfAabb.width*this.leftOffsetRate*.5;
         var rightBorder = selfCenter.x+selfAabb.width*this.rightOffsetRate*.5;
         var topBorder = selfCenter.y+selfAabb.height*this.topOffsetRate*.5;
-        var bottomBorder = selfCenter.y+selfAabb.height*this.bottomOffsetRate*.5;
+        var bottomBorder = selfCenter.y-selfAabb.height*this.bottomOffsetRate*.5;
         
         var part;
         
@@ -93,7 +93,7 @@ cc.Class({
                 if(otherAabb.yMin >= topBorder){
                     part = EventType.cPartLeftTop;
                 }
-                else if(otherAabb.yMax <= topBorder){
+                else if(otherAabb.yMax <= bottomBorder){
                     part = EventType.cPartLeftBottom;
                 }
                 else{
@@ -106,7 +106,7 @@ cc.Class({
                 if(otherAabb.yMin >= topBorder){
                     part = EventType.cPartRightTop;
                 }
-                else if(otherAabb.yMax <= topBorder){
+                else if(otherAabb.yMax <= bottomBorder){
                     part = EventType.cPartRightBottom;
                 }
                 else{
