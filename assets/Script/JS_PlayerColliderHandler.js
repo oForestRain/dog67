@@ -87,7 +87,7 @@ cc.Class({
         if(this.leftLockCount || this.rightLockCount || this.landingLockCount){
             this.node.color = cc.Color.RED;
         }
-        console.log("enterHandler-->",this.leftLockCount,this.rightLockCount,this.landingLockCount);
+        // console.log("enterHandler-->",this.leftLockCount,this.rightLockCount,this.landingLockCount);
     },
     
     enterEnemy : function( userData ){
@@ -114,7 +114,7 @@ cc.Class({
         
         var enter = true;
 
-        console.log("enterTerrainCheckBorder-->",part);
+        // console.log("enterTerrainCheckBorder-->",part);
         if(part == EventType.cPartLeft){
             this.stopLeft(userData,enter);
         }
@@ -215,7 +215,7 @@ cc.Class({
             }
         }
         
-        console.log("stopLeft-->","left:",this.leftLockCount,bool);
+        // console.log("stopLeft-->","left:",this.leftLockCount,bool);
     },
     
     stopRight : function( userData,bool){
@@ -237,7 +237,7 @@ cc.Class({
             }
         }
 
-        console.log("stopRight-->","right:",this.rightLockCount,bool);
+        // console.log("stopRight-->","right:",this.rightLockCount,bool);
     },
     
     stopUp : function( userData,bool ){
@@ -250,7 +250,7 @@ cc.Class({
             this.lockUp();
             this.node.y = otherAabb.yMin - selfAabb.height*.5 - 1;
         }
-        console.log("stopUp-->",bool);
+        // console.log("stopUp-->",bool);
     },
     
     landingTerrain : function( userData,bool ){
@@ -275,7 +275,7 @@ cc.Class({
                 this.landingLockCount = 0;
             }
         }
-        console.log("landingTerrain-->","landing:",this.landingLockCount,bool);
+        // console.log("landingTerrain-->","landing:",this.landingLockCount,bool);
     },
     
     lockLeft : function(bool){
@@ -350,7 +350,7 @@ cc.Class({
         if(!this.leftLockCount && !this.rightLockCount && !this.landingLockCount){
             this.node.color = cc.Color.WHITE;
         }
-        console.log("exitHandler-->",!this.leftLockCount,!this.rightLockCount,!this.landingLockCount);
+        // console.log("exitHandler-->",!this.leftLockCount,!this.rightLockCount,!this.landingLockCount);
     },
     
     exitEnemy : function( userData ){
@@ -377,7 +377,7 @@ cc.Class({
 
         var enter = false;
 
-        console.log("exitTerrainCheckBorder-->",part);
+        // console.log("exitTerrainCheckBorder-->",part);
         if(part == EventType.cPartLeft){
             this.stopLeft(userData,enter);
         }

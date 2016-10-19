@@ -20,7 +20,11 @@ cc.Class({
             default:PrefabType.brickSmash,
             type:PrefabType,
         },
-
+        pool:true,
+        prefabType: {
+            default:PrefabType.brickSmash,
+            type:PrefabType,
+        },
     },
 
     // use this for initialization
@@ -94,10 +98,12 @@ cc.Class({
         
         var userData = {};
         userData.target = this.node;
-        userData.prefabType = this.type;
+        userData.type = this.type;
+        userData.pool = this.pool;
+        userData.prefabType = this.prefabType;
         event.setUserData(userData);
         
-        console.log("pushed--->",userData.target,userData.prefabType);
+        // console.log("pushed--->",userData.target,userData.prefabType);
         
         GlobalReference.InstanceFactory.dispatchEvent(event);
     },
