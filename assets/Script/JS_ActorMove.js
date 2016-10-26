@@ -24,11 +24,19 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
 
+        
+        this.initListener();
+        
+    },
+    
+    onEnable: function () {
         this.leftLock = false;
         this.rightLock = false;
         this.speed = 0;
-        this.initListener();
-        
+    },
+    
+    onDisable: function () {
+
     },
 
     // called every frame, uncomment this function to activate update callback

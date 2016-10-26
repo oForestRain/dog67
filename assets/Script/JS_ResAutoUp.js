@@ -1,3 +1,5 @@
+var EventType = require("EventType");
+
 cc.Class({
     extends: cc.Component,
 
@@ -12,8 +14,8 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        upHeight : 64,
-        speed : 64,
+        upHeight : 65,
+        speed : 65,
     },
 
     // use this for initialization
@@ -21,10 +23,15 @@ cc.Class({
         this.startUp = false;
     },
     
-    start: function () {
+    onEnable: function () {
         this.startUp = true;
         this.yOffset = 0;
     },
+    
+    onDisable: function () {
+
+    },
+    
 
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
@@ -34,6 +41,13 @@ cc.Class({
             if(this.yOffset>=this.upHeight){
                 offsetY = offsetY - this.yOffset + this.upHeight;
                 this.startUp = false;
+                var event = new cc.Event.EventCustom(EventType.aFallDownEvent, true );
+                this.node.dispatchEvent( event );
+                event = new cc.Event.EventCustom(EventType.aConlliderEnable, true );
+                var userData = {};
+                userData.enable = true;
+                event.setUserData(userData);
+                this.node.dispatchEvent( event );
             }
             this.node.y += offsetY;
         }

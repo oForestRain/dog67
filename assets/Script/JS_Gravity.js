@@ -20,11 +20,18 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        this.stateType = StateType.aLanding;
-        
         this.initListener();
     },
     
+    onEnable: function () {
+        this.stateType = StateType.aLanding;
+    },
+    
+    onDisable: function () {
+
+    },
+     
+
     initListener : function(){
         this.node.on(EventType.aLandingEvent, 
             function (event) {

@@ -18,6 +18,7 @@ var EventType =  cc.Enum({
     Enemy : "enemy",
     Terrain : "terrain",
     //conllider
+    aConlliderEnable : "ActorConlliderEnable",
     aConlliderEnter : "ActorConlliderEnter",
     aConlliderStay : "ActorConlliderStay",
     aConlliderExit : "ActorConlliderExit",
@@ -41,6 +42,8 @@ var EventType =  cc.Enum({
     insFacChange : "InstanceFactoryChange",
     insFacAdd : "InstanceFactoryAdd",
     insFacDel : "InstanceFactoryDelete",
+    //PrefabEvent
+    prefabReset : "PrefabReset",
 
 });
 

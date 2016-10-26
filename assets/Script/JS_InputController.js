@@ -28,6 +28,21 @@ cc.Class({
         // this.debuglog = this.getComponent(cc.Label);
         
     },
+    
+    onEnable: function () {
+        var event = new cc.Event.EventCustom(EventType.aConlliderEnable, true );
+        var userData = {};
+        userData.enable = true;
+        event.setUserData(userData);
+        this.actor.dispatchEvent( event );
+    },
+    
+    onDisable: function () {
+
+    },
+    
+    
+    
 
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {

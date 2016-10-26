@@ -23,10 +23,17 @@ cc.Class({
 
     // use this for initialization
     onLoad: function (dt) {
-        this.stateType = StateType.aLanding;
         this.GravityCom = this.getComponent("JS_Gravity");
 
         this.initListener();
+    },
+    
+    onEnable: function () {
+       this.stateType = StateType.aLanding;
+    },
+    
+    onDisable: function () {
+
     },
     
     initListener : function(){

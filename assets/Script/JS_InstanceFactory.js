@@ -45,7 +45,7 @@ cc.Class({
         this.initListener();
     },
     
-        initListener : function(){
+    initListener : function(){
         this.node.on(EventType.insFacChange, 
             function (event) { 
                 this.changeToPrefab(event);
@@ -156,6 +156,9 @@ cc.Class({
             // console.log("putBackPrefab-->undefined",type);
             return;  
         }
+        var event = new cc.Event.EventCustom(EventType.prefabReset, true);
+        instance.dispatchEvent(event);
+
         this.poolArray[type].put(instance);
         
         console.log("putBackPrefab-->",this.poolArray[type].size(),type);
