@@ -17,18 +17,10 @@ cc.Class({
         // },
         // ...
         type: {
-            default:PrefabType.brickSmash,
+            default:PrefabType.boneRes,
             type:PrefabType,
         },
         pool:true,
-        changePrefabType: {
-            default:PrefabType.brickSmash,
-            type:PrefabType,
-        },
-        addPrefabType: {
-            default:PrefabType.pnull,
-            type:PrefabType,
-        },
     },
 
     // use this for initialization
@@ -75,47 +67,29 @@ cc.Class({
         //     return;
         // }
         
-        this.enterPlayerCheckBorder(userData);
+        this.collect();
         
         // console.log("enterTerrainCheckBorder-->",this.leftLockCount,this.rightLockCount,this.landingLockCount);
     },
     
-    enterPlayerCheckBorder : function(userData){
-        var part = userData.part;
+    collect: function (dt) {
+        // console.log("collect--->",this.type);
 
-        // console.log("enterPlayerCheckBorder-->",part);
-        
-        switch(part){
-            case EventType.cPartBottom:
-            case EventType.cPartBottomLeft:
-            case EventType.cPartBottomRight:
-                this.pushed();
-                break;
-        }
-    },
-    
-    pushed: function (dt) {
-        // console.log(this.prefabPool);
-        // console.log(PrefabType.brickSmash);
-
-        var event = new cc.Event.EventCustom(EventType.brickPush , true);
+        var event = new cc.Event.EventCustom(EventType.resCollect , true);
         
         var userData = {};
         userData.target = this.node;
         userData.type = this.type;
         userData.pool = this.pool;
-        userData.changePrefabType = this.changePrefabType;
-        userData.addPrefabType = this.addPrefabType;
         event.setUserData(userData);
         
         // console.log("pushed--->",userData.target,userData.prefabType);
         
         GlobalReference.GameInstance.dispatchEvent(event);
     },
-    
 
     // called every frame, uncomment this function to activate update callback
     // update: function (dt) {
-    
+
     // },
 });

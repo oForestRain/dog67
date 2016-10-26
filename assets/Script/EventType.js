@@ -35,9 +35,13 @@ var EventType =  cc.Enum({
     cPartBottomLeft : "ConlliderPartBottomLeft",
     cPartBottomRight : "ConlliderPartBottomRight",
     //ObjectInteractEvent
-    insFacChange : "instanceFactoryChange",
-    insFacAdd : "instanceFactoryAdd",
-    
+    brickPush : "BrickPush",
+    resCollect : "ResCollect",
+    //InstanceFactoryEvent
+    insFacChange : "InstanceFactoryChange",
+    insFacAdd : "InstanceFactoryAdd",
+    insFacDel : "InstanceFactoryDelete",
+
 });
 
 module.exports = EventType;

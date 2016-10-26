@@ -1,5 +1,5 @@
 var GlobalReference =  {
-    GameInstanceComponent : null,
+    GameInstance : null,
     GameController : null,
     InstanceFactory : null,
 }

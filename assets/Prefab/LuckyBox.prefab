@@ -139,7 +139,8 @@
     "_enabled": true,
     "type": 2,
     "pool": true,
-    "prefabType": 1
+    "changePrefabType": 1,
+    "addPrefabType": 3
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -149,6 +150,7 @@
     "asset": {
       "__uuid__": "c820d08d-c0d5-41e2-8d32-38442198648a"
     },
-    "fileId": "e419esuDXdNzJxRnuigAPA5"
+    "fileId": "e419esuDXdNzJxRnuigAPA5",
+    "sync": false
   }
 ]

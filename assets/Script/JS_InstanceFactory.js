@@ -45,19 +45,25 @@ cc.Class({
         this.initListener();
     },
     
-    initListener : function(){
+        initListener : function(){
         this.node.on(EventType.insFacChange, 
             function (event) { 
                 this.changeToPrefab(event);
             },
             this);
-            
         this.node.on(EventType.insFacAdd, 
             function (event) { 
                 this.addPrefab(event);
             },
             this);
+        this.node.on(EventType.insFacDel, 
+            function (event) { 
+                this.putBack(event);
+            },
+            this);
     },
+    
+    
 
     // called every frame, uncomment this function to activate update callback
     // update: function (dt) {
@@ -71,7 +77,7 @@ cc.Class({
         var prefabType = userData.prefabType;
         var pool = userData.pool;
         
-        console.log("changeToPrefab",targetType,target,prefabType);
+        // console.log("changeToPrefab",targetType,target,prefabType);
         
         var prefabInstance = this.getPrefab(prefabType);
         prefabInstance.position =  target.position;
@@ -91,12 +97,30 @@ cc.Class({
         var prefabType = userData.prefabType;
         var position = userData.position;
 
-        console.log("addPrefab",target,prefabType);
+        // console.log("addPrefab",target,prefabType);
         
         var prefabInstance = this.getPrefab(prefabType);
         prefabInstance.position =  position;
         prefabInstance.parent = target.parent;
         
+        // console.log("addPrefab",prefabInstance.position,prefabInstance.parent);
+        
+    },
+    
+    putBack: function (event) {
+        var userData = event.getUserData();
+        var target = userData.target;
+        var targetType = userData.type;
+        var pool = userData.pool;
+        
+        // console.log("putBack",targetType,target);
+        
+        if(pool){
+            this.putBackPrefab(targetType,target);
+        }
+        else{
+            target.destroy();
+        }
     },
     
     getPrefab: function (type) {
@@ -118,7 +142,7 @@ cc.Class({
         else{
             instance = cc.instantiate(this.prefab[type]);
         }
-        console.log("getPrefab-->",this.poolArray[type].size(),type);
+        console.log("getPrefab-->",this.poolArray[type].size(),type,instance);
 
         return instance;
     },

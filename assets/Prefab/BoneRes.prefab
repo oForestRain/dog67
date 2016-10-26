@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "WeakBrick",
+    "_name": "bone",
     "_objFlags": 0,
     "_opacity": 255,
     "_color": {
@@ -30,7 +30,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 64,
-      "height": 64
+      "height": 63
     },
     "_children": [],
     "_rotationX": 0,
@@ -39,8 +39,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 455,
-      "y": 279
+      "x": 182,
+      "y": 287
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -62,12 +62,15 @@
       },
       {
         "__id__": 5
+      },
+      {
+        "__id__": 6
       }
     ],
     "_prefab": {
-      "__id__": 6
+      "__id__": 7
     },
-    "groupIndex": 2
+    "groupIndex": 3
   },
   {
     "__type__": "cc.Sprite",
@@ -78,7 +81,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "1a3d22a5-2b39-4410-9d3f-17081effe20b"
+      "__uuid__": "181b1383-959d-43d3-9173-54078f7e663e"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -130,17 +133,26 @@
     "onDisableCollisionManagerEnabled": false
   },
   {
-    "__type__": "80df9ChBXxGOqEZKJAe1XKn",
+    "__type__": "7688d44le1Hd6UDwd3FGNkN",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
     "_enabled": true,
-    "type": 1,
-    "pool": true,
-    "changePrefabType": 0,
-    "addPrefabType": 4
+    "type": 3,
+    "pool": true
+  },
+  {
+    "__type__": "1ad08lfRDxAiJz+1/1zKavX",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "upHeight": 64,
+    "speed": 64
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -148,9 +160,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "3dd5efee-7663-458b-bb55-d8d0bc1e339e"
+      "__uuid__": "2c8284cc-2ee3-44eb-ad7c-a2f78730f0b2"
     },
-    "fileId": "30865RGXtxJfYVOU5U8nKCV",
+    "fileId": "a399bXXHylMDoC7EbcsadVS",
     "sync": false
   }
 ]
