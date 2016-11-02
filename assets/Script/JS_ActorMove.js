@@ -94,94 +94,77 @@ cc.Class({
     },
     
     initListener : function(){
-        this.node.on(EventType.aLeftEvent, 
+        this.node.on(EventType.aMove, 
             function (event) {
                 //console.log(event.type);
-                this.mLeft();
-            },
-            this);
-            
-        this.node.on(EventType.aRightEvent, 
-            function (event) {
-                // console.log(event.type,event.getUserData());
-                this.mRight();
+                this.aMove(event);
             },
             this);
 
-        this.node.on(EventType.aLeftStopEvent, 
+        this.node.on(EventType.aStop, 
             function (event) {
                 //console.log(event.type);
-                this.mMoveLeftToStopState();
+                this.aStop(event);
             },
             this);
-            
-        this.node.on(EventType.aRightStopEvent, 
+ 
+         this.node.on(EventType.aLock, 
             function (event) {
                 //console.log(event.type);
-                this.mMoveRightToStopState();
-            },
-            this);
-        this.node.on(EventType.aMLeftLockEvent, 
-            function (event) {
-                //console.log(event.type);
-                this.mLeftLock(event);
-            },
-            this);
-        this.node.on(EventType.aMRightLockEvent, 
-            function (event) {
-                //console.log(event.type);
-                this.mRightLock(event);
+                this.aLock(event);
             },
             this);
     },
 
-    mLeft: function() {
+    aMove: function(event) {
+        var userData = event.getUserData();
+        var direction = userData.direction;
 
-        this.mMovingLeftState();
-        
+        switch(direction) {
+            case EventType.dLeft:
+                this.mMovingLeftState();
+                break;
+            case EventType.dRight:
+                this.mMovingRightState();
+                break;
+        }
     },
 
-    mRight: function() {
-
-        this.mMovingRightState();
-    },
-    
     // aIdle: "ActorIdle",
     // aMovingLeft: "ActorMovingLeft",
     // aMovingRight: "ActorMovingRight",
     // aMoveToStop: "ActorMoveToStop",
     
     mMovingLeftState: function() {
-        
         this.stateType = StateType.aMovingLeft;
         
         this.node.scaleX = -1;
-
     },
     
     mMovingRightState: function() {
-        
         this.stateType = StateType.aMovingRight;
         
         this.node.scaleX = 1;
     },
     
-    mMoveLeftToStopState: function() {
-        
-        if(this.stateType === StateType.aMovingLeft){
-            this.mMoveToStopState();
-        }
+    aStop: function(event) {
+        var userData = event.getUserData();
+        var direction = userData.direction;
 
-    },
-    
-    mMoveRightToStopState: function() {
-        
-        if(this.stateType === StateType.aMovingRight){
-             this.mMoveToStopState();
+        switch(direction) {
+            case EventType.dLeft:
+                if(this.speed < 0 ){
+                    this.mMoveToStopState();
+                }
+                break;
+            case EventType.dRight:
+                if(this.speed > 0 ){
+                    this.mMoveToStopState();
+                }
+                break;
         }
-
     },
-    
+
     mMoveToStopState: function() {
         
         this.stateType = StateType.aMoveToStop;
@@ -194,18 +177,20 @@ cc.Class({
 
     },
     
-    mLeftLock: function(event) {
+    aLock: function(event) {
         var userData = event.getUserData();
-
-        this.leftLock = userData.bool;
-        // console.log("mLeftLock--->"+this.leftLock);
+        var direction = userData.direction;
+        var lock = userData.bool;
+        
+        // console.log("ActorMove--->",direction,lock);
+        
+        switch(direction) {
+            case EventType.dLeft:
+                this.leftLock = lock;
+                break;
+            case EventType.dRight:
+                this.rightLock = lock;
+                break;
+        }
     },
-    
-    mRightLock: function(event) {
-        var userData = event.getUserData();
-
-        this.rightLock = userData.bool;
-        // console.log("mLeftLock--->"+this.rightLock);
-    },
-
 });

@@ -57,22 +57,35 @@ cc.Class({
         var otherAabb = other.world.aabb;
         var selfAabb = self.world.aabb;
         var otherPreAabb = other.world.preAabb;
-        var selfPreCAabb = self.world.preAabb;
+        var selfPreAabb = self.world.preAabb;
         
         // check part 
-        userData.part = this.checkPart(otherAabb,selfAabb,otherPreAabb,selfPreCAabb);
+        userData.part = this.checkPart(otherAabb,selfAabb,otherPreAabb,selfPreAabb);
 
         event.setUserData(userData);
         this.node.dispatchEvent(event);
     },
 
-    checkPart: function(otherAabb,selfAabb,otherPreAabb,selfPreCAabb){
-        
+    checkPart: function(otherAabb,selfAabb,otherPreAabb,selfPreAabb){
+        ////direction
+        // dLeft:"DirectionLeft",
+        // dRight:"DirectionRight",
+        // dUp:"DirectionUp",
+        // dDown:"DirectionDown",
+        // dLU:"DirectionLeftUp",
+        // dLD:"DirectionLeftDown",
+        // dRU:"DirectionRightUp",
+        // dRD:"DirectionRightDown",
+        // dUL:"DirectionUpLeft",
+        // dUR:"DirectionUpRight",
+        // dDL:"DirectionDownLeft",
+        // dDR:"DirectionDownRight",
+
         var otherCenter = otherAabb.center;
         var selfCenter = selfAabb.center;
         
         var otherPreCenter = otherPreAabb.center;
-        var selfPreCenter = selfPreCAabb.center;
+        var selfPreCenter = selfPreAabb.center;
         
         var leftBorder = selfCenter.x-selfAabb.width*this.leftOffsetRate*.5;
         var rightBorder = selfCenter.x+selfAabb.width*this.rightOffsetRate*.5;
@@ -83,96 +96,110 @@ cc.Class({
         
         //check x-axis
         var otherPreAabbClone = otherPreAabb.clone();
-        var selfPreAabbClone = selfPreCAabb.clone();
+        var selfPreAabbClone = selfPreAabb.clone();
         otherPreAabbClone.x = otherAabb.x;
         selfPreAabbClone.x = selfAabb.x;
+        // console.log("checkPartX-->",selfPreCenter.x,selfCenter.x,otherPreCenter.x,otherCenter.x);
         if (cc.Intersection.rectRect(selfPreAabbClone,otherPreAabbClone)) {
             //left be hit
             if (selfPreCenter.x > selfCenter.x || otherPreCenter.x < otherCenter.x) {
-                // console.log("checkPart-->left be hit");
+                // console.log("part------------>left be hit");
                 if(otherAabb.yMin >= topBorder){
-                    part = EventType.cPartLeftTop;
+                    part = EventType.dLU;
                 }
                 else if(otherAabb.yMax <= bottomBorder){
-                    part = EventType.cPartLeftBottom;
+                    part = EventType.dLD;
                 }
                 else{
-                    part = EventType.cPartLeft;
+                    part = EventType.dLeft;
                 }
             }
             //right be hit
             else if (selfPreCenter.x < selfCenter.x || otherPreCenter.x > otherCenter.x) {
-                // console.log("checkPart-->right be hit");
+                // console.log("part------------>right be hit");
                 if(otherAabb.yMin >= topBorder){
-                    part = EventType.cPartRightTop;
+                    part = EventType.dRU;
                 }
                 else if(otherAabb.yMax <= bottomBorder){
-                    part = EventType.cPartRightBottom;
+                    part = EventType.dRD;
                 }
                 else{
-                    part = EventType.cPartRight;
+                     part = EventType.dRight;
                 }
+            }
+            // console.log("part------------>1",part);
+            if(!part){
+                return part;
             }
         }
         
         //check y-axis
         otherPreAabbClone = otherPreAabb.clone();
-        selfPreAabbClone = selfPreCAabb.clone();
+        selfPreAabbClone = selfPreAabb.clone();
         otherPreAabbClone.y = otherAabb.y;
         selfPreAabbClone.y = selfAabb.y;
+        // console.log("checkPartY-->",selfPreCenter.y,selfCenter.y,otherPreCenter.y,otherCenter.y);
         if (cc.Intersection.rectRect(selfPreAabbClone,otherPreAabbClone)) {
             //top be hit
             if (selfPreCenter.y < selfCenter.y || otherPreCenter.y > otherCenter.y) {
                 // console.log("checkPart-->top be hit");
                 if(otherAabb.xMax <= leftBorder){
-                    part = EventType.cPartTopLeft;
+                    part = EventType.dUL;
                 }
                 else if(otherAabb.xMin >= rightBorder){
-                    part = EventType.cPartTopRight;
+                    part = EventType.dUR;
                 }
                 else{
-                    part = EventType.cPartTop;
+                    part = EventType.dUp;
                 }
             }
             //bottom be hit
             else if (selfPreCenter.y > selfCenter.y || otherPreCenter.y < otherCenter.y) {
                 // console.log("checkPart-->bottom be hit");
                 if(otherAabb.xMax <= leftBorder){
-                    part = EventType.cPartBottomLeft;
+                    part = EventType.dDL;
                 }
                 else if(otherAabb.xMin >= rightBorder){
-                    part = EventType.cPartBottomRight;
+                    part = EventType.dDR;
                 }
                 else{
-                    part = EventType.cPartBottom;
+                    part = EventType.dDown;
                 }
             }
+            // console.log("part------------>2",part);
+            if(!part){
+                return part;
+            }
         }
+        
         
         // check corner
         if(!part){
             //left
             if (selfPreCenter.x > selfCenter.x || otherPreCenter.x < otherCenter.x) {
-                // console.log("checkCorner-->left",selfPreCenter.y,selfCenter.y);
-                if(selfPreCenter.y < selfCenter.y){
-                    part = EventType.cPartTopLeft;
+                // console.log("checkCorner-->left",selfPreCenter.x,selfCenter.x);
+                if(selfPreCenter.y < selfCenter.y || otherPreCenter.y > otherCenter.y){
+                    part = EventType.dUL;
                 }
                 else{
-                    part = EventType.cPartBottomLeft;
+                    part = EventType.dDL;
                 }
             }
             //right
             else if (selfPreCenter.x < selfCenter.x || otherPreCenter.x > otherCenter.x) {
                 // console.log("checkCorner-->right",selfPreCenter.y,selfCenter.y);
-                if(selfPreCenter.y < selfCenter.y){
-                    part = EventType.cPartTopRight;
+                if(selfPreCenter.y < selfCenter.y || otherPreCenter.y > otherCenter.y){
+                    part = EventType.dUR;
                 }
                 else{
-                    part = EventType.cPartBottomRight;
+                     part = EventType.dDR;
                 }
             }
+            // console.log("part------------>3",part);
         }
         
+        
+
         // if(!part){
         //     console.log("part!==undefined------------------------------------------------->");
         // }

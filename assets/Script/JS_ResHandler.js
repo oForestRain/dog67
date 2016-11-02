@@ -47,31 +47,15 @@ cc.Class({
         // }
 
         switch(userData.other.node.group){
-            case EventType.Enemy:
-                this.enterEnemy(userData);
-                break;
+            // case EventType.Enemy:
             case EventType.Player:
-                this.enterPlayer(userData);
+                this.collect();
                 break;
         }
         
         // console.log("enterHandler-->");
     },
-    
-    enterEnemy : function( userData ){
-        
-    },
 
-    enterPlayer : function( userData ){
-        // if(userData === null){
-        //     return;
-        // }
-        
-        this.collect();
-        
-        // console.log("enterTerrainCheckBorder-->",this.leftLockCount,this.rightLockCount,this.landingLockCount);
-    },
-    
     collect: function (dt) {
         // console.log("collect--->",this.type);
 

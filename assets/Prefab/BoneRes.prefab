@@ -168,7 +168,8 @@
       "__id__": 1
     },
     "_enabled": true,
-    "gravity": 2048
+    "gravity": 2048,
+    "gEnable": true
   },
   {
     "__type__": "7bcc86taIxNBYJylLsJcInh",

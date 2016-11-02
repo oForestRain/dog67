@@ -16,6 +16,7 @@ cc.Class({
         // },
         // ...
         gravity : 2048,
+        gEnable : true,
     },
 
     // use this for initialization
@@ -33,16 +34,16 @@ cc.Class({
      
 
     initListener : function(){
-        this.node.on(EventType.aLandingEvent, 
+        this.node.on(EventType.aLanding, 
             function (event) {
-                // console.log(event.type);
+                // console.log("Gravity--->",event.type);
                 this.gLanding();
             },
             this);
             
-        this.node.on(EventType.aFallDownEvent, 
+        this.node.on(EventType.aFallDown, 
             function (event) {
-                // console.log(event.type);
+                // console.log("Gravity--->",event.type);
                 this.gFallDown();
             },
             this);
@@ -50,6 +51,10 @@ cc.Class({
 
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
+        if(!this.gEnable){
+            return;
+        }
+        
         if(this.stateType === StateType.aFallDown){
             var endSpeed = this.speed - dt * this.gravity;
             var offsetY = (endSpeed + this.speed)/2 * dt;

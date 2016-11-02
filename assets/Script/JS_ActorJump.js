@@ -38,32 +38,32 @@ cc.Class({
     
     initListener : function(){
         
-        this.node.on(EventType.aJumpEvent, 
+        this.node.on(EventType.aJump, 
             function (event) {
                 // console.log(event.type);
                 this.mJump();
             },
             this);
             
-        // this.node.on(EventType.aJumpStopEvent, 
+        // this.node.on(EventType.aJumpStop, 
         //     function (event) {
 
         //     },
         //     this);
 
-        this.node.on(EventType.aUpLockEvent, 
+        this.node.on(EventType.aUpLock, 
             function (event) {
                 this.mStopUp();
             },
             this);
         
-        this.node.on(EventType.aJumpLockEvent, 
+        this.node.on(EventType.aJumpLock, 
             function (event) {
                 this.mJumpLock();
             },
             this);
             
-        this.node.on(EventType.aLandingEvent, 
+        this.node.on(EventType.aLanding, 
             function (event) {
                 this.mLandState();
             },
@@ -149,7 +149,7 @@ cc.Class({
         // console.log("mJumpState-->");
         this.stateType = StateType.aJump;
 
-        var event = new cc.Event.EventCustom(EventType.aFallDownEvent, true );
+        var event = new cc.Event.EventCustom(EventType.aFallDown, true );
         this.node.dispatchEvent( event );
     },
     
@@ -157,7 +157,7 @@ cc.Class({
         // console.log("mJumpState2-->");
         this.stateType = StateType.aJump2;
         
-        var event = new cc.Event.EventCustom(EventType.aFallDownEvent, true );
+        var event = new cc.Event.EventCustom(EventType.aFallDown, true );
         this.node.dispatchEvent( event );
     },
 
@@ -170,7 +170,7 @@ cc.Class({
     
     // dispatchLanding: function() {
 
-    //     var event = new cc.Event.EventCustom(EventType.aLandingEvent, true );
+    //     var event = new cc.Event.EventCustom(EventType.aLanding, true );
     //     this.node.dispatchEvent( event );
         
     // },

@@ -31,7 +31,6 @@ cc.Class({
     onDisable: function () {
 
     },
-    
 
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
@@ -41,7 +40,7 @@ cc.Class({
             if(this.yOffset>=this.upHeight){
                 offsetY = offsetY - this.yOffset + this.upHeight;
                 this.startUp = false;
-                var event = new cc.Event.EventCustom(EventType.aFallDownEvent, true );
+                var event = new cc.Event.EventCustom(EventType.aFallDown, true );
                 this.node.dispatchEvent( event );
                 event = new cc.Event.EventCustom(EventType.aConlliderEnable, true );
                 var userData = {};

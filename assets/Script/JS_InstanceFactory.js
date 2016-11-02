@@ -156,8 +156,6 @@ cc.Class({
             // console.log("putBackPrefab-->undefined",type);
             return;  
         }
-        var event = new cc.Event.EventCustom(EventType.prefabReset, true);
-        instance.dispatchEvent(event);
 
         this.poolArray[type].put(instance);
         

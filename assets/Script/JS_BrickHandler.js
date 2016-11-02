@@ -48,26 +48,19 @@ cc.Class({
     
     enterHandler : function( event ){
         var userData = event.getUserData();
-        // console.log("enterHandler-->",userData.other.node.group);
+        // console.log("BrickenterHandler-->",userData.other.node.group);
 
         // if(userData === null || userData.other === null || userData.other.node === null){
             // return;
         // }
 
         switch(userData.other.node.group){
-            case EventType.Enemy:
-                this.enterEnemy(userData);
-                break;
             case EventType.Player:
                 this.enterPlayer(userData);
                 break;
         }
         
         // console.log("enterHandler-->");
-    },
-    
-    enterEnemy : function( userData ){
-        
     },
 
     enterPlayer : function( userData ){
@@ -83,12 +76,12 @@ cc.Class({
     enterPlayerCheckBorder : function(userData){
         var part = userData.part;
 
-        // console.log("enterPlayerCheckBorder-->",part);
+        // console.log("BrickenterPlayerCheckBorder-->",part);
         
         switch(part){
-            case EventType.cPartBottom:
-            case EventType.cPartBottomLeft:
-            case EventType.cPartBottomRight:
+            case EventType.dDown:
+            case EventType.dDL:
+            case EventType.dDR:
                 this.pushed();
                 break;
         }
@@ -108,7 +101,7 @@ cc.Class({
         userData.addPrefabType = this.addPrefabType;
         event.setUserData(userData);
         
-        // console.log("pushed--->",userData.target,userData.prefabType);
+        // console.log("pushed--->",userData.target,userData.changePrefabType);
         
         GlobalReference.GameInstance.dispatchEvent(event);
     },

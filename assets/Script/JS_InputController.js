@@ -41,9 +41,6 @@ cc.Class({
 
     },
     
-    
-    
-
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
         // this.debuglog.string = this.moveDeriction;
@@ -92,23 +89,29 @@ cc.Class({
     },
     
     mLeft: function() {
-        var event = new cc.Event.EventCustom(EventType.aLeftEvent, true );
-        
-        // console.log(event.type);
+        var event = new cc.Event.EventCustom(EventType.aMove, true );
+        var userData = {};
+        userData.direction = EventType.dLeft;
+        event.setUserData(userData);
+
+        // console.log(event.type,userData.direction);
         
         this.actor.dispatchEvent( event );
     },
 
     mRight: function() {
-        var event = new cc.Event.EventCustom(EventType.aRightEvent, true );
-        // event.setUserData({a:1});
-        // console.log(event.type);
+        var event = new cc.Event.EventCustom(EventType.aMove, true );
+        var userData = {};
+        userData.direction = EventType.dRight;
+        event.setUserData(userData);
+        
+        // console.log(event.type,userData.direction);
         
         this.actor.dispatchEvent( event );
     },
     
     mJump: function() {
-        var event = new cc.Event.EventCustom(EventType.aJumpEvent, true );
+        var event = new cc.Event.EventCustom(EventType.aJump, true );
         
         // console.log(event.type);
         
@@ -116,23 +119,29 @@ cc.Class({
     },
     
     mLeftStop: function() {
-        var event = new cc.Event.EventCustom(EventType.aLeftStopEvent, true );
+        var event = new cc.Event.EventCustom(EventType.aStop, true );
+        var userData = {};
+        userData.direction = EventType.dLeft;
+        event.setUserData(userData);
         
-        // console.log(event.type);
+        // console.log(event.type,userData.direction);
         
         this.actor.dispatchEvent( event );
     },
     
     mRightStop: function() {
-        var event = new cc.Event.EventCustom(EventType.aRightStopEvent, true );
+        var event = new cc.Event.EventCustom(EventType.aStop, true );
+        var userData = {};
+        userData.direction = EventType.dRight;
+        event.setUserData(userData);
         
-        // console.log(event.type);
+        // console.log(event.type,userData.direction);
         
         this.actor.dispatchEvent( event );
     },
     
     mFalldown: function() {
-        var event = new cc.Event.EventCustom(EventType.aJumpStopEvent, true );
+        var event = new cc.Event.EventCustom(EventType.aJumpStop, true );
         
         // console.log(event.type);
         

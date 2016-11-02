@@ -4,9 +4,18 @@
       false,
       true,
       true,
-      true
+      true,
+      false
     ],
     [
+      true,
+      false,
+      true,
+      false,
+      false
+    ],
+    [
+      true,
       true,
       false,
       true,
@@ -14,14 +23,16 @@
     ],
     [
       true,
+      false,
       true,
       false,
-      true
+      false
     ],
     [
-      true,
       false,
-      true,
+      false,
+      false,
+      false,
       false
     ]
   ],
@@ -30,7 +41,8 @@
     "player",
     "enemy",
     "terrain",
-    "res"
+    "resource",
+    "default"
   ],
   "start-scene": "current"
 }
