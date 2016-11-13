@@ -1,4 +1,5 @@
 var EventType = require("EventType");
+var DirectionType = require("DirectionType");
 var StateType = require("StateType");
 // var Box2dWeb = require("Box2dWeb");
 // var JS_Gravity = require("JS_Gravity");
@@ -28,17 +29,38 @@ cc.Class({
         this.initListener();
     },
     
+    // // StateType
+    // Idle: 0,
+    // //move
+    // MoveLeft:1,
+    // MoveRight:2,
+    // MoveToStop:3,
+    // //jump
+    // Landing:4,
+    // Jump:5,
+    // Jump2:6,
+    // Falling:7,
+    
     onEnable: function () {
-       this.stateType = StateType.aLanding;
+       this.stateType = StateType.Landing;
     },
     
     onDisable: function () {
 
     },
     
+    //control
+    // ActorMove: 0,
+    // ActorMoveStop: 1,
+    // ActorJump: 2,
+    // ActorJumpStop: 3,
+    //gravity
+    // ActorLanding: 20,
+    // ActorFalling: 21,
+    
     initListener : function(){
         
-        this.node.on(EventType.aJump, 
+        this.node.on(EventType.ActorJump, 
             function (event) {
                 // console.log(event.type);
                 this.mJump();
@@ -51,25 +73,29 @@ cc.Class({
         //     },
         //     this);
 
-        this.node.on(EventType.aUpLock, 
+        this.node.on(EventType.ActorMotionLock, 
             function (event) {
-                this.mStopUp();
+                var userData = event.getUserData();
+                var direction = userData.direction;
+                if(direction == DirectionType.Up){
+                    this.mStopUp();
+                }
             },
             this);
         
-        this.node.on(EventType.aJumpLock, 
-            function (event) {
-                this.mJumpLock();
-            },
-            this);
+        // this.node.on(EventType.aJumpLock, 
+        //     function (event) {
+        //         this.mJumpLock();
+        //     },
+        //     this);
             
-        this.node.on(EventType.aLanding, 
+        this.node.on(EventType.ActorLanding, 
             function (event) {
                 this.mLandState();
             },
             this);
     },
-
+    
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
         if(this.GravityCom===null){
@@ -78,24 +104,14 @@ cc.Class({
         
         // console.log(this.stateType);
         
-        if(this.GravityCom.stateType === StateType.aLanding){
+        if(this.GravityCom.stateType === StateType.Landing){
             return;
         }
 
-        if(this.stateType === StateType.aJump || this.stateType === StateType.aJump2){
+        if(this.stateType === StateType.Jump || this.stateType === StateType.Jump2){
                 var offsetY = this.speed * dt;
                 
                 this.node.y += offsetY;
-
-                // this.node.y -= offsetY;
-                // if(this.node.y + offsetY <= this.startY){
-                //     this.node.y = this.startY;
-                //     this.speed = 0;
-                //     this.dispatchLanding();
-                // }
-                // else{
-                //     this.node.y += offsetY;
-                // }
         }
         
     },
@@ -109,14 +125,14 @@ cc.Class({
         var jTime;
         var actorJHeight;
         var gravity;
-        if(this.stateType === StateType.aLanding){
+        if(this.stateType === StateType.Landing){
             // this.startY = this.node.y;
             gravity = this.GravityCom.gravity;
             jTime = Math.sqrt(2*this.jHeight / gravity);
             this.speed = jTime * gravity;
             this.mJumpState();
         }
-        else if(this.stateType === StateType.aJump){
+        else if(this.stateType === StateType.Jump){
             gravity = this.GravityCom.gravity;
             jTime = Math.sqrt(2*this.jHeight2 / gravity);
             this.speed = jTime * gravity;
@@ -125,8 +141,16 @@ cc.Class({
 
     },
     
+    mFreeJump: function(){
+        var event = new cc.Event.EventCustom(EventType.ActorMotionFree, true );
+        var userData = {};
+        userData.direction  = DirectionType.Down;
+        event.setUserData(userData);
+        this.node.dispatchEvent( event );
+    },
+    
     mStopUp: function() {
-
+        // console.log("ActorJump-->mStopUp");
         if(this.GravityCom===null){
             return;
         }
@@ -137,7 +161,7 @@ cc.Class({
     },
     
     mJumpLock: function() {
-
+        // console.log("ActorJump-->mJumpLock");
         if(this.GravityCom===null){
             return;
         }
@@ -146,33 +170,27 @@ cc.Class({
     },
     
     mJumpState: function() {
-        // console.log("mJumpState-->");
-        this.stateType = StateType.aJump;
+        // console.log("ActorJump-->mJumpState");
+        this.mFreeJump();
+        
+        this.stateType = StateType.Jump;
 
-        var event = new cc.Event.EventCustom(EventType.aFallDown, true );
+        var event = new cc.Event.EventCustom(EventType.ActorFalling, true );
         this.node.dispatchEvent( event );
     },
     
     mJump2State: function() {
         // console.log("mJumpState2-->");
-        this.stateType = StateType.aJump2;
+        this.stateType = StateType.Jump2;
         
-        var event = new cc.Event.EventCustom(EventType.aFallDown, true );
+        var event = new cc.Event.EventCustom(EventType.ActorFalling, true );
         this.node.dispatchEvent( event );
     },
 
     mLandState: function() {
-
-        this.stateType = StateType.aLanding;
+        // console.log("ActorJump-->mLandState");
+        this.stateType = StateType.Landing;
         this.speed =0;
         
     },
-    
-    // dispatchLanding: function() {
-
-    //     var event = new cc.Event.EventCustom(EventType.aLanding, true );
-    //     this.node.dispatchEvent( event );
-        
-    // },
-    
 });

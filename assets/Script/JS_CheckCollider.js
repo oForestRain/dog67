@@ -1,4 +1,5 @@
 var EventType = require("EventType");
+var DirectionType = require("DirectionType");
 
 cc.Class({
     extends: cc.Component,
@@ -45,41 +46,41 @@ cc.Class({
         // this.node.color = cc.Color.RED;
         
         //conllider
-        // aConlliderEnter : "ActorConlliderEnter",
-        // aConlliderStay : "ActorConlliderStay",
-        // aConlliderExit : "ActorConlliderExit",
+        // ConlliderEnable : 10,
+        // ConlliderEnter : 11,
+        // ConlliderStay : 12,
+        // ConlliderExit : 13,
         
-        var event = new cc.Event.EventCustom(EventType.aConlliderEnter, true);
+        var event = new cc.Event.EventCustom(EventType.ConlliderEnter, true);
         var userData = {};
         userData.other = other;
         userData.actor = self;
         
-        var otherAabb = other.world.aabb;
-        var selfAabb = self.world.aabb;
-        var otherPreAabb = other.world.preAabb;
-        var selfPreAabb = self.world.preAabb;
-        
         // check part 
-        userData.part = this.checkPart(otherAabb,selfAabb,otherPreAabb,selfPreAabb);
+        userData.direction = this.customFormDirectionFromPart(other, self);
 
         event.setUserData(userData);
         this.node.dispatchEvent(event);
     },
 
-    checkPart: function(otherAabb,selfAabb,otherPreAabb,selfPreAabb){
-        ////direction
-        // dLeft:"DirectionLeft",
-        // dRight:"DirectionRight",
-        // dUp:"DirectionUp",
-        // dDown:"DirectionDown",
-        // dLU:"DirectionLeftUp",
-        // dLD:"DirectionLeftDown",
-        // dRU:"DirectionRightUp",
-        // dRD:"DirectionRightDown",
-        // dUL:"DirectionUpLeft",
-        // dUR:"DirectionUpRight",
-        // dDL:"DirectionDownLeft",
-        // dDR:"DirectionDownRight",
+    checkPart: function(other,self){
+        var otherAabb = other.world.aabb;
+        var selfAabb = self.world.aabb;
+        var otherPreAabb = other.world.preAabb;
+        var selfPreAabb = self.world.preAabb;
+        //DirectionType
+        // UpLeft:0,
+        // Up:1,
+        // UpRight:2,
+        // RightUp:3,
+        // Right:4,
+        // RightDown:5,
+        // DownRight:6,
+        // Down:7,
+        // DownLeft:8,
+        // LeftDown:9,
+        // Left:10,
+        // LeftUp:11,
 
         var otherCenter = otherAabb.center;
         var selfCenter = selfAabb.center;
@@ -103,28 +104,28 @@ cc.Class({
         if (cc.Intersection.rectRect(selfPreAabbClone,otherPreAabbClone)) {
             //left be hit
             if (selfPreCenter.x > selfCenter.x || otherPreCenter.x < otherCenter.x) {
-                // console.log("part------------>left be hit");
+                // console.log("checkPart------------>part left be hit");
                 if(otherAabb.yMin >= topBorder){
-                    part = EventType.dLU;
+                    part = DirectionType.LeftUp;
                 }
                 else if(otherAabb.yMax <= bottomBorder){
-                    part = EventType.dLD;
+                    part = DirectionType.LeftDown;
                 }
                 else{
-                    part = EventType.dLeft;
+                    part = DirectionType.Left;
                 }
             }
             //right be hit
             else if (selfPreCenter.x < selfCenter.x || otherPreCenter.x > otherCenter.x) {
-                // console.log("part------------>right be hit");
+                // console.log("checkPart------------>part right be hit");
                 if(otherAabb.yMin >= topBorder){
-                    part = EventType.dRU;
+                    part = DirectionType.RightUp;
                 }
                 else if(otherAabb.yMax <= bottomBorder){
-                    part = EventType.dRD;
+                    part = DirectionType.RightDown;
                 }
                 else{
-                     part = EventType.dRight;
+                     part = DirectionType.Right;
                 }
             }
             // console.log("part------------>1",part);
@@ -142,28 +143,28 @@ cc.Class({
         if (cc.Intersection.rectRect(selfPreAabbClone,otherPreAabbClone)) {
             //top be hit
             if (selfPreCenter.y < selfCenter.y || otherPreCenter.y > otherCenter.y) {
-                // console.log("checkPart-->top be hit");
+                // console.log("checkPart-->part top be hit");
                 if(otherAabb.xMax <= leftBorder){
-                    part = EventType.dUL;
+                    part = DirectionType.UpLeft;
                 }
                 else if(otherAabb.xMin >= rightBorder){
-                    part = EventType.dUR;
+                    part = DirectionType.UpRight;
                 }
                 else{
-                    part = EventType.dUp;
+                    part = DirectionType.Up;
                 }
             }
             //bottom be hit
             else if (selfPreCenter.y > selfCenter.y || otherPreCenter.y < otherCenter.y) {
-                // console.log("checkPart-->bottom be hit");
+                // console.log("checkPart-->part bottom be hit");
                 if(otherAabb.xMax <= leftBorder){
-                    part = EventType.dDL;
+                    part = DirectionType.DownLeft;
                 }
                 else if(otherAabb.xMin >= rightBorder){
-                    part = EventType.dDR;
+                    part = DirectionType.DownRight;
                 }
                 else{
-                    part = EventType.dDown;
+                    part = DirectionType.Down;
                 }
             }
             // console.log("part------------>2",part);
@@ -172,39 +173,128 @@ cc.Class({
             }
         }
         
-        
         // check corner
         if(!part){
             //left
             if (selfPreCenter.x > selfCenter.x || otherPreCenter.x < otherCenter.x) {
                 // console.log("checkCorner-->left",selfPreCenter.x,selfCenter.x);
                 if(selfPreCenter.y < selfCenter.y || otherPreCenter.y > otherCenter.y){
-                    part = EventType.dUL;
+                    part = DirectionType.UpLeft;
                 }
                 else{
-                    part = EventType.dDL;
+                    part = DirectionType.DownLeft;
                 }
             }
             //right
             else if (selfPreCenter.x < selfCenter.x || otherPreCenter.x > otherCenter.x) {
                 // console.log("checkCorner-->right",selfPreCenter.y,selfCenter.y);
                 if(selfPreCenter.y < selfCenter.y || otherPreCenter.y > otherCenter.y){
-                    part = EventType.dUR;
+                    part = DirectionType.UpRight;
                 }
                 else{
-                     part = EventType.dDR;
+                     part = DirectionType.DownRight;
                 }
             }
             // console.log("part------------>3",part);
         }
         
-        
-
         // if(!part){
         //     console.log("part!==undefined------------------------------------------------->");
         // }
-
+        
         return part;
+    },
+    
+    customFormDirectionFromPart : function(other, self){
+        var direction;
+        var part = this.checkPart(other, self);
+        // console.log("customFormDirectionFromPart-->",part);
+        var otherAabb = other.world.aabb;
+        var selfAabb = self.world.aabb;
+        var otherPreAabb = other.world.preAabb;
+        var selfPreAabb = self.world.preAabb;
+        
+        if(part == DirectionType.Left){
+            direction = DirectionType.Left;
+        }
+        else if(part == DirectionType.LeftUp){
+            if(otherPreAabb.yMin == selfPreAabb.yMax || otherAabb.yMin == selfAabb.yMax){//Exclude press
+                direction = DirectionType.Up;
+            }
+            else{
+                direction = DirectionType.Left;
+            }
+        }
+        else if(part == DirectionType.LeftDown){
+            if(otherPreAabb.yMax == selfPreAabb.yMin || otherAabb.yMax == selfAabb.yMin){//Exclude landing
+                direction = DirectionType.Down;
+            }
+            else{
+                direction = DirectionType.Left;
+            }
+        }
+        
+        if(part == DirectionType.Right){
+            direction = DirectionType.Right;
+        }
+        else if(part == DirectionType.RightUp){
+            if(otherPreAabb.yMin == selfPreAabb.yMax || otherAabb.yMin == selfAabb.yMax){
+                direction = DirectionType.Up;
+            }
+            else{
+                direction = DirectionType.Right;
+            }
+        }
+        else if(part == DirectionType.RightDown){
+            if(otherPreAabb.yMax == selfPreAabb.yMin || otherAabb.yMax == selfAabb.yMin){
+                direction = DirectionType.Down;
+            }
+            else{
+                direction = DirectionType.Right;
+            }
+        }
+        
+        if(part == DirectionType.Up){
+            direction = DirectionType.Up;
+        }
+        else if(part == DirectionType.UpLeft){
+            if(otherPreAabb.xMax == selfPreAabb.xMin || otherAabb.xMax == selfAabb.xMin){//Exclude left
+                direction = DirectionType.Left;
+            }
+            else{
+                direction = DirectionType.Up;
+            }
+        }
+        else if(part == DirectionType.UpRight){
+            if(otherPreAabb.xMin == selfPreAabb.xMax || otherAabb.xMin == selfAabb.xMax){//Exclude right
+                direction = DirectionType.Right;
+            }
+            else{
+                direction = DirectionType.Up;
+            }
+        }
+        
+        if(part == DirectionType.Down){
+            direction = DirectionType.Down;
+        }
+        else if(part == DirectionType.DownLeft){
+            if(otherPreAabb.xMax == selfPreAabb.xMin || otherAabb.xMax == selfAabb.xMin){
+                direction = DirectionType.Left;
+            }
+            else{
+                direction = DirectionType.Down;
+            }
+        }
+        else if(part == DirectionType.DownRight){
+            if(otherPreAabb.xMin == selfPreAabb.xMax || otherAabb.xMin == selfAabb.xMax){
+                direction = DirectionType.Right;
+            }
+            else{
+                direction = DirectionType.Down;
+            }
+        }
+        
+        return direction;
     },
     
     onCollisionStay: function (other, self) {
@@ -215,23 +305,13 @@ cc.Class({
         // console.log("onCollisionExit");
         // this.node.color = cc.Color.WHITE;
        
-        var event = new cc.Event.EventCustom(EventType.aConlliderExit, true);
+        var event = new cc.Event.EventCustom(EventType.ConlliderExit, true);
         var userData = {};
         userData.other = other;
         userData.actor = self;
         
-        var otherPreAabb = other.world.aabb;
-        var selfPreCAabb = self.world.aabb;
-        var otherAabb = other.world.preAabb;
-        var selfAabb = self.world.preAabb;
+        userData.direction = this.customFormDirectionFromPart(other, self);
         
-        // otherAabb = other.world.aabb;
-        // selfAabb = self.world.aabb;
-        // otherPreAabb = other.world.preAabb;
-        // selfPreCAabb = self.world.preAabb;
-        
-        userData.part = this.checkPart(otherAabb,selfAabb,otherPreAabb,selfPreCAabb);
-
         event.setUserData(userData);
         this.node.dispatchEvent(event);
     },

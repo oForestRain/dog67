@@ -34,17 +34,18 @@ cc.Class({
         this.dispatchAllArray();
     },
     
-    // //conlliderEnterArray
-    // cAddToArray : "ConlliderAddToArray",
-    // cRemoveFromArray : "ConlliderRemoveFromArray",
-    
+    //conlliderEnterArray
+    // ConlliderAddToArray: 40,
+    // ConlliderRemoveFromArray: 41,
+    // EnterArrayDisable: 42,
+
     initListener : function(){
-        this.node.on(EventType.cAddToArray, 
+        this.node.on(EventType.ConlliderAddToArray, 
             function (event) {
                 this.addToArray(event);
             },
             this);
-        this.node.on(EventType.cRemoveFromArray, 
+        this.node.on(EventType.ConlliderRemoveFromArray, 
             function (event) {
                 this.removeFromArray(event);
             },
@@ -81,7 +82,7 @@ cc.Class({
         var userData;
         for(var i=0;i<this.enterArray.length;i++){
             actor = this.enterArray[i];
-            event = new cc.Event.EventCustom(EventType.cEnterArrayDisable, true );
+            event = new cc.Event.EventCustom(EventType.EnterArrayDisable, true );
             userData = {};
             userData.other = this.node;
             // console.log("CAHdispatchAllArray--->",i,userData.other.group,actor.group);

@@ -46,17 +46,17 @@ cc.Class({
     },
     
     initListener : function(){
-        this.node.on(EventType.insFacChange, 
+        this.node.on(EventType.InstanceFactoryChange, 
             function (event) { 
                 this.changeToPrefab(event);
             },
             this);
-        this.node.on(EventType.insFacAdd, 
+        this.node.on(EventType.InstanceFactoryAdd, 
             function (event) { 
                 this.addPrefab(event);
             },
             this);
-        this.node.on(EventType.insFacDel, 
+        this.node.on(EventType.InstanceFactoryDelete, 
             function (event) { 
                 this.putBack(event);
             },
@@ -77,7 +77,7 @@ cc.Class({
         var prefabType = userData.prefabType;
         var pool = userData.pool;
         
-        // console.log("changeToPrefab",targetType,target,prefabType);
+        // console.log("InstanceFactory-->changeToPrefab",targetType,target,prefabType,target.position);
         
         var prefabInstance = this.getPrefab(prefabType);
         prefabInstance.position =  target.position;
@@ -97,13 +97,13 @@ cc.Class({
         var prefabType = userData.prefabType;
         var position = userData.position;
 
-        // console.log("addPrefab",target,prefabType);
+        // console.log("InstanceFactory-->addPrefab",target,prefabType,position);
         
         var prefabInstance = this.getPrefab(prefabType);
         prefabInstance.position =  position;
         prefabInstance.parent = target.parent;
         
-        // console.log("addPrefab",prefabInstance.position,prefabInstance.parent);
+        // console.log("InstanceFactory-->addPrefab",prefabInstance.position,prefabInstance.parent);
         
     },
     
@@ -113,7 +113,7 @@ cc.Class({
         var targetType = userData.type;
         var pool = userData.pool;
         
-        // console.log("putBack",targetType,target);
+        console.log("InstanceFactory-->putBack",targetType,target);
         
         if(pool){
             this.putBackPrefab(targetType,target);
@@ -125,15 +125,15 @@ cc.Class({
     
     getPrefab: function (type) {
         if(type >= this.prefabType.length || type >= this.poolArray.length){
-            // console.log("getPrefab-->undefined");
+            // console.log("InstanceFactory-->getPrefab undefined");
             return;
         }
         if(!this.prefab[type] || !this.poolArray[type]){
-            // console.log("getPrefab-->undefined",type);
+            // console.log("InstanceFactory-->getPrefab undefined",type);
             return;  
         }
 
-        console.log("getPrefab-->",this.poolArray[type].size(),type);
+        // console.log("InstanceFactory-->getPrefab",this.poolArray[type].size(),type);
         var instance = null;
         
         if (this.poolArray[type].size() > 0){
@@ -142,23 +142,23 @@ cc.Class({
         else{
             instance = cc.instantiate(this.prefab[type]);
         }
-        console.log("getPrefab-->",this.poolArray[type].size(),type,instance);
+        // console.log("InstanceFactory-->getPrefab",this.poolArray[type].size(),type,instance);
 
         return instance;
     },
     
     putBackPrefab: function (type,instance) {
         if(type >= this.prefabType.length || type >= this.poolArray.length){
-            // console.log("putBackPrefab-->undefined");
+            console.log("InstanceFactory-->putBackPrefab undefined");
             return;
         }
         if(this.poolArray[type]===undefined){
-            // console.log("putBackPrefab-->undefined",type);
+            console.log("InstanceFactory-->putBackPrefab undefined",type);
             return;  
         }
 
         this.poolArray[type].put(instance);
         
-        console.log("putBackPrefab-->",this.poolArray[type].size(),type);
+        // console.log("InstanceFactory-->putBackPrefab",this.poolArray[type].size(),type,instance);
     }
 });

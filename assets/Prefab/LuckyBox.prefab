@@ -39,8 +39,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 847,
-      "y": 284
+      "x": 869,
+      "y": 309
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -65,10 +65,19 @@
       },
       {
         "__id__": 6
+      },
+      {
+        "__id__": 8
+      },
+      {
+        "__id__": 9
+      },
+      {
+        "__id__": 10
       }
     ],
     "_prefab": {
-      "__id__": 7
+      "__id__": 11
     },
     "groupIndex": 2
   },
@@ -133,19 +142,6 @@
     "onDisableCollisionManagerEnabled": false
   },
   {
-    "__type__": "80df9ChBXxGOqEZKJAe1XKn",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "type": 2,
-    "pool": true,
-    "changePrefabType": 1,
-    "addPrefabType": 3
-  },
-  {
     "__type__": "ad2180FOqxACYY6ol4IGUoW",
     "_name": "",
     "_objFlags": 0,
@@ -153,6 +149,73 @@
       "__id__": 1
     },
     "_enabled": true
+  },
+  {
+    "__type__": "49eb1osjf1OvK2fFJNSzh3p",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "collider": [
+      {
+        "__id__": 7
+      }
+    ]
+  },
+  {
+    "__type__": "JS_InteractEmitterAssist",
+    "event": 11,
+    "direction": [
+      6,
+      7,
+      8
+    ],
+    "group": [
+      0
+    ],
+    "emit": 100
+  },
+  {
+    "__type__": "7358df/KbpDXLE276qyL2AI",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "type": 2,
+    "event": 100,
+    "emit": 51,
+    "pool": true,
+    "prefabType": 3
+  },
+  {
+    "__type__": "7358df/KbpDXLE276qyL2AI",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "type": 2,
+    "event": 100,
+    "emit": 50,
+    "pool": true,
+    "prefabType": 1
+  },
+  {
+    "__type__": "de592s53NhKxKN46x0z0nqA",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "type": 2,
+    "event": 100,
+    "emit": 200
   },
   {
     "__type__": "cc.PrefabInfo",

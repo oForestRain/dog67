@@ -1,10 +1,10 @@
 var PrefabType =  cc.Enum({
-    //Particle
-    brickSmash: 0,
-    weakBrick:1,
-    luckyBox:2,
-    boneRes:3,
-    pnull:4,
+    //PrefabType
+    BrickSmash: 0,
+    WeakBrick:1,
+    LuckyBox:2,
+    BoneRes:3,
+    EnemyCat:4,
 });
 
 module.exports = PrefabType;
