@@ -168,8 +168,8 @@ cc.Class({
             return;
         }
         
-        // event.setUserData(userData);
-        // this.node.dispatchEvent( event );
+        event.setUserData(userData);
+        this.node.dispatchEvent( event );
     },
 
     mMovingLeftState: function() {

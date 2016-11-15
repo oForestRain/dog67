@@ -39,8 +39,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 869,
-      "y": 309
+      "x": 823,
+      "y": 334
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -64,20 +64,17 @@
         "__id__": 5
       },
       {
-        "__id__": 6
+        "__id__": 7
       },
       {
         "__id__": 8
       },
       {
         "__id__": 9
-      },
-      {
-        "__id__": 10
       }
     ],
     "_prefab": {
-      "__id__": 11
+      "__id__": 10
     },
     "groupIndex": 2
   },
@@ -142,15 +139,6 @@
     "onDisableCollisionManagerEnabled": false
   },
   {
-    "__type__": "ad2180FOqxACYY6ol4IGUoW",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true
-  },
-  {
     "__type__": "49eb1osjf1OvK2fFJNSzh3p",
     "_name": "",
     "_objFlags": 0,
@@ -160,7 +148,7 @@
     "_enabled": true,
     "collider": [
       {
-        "__id__": 7
+        "__id__": 6
       }
     ]
   },

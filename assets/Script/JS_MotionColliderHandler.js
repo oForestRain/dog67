@@ -72,16 +72,6 @@ cc.Class({
                 }
             },
             this);
-        this.node.on(EventType.EnterArrayDisable, 
-            function (event) {
-                this.exitFromDisable(event);
-            },
-            this);
-        this.node.on(EventType.ActorMotionFree, 
-            function (event) {
-                this.motionFree(event);
-            },
-            this);
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -109,15 +99,12 @@ cc.Class({
         }
         
         var userData = event.getUserData();
-        this.enterCheckBorder(userData);
+        var direction = userData.direction;
+        var other = userData.other.node;
+        this.enterAt(direction,other);
+        this.colliderCheck(direction);
+        this.backToPosition(direction,userData);
 
-        var lockcount = 0;
-        for(var kArray in this.lockArray){
-            lockcount +=kArray.length;
-        }
-        if(lockcount){
-            this.node.color = cc.Color.RED;
-        }
         // console.log("MotionColliderHandler-->enterHandler",this.leftLockCount,this.rightLockCount,this.upLockCount,this.downLockCount);
     },
     
@@ -125,19 +112,12 @@ cc.Class({
         // console.log("MotionColliderHandler-->exitHandler");
         var userData = event.getUserData();
         var other = userData.other.node;
-        
-        var direction = this.exitFrom(other);
+        var tangent  = userData.tangent;
+
+        var direction = this.exitFrom(other,!tangent);
         
         if(direction){
-             this.colliderCheck(direction,userData);
-        }
-        
-        var lockcount = 0;
-        for(var kArray in this.lockArray){
-            lockcount +=kArray.length;
-        }
-        if(lockcount){
-            this.node.color = cc.Color.WHITE;
+            this.colliderCheck(direction);
         }
     },
     
@@ -173,19 +153,6 @@ cc.Class({
         return false;
     },
 
-    enterCheckBorder : function(userData){
-        var direction = userData.direction;
-        var other = userData.other.node;
-
-        this.enterAt(direction,other);
-        this.colliderCheck(direction,userData);
-    },
-    
-    //conlliderEnterArray
-    // ConlliderAddToArray: 40,
-    // ConlliderRemoveFromArray: 41,
-    // EnterArrayDisable: 42,
-    
     enterAt : function(direction,other){
         var lArray;
         if(!this.lockArray[direction]){
@@ -204,13 +171,8 @@ cc.Class({
         // console.log("enterAt-->",direction,this.lockArray[direction].length,other.group);
     },
     
-    exitFrom : function( other ){
-        // console.log("MotionColliderHandler-->exitFrom",other.group);
-        var event = new cc.Event.EventCustom(EventType.ConlliderRemoveFromArray, true );
-        var data = {};
-        data.actor = this.node;
-        event.setUserData(data);
-        other.dispatchEvent(event);
+    exitFrom : function( other , clearAll ){
+        console.log("MotionColliderHandler-->exitFrom",other.group,clearAll);
         
         var direction;
         var kArray;
@@ -221,7 +183,12 @@ cc.Class({
                 if(kArray[j]===other){
                     // console.log("MotionColliderHandler-->exitFrom j1",key,j,kArray.length);
                     direction = key;
-                    kArray.splice(j,1);
+                    if(clearAll===false){
+                        kArray.splice(j,1);
+                    }
+                    else{
+                        kArray.length = 0;
+                    }
                     // console.log("MotionColliderHandler-->exitFrom j2",key,j,kArray.length,kArray[j]);
                     return direction;
                 }
@@ -231,41 +198,14 @@ cc.Class({
         return direction;
     },
     
-    exitFromDisable : function( other ){
-        // console.log("MotionColliderHandler-->exitFromDisable",other.group);
-        var direction;
-        var kArray;
-        for(var key in this.lockArray){
-            kArray = this.lockArray[key];
-            for(var j in kArray){
-                if(kArray[j]===other){
-                    // console.log("MotionColliderHandler-->exitFromDisable-->j1",key,j,kArray.length);
-                    direction = key;
-                    kArray.splice(j,1);
-                    // console.log("MotionColliderHandler-->exitFromDisable-->j2",key,j,kArray.length,kArray[j]);
-                    return direction;
-                }
-            }
-        }
-        
-        return direction;
-    },
-    
-    colliderCheck: function( direction , userData ){
+    colliderCheck: function( direction ){
         // console.log("MotionColliderHandler-->colliderCheck",direction);
         var kArray;
         if(!this.lockArray[direction]){
             this.lockArray[direction] = [];
         }
-        var kArray = this.lockArray[direction];
-        
-        if(kArray.length>0){
-            var other = userData.other;
-            var actor = userData.actor;
-            var otherAabb = other.world.aabb;
-            var actorAabb = actor.world.aabb;
-        }
-        
+        kArray = this.lockArray[direction];
+
         // console.log("MotionColliderHandler-->colliderCheck",direction,kArray,kArray.length);
         
         var event;
@@ -277,14 +217,11 @@ cc.Class({
                     data.direction = direction;
                     data.bool = (kArray.length>0);
                     event.setUserData(data);
-                    this.node.y = otherAabb.yMin - actorAabb.height*.5 - 1;
                 }
-                // console.log("MotionColliderHandler-->dispatchEventUp");
         }
         else if(direction==DirectionType.Down){
                 if(kArray.length>0){
                     event = new cc.Event.EventCustom(EventType.ActorLanding, true );
-                    this.node.y = otherAabb.yMax + actorAabb.height*.5;
                 }
                 else{
                     event = new cc.Event.EventCustom(EventType.ActorFalling, true );
@@ -297,37 +234,70 @@ cc.Class({
                 data.direction = direction;
                 data.bool = (kArray.length>0);
                 event.setUserData(data);
-                if(data.bool){
-                    if(direction == DirectionType.Left){
-                        this.node.x = otherAabb.xMax + actorAabb.width*.5
-                    }
-                    else{
-                        this.node.x = otherAabb.xMin - actorAabb.width*.5;
-                    }
-                }
                 // console.log("MotionColliderHandler-->dispatchEventLeftRight",data.bool,kArray.length);
         }
         
         if(event){
-            this.node.dispatchEvent( event );
+            this.dispatchLockEvent( event );
         }
     },
     
-    motionFree : function( event ){
-        // console.log("MotionColliderHandler-->motionFree");
-        var userData = event.getUserData();
-        var direction = userData.direction;
-        
-        if(!this.lockArray[direction]){
-            return;
+    dispatchLockEvent : function(event){
+        if(event){
+            this.node.dispatchEvent( event );
         }
         
-        // console.log("MotionColliderHandler-->motionFree",direction);
+        var lockcount = 0;
+        for(var kArray in this.lockArray){
+            lockcount +=kArray.length;
+        }
+        if(lockcount){
+            this.node.color = cc.Color.RED;
+        }
+        else{
+            this.node.color = cc.Color.WHITE;
+        }
+    },
 
-        var kArray = this.lockArray[direction];
-        kArray.length = 0;
+    // motionFree : function(direction){
+    //     // console.log("MotionColliderHandler-->motionFree",direction);
+    //     if(!this.lockArray[direction]){
+    //         return;
+    //     }
+    //     var kArray = this.lockArray[direction];
+    //     // var node;
+
+    //     // var event = new cc.Event.EventCustom(EventType.ConlliderRemoveFromArray, true );
+    //     // var data = {};
+    //     // data.actor = this.node;
+    //     // event.setUserData(data);
         
-        this.colliderCheck(direction,null);
+    //     // for(var key in kArray){
+    //     //     node = kArray[key];
+    //     //     node.dispatchEvent(event);
+    //     // }
+    //     kArray.length = 0;
+    // },
+    
+    backToPosition:function(direction,userData){
+        var other = userData.other;
+        var actor = userData.actor;
+        var otherAabb = other.world.aabb;
+        var actorAabb = actor.world.aabb;
+        
+        if(direction==DirectionType.Up){
+            this.node.y = otherAabb.yMin - actorAabb.height*.5 - 1;
+        }
+        else if(direction==DirectionType.Down){
+            this.node.y = otherAabb.yMax + actorAabb.height*.5;
+        }
+        else if(direction == DirectionType.Left){
+            this.node.x = otherAabb.xMax + actorAabb.width*.5
+        }
+        else if(direction == DirectionType.Right){
+            this.node.x = otherAabb.xMin - actorAabb.width*.5;
+        }
+        
     },
     
     stayHandler : function( event ){

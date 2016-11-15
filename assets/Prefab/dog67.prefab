@@ -39,8 +39,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 159,
-      "y": 191
+      "x": 207,
+      "y": 192
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -180,7 +180,7 @@
     },
     "_enabled": true,
     "gravity": 2048,
-    "gEnable": true
+    "gStateType": 4
   },
   {
     "__type__": "7bcc86taIxNBYJylLsJcInh",

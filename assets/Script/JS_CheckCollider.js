@@ -43,8 +43,7 @@ cc.Class({
     
     onCollisionEnter: function (other, self) {
         // console.log("onCollisionEnter");
-        // this.node.color = cc.Color.RED;
-        
+
         //conllider
         // ConlliderEnable : 10,
         // ConlliderEnter : 11,
@@ -57,17 +56,16 @@ cc.Class({
         userData.actor = self;
         
         // check part 
-        userData.direction = this.customFormDirectionFromPart(other, self);
+        var customFormDirection = this.customFormDirectionFromPart(other, self , true);
+        userData.direction = customFormDirection.direction;
+        userData.tangent = customFormDirection.tangent;
+        // console.log("ConlliderEnter",userData.direction);
 
         event.setUserData(userData);
         this.node.dispatchEvent(event);
     },
 
-    checkPart: function(other,self){
-        var otherAabb = other.world.aabb;
-        var selfAabb = self.world.aabb;
-        var otherPreAabb = other.world.preAabb;
-        var selfPreAabb = self.world.preAabb;
+    checkPart: function(otherAabb,otherPreAabb,selfAabb,selfPreAabb){
         //DirectionType
         // UpLeft:0,
         // Up:1,
@@ -129,7 +127,7 @@ cc.Class({
                 }
             }
             // console.log("part------------>1",part);
-            if(!part){
+            if(part!==undefined){
                 return part;
             }
         }
@@ -168,13 +166,13 @@ cc.Class({
                 }
             }
             // console.log("part------------>2",part);
-            if(!part){
+            if(part!==undefined){
                 return part;
             }
         }
         
         // check corner
-        if(!part){
+        if(part===undefined){
             //left
             if (selfPreCenter.x > selfCenter.x || otherPreCenter.x < otherCenter.x) {
                 // console.log("checkCorner-->left",selfPreCenter.x,selfCenter.x);
@@ -198,28 +196,42 @@ cc.Class({
             // console.log("part------------>3",part);
         }
         
-        // if(!part){
-        //     console.log("part!==undefined------------------------------------------------->");
-        // }
+        if(part===undefined){
+            // console.log("part===undefined------------------------------------------------->");
+        }
+        else{
+            // console.log("part------------>4",part);
+        }
         
         return part;
     },
     
-    customFormDirectionFromPart : function(other, self){
+    customFormDirectionFromPart : function(other, self ,enter){
         var direction;
-        var part = this.checkPart(other, self);
-        // console.log("customFormDirectionFromPart-->",part);
+        var tangent=false;
+        
         var otherAabb = other.world.aabb;
         var selfAabb = self.world.aabb;
         var otherPreAabb = other.world.preAabb;
         var selfPreAabb = self.world.preAabb;
         
+        var part;
+        if(enter){
+            part = this.checkPart(otherAabb,otherPreAabb,selfAabb,selfPreAabb);
+        }
+        else{
+            part = this.checkPart(otherPreAabb,otherAabb,selfPreAabb,selfAabb);
+        }
+        
+        // console.log("customFormDirectionFromPart-->",part);
+
         if(part == DirectionType.Left){
             direction = DirectionType.Left;
         }
         else if(part == DirectionType.LeftUp){
             if(otherPreAabb.yMin == selfPreAabb.yMax || otherAabb.yMin == selfAabb.yMax){//Exclude press
                 direction = DirectionType.Up;
+                tangent = true;
             }
             else{
                 direction = DirectionType.Left;
@@ -228,6 +240,7 @@ cc.Class({
         else if(part == DirectionType.LeftDown){
             if(otherPreAabb.yMax == selfPreAabb.yMin || otherAabb.yMax == selfAabb.yMin){//Exclude landing
                 direction = DirectionType.Down;
+                tangent = true;
             }
             else{
                 direction = DirectionType.Left;
@@ -240,6 +253,7 @@ cc.Class({
         else if(part == DirectionType.RightUp){
             if(otherPreAabb.yMin == selfPreAabb.yMax || otherAabb.yMin == selfAabb.yMax){
                 direction = DirectionType.Up;
+                tangent = true;
             }
             else{
                 direction = DirectionType.Right;
@@ -248,6 +262,7 @@ cc.Class({
         else if(part == DirectionType.RightDown){
             if(otherPreAabb.yMax == selfPreAabb.yMin || otherAabb.yMax == selfAabb.yMin){
                 direction = DirectionType.Down;
+                tangent = true;
             }
             else{
                 direction = DirectionType.Right;
@@ -260,6 +275,7 @@ cc.Class({
         else if(part == DirectionType.UpLeft){
             if(otherPreAabb.xMax == selfPreAabb.xMin || otherAabb.xMax == selfAabb.xMin){//Exclude left
                 direction = DirectionType.Left;
+                tangent = true;
             }
             else{
                 direction = DirectionType.Up;
@@ -268,6 +284,7 @@ cc.Class({
         else if(part == DirectionType.UpRight){
             if(otherPreAabb.xMin == selfPreAabb.xMax || otherAabb.xMin == selfAabb.xMax){//Exclude right
                 direction = DirectionType.Right;
+                tangent = true;
             }
             else{
                 direction = DirectionType.Up;
@@ -280,6 +297,7 @@ cc.Class({
         else if(part == DirectionType.DownLeft){
             if(otherPreAabb.xMax == selfPreAabb.xMin || otherAabb.xMax == selfAabb.xMin){
                 direction = DirectionType.Left;
+                tangent = true;
             }
             else{
                 direction = DirectionType.Down;
@@ -288,13 +306,14 @@ cc.Class({
         else if(part == DirectionType.DownRight){
             if(otherPreAabb.xMin == selfPreAabb.xMax || otherAabb.xMin == selfAabb.xMax){
                 direction = DirectionType.Right;
+                tangent = true;
             }
             else{
                 direction = DirectionType.Down;
             }
         }
         
-        return direction;
+        return {direction,tangent};
     },
     
     onCollisionStay: function (other, self) {
@@ -303,14 +322,17 @@ cc.Class({
     
     onCollisionExit: function (other, self) {
         // console.log("onCollisionExit");
-        // this.node.color = cc.Color.WHITE;
-       
+
         var event = new cc.Event.EventCustom(EventType.ConlliderExit, true);
         var userData = {};
         userData.other = other;
         userData.actor = self;
         
-        userData.direction = this.customFormDirectionFromPart(other, self);
+        var customFormDirection = this.customFormDirectionFromPart(other, self , false);
+        userData.direction = customFormDirection.direction;
+        userData.tangent = customFormDirection.tangent;
+        
+        console.log("onCollisionExit",userData.direction,userData.tangent);
         
         event.setUserData(userData);
         this.node.dispatchEvent(event);
