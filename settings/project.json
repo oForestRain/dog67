@@ -38,11 +38,11 @@
   ],
   "excluded-modules": [],
   "group-list": [
-    "player",
-    "enemy",
-    "terrain",
-    "resource",
-    "default"
+    "Player",
+    "Enemy",
+    "Terrain",
+    "Resource",
+    "Default"
   ],
   "start-scene": "current"
 }

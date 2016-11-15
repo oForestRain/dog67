@@ -34,12 +34,12 @@ cc.Class({
     },
     
     initListener : function(){
-        this.node.on(EventType.brickPush, 
+        this.node.on(EventType.BrickPush, 
             function (event) { 
                 this.brickPush(event);
             },
             this);
-        this.node.on(EventType.resCollect, 
+        this.node.on(EventType.ResourceCollect, 
             function (event) { 
                 this.resCollect(event);
             },
@@ -60,51 +60,15 @@ cc.Class({
     
     brickPush: function (event) {
         var userData = event.getUserData();
-        var target = userData.target;
-        var targetType = userData.type;
-        var pool = userData.pool;
-        var changePrefabType = userData.changePrefabType;
-        var addPrefabType = userData.addPrefabType;
-        var position = userData.target.position;
+        var actor = userData.actor;
+        var target = userData.other;
         
-        // console.log("GameInstance.brickPush--->",userData);
-        if(addPrefabType!=PrefabType.pnull){
-            event = new cc.Event.EventCustom(EventType.insFacAdd, true);
-            userData = {};
-            userData.target = target;
-            userData.prefabType = addPrefabType;
-            userData.position = position;
-            event.setUserData(userData);
-            GlobalReference.InstanceFactory.dispatchEvent(event);
-        }
-        
-        if(changePrefabType!=PrefabType.pnull){
-            event = new cc.Event.EventCustom(EventType.insFacChange, true);
-            userData = {};
-            userData.target = target;
-            userData.type = targetType;
-            userData.pool = pool;
-            userData.prefabType = changePrefabType;
-            event.setUserData(userData);
-            GlobalReference.InstanceFactory.dispatchEvent(event);
-        }
-       
     },
     
     resCollect: function (event) {
-        console.log("resCollect--->");
         var userData = event.getUserData();
-        var target = userData.target;
-        var targetType = userData.type;
-        var pool = userData.pool;
-
-        event = new cc.Event.EventCustom(EventType.insFacDel, true);
-        userData = {};
-        userData.target = target;
-        userData.type = targetType;
-        userData.pool = pool;
-        event.setUserData(userData);
-        GlobalReference.InstanceFactory.dispatchEvent(event);
+        var actor = userData.actor;
+        var target = userData.other;
         
     },
 

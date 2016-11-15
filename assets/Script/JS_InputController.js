@@ -1,4 +1,5 @@
 var EventType = require("EventType");
+var DirectionType = require("DirectionType");
 
 cc.Class({
     extends: cc.Component,
@@ -30,11 +31,7 @@ cc.Class({
     },
     
     onEnable: function () {
-        var event = new cc.Event.EventCustom(EventType.aConlliderEnable, true );
-        var userData = {};
-        userData.enable = true;
-        event.setUserData(userData);
-        this.actor.dispatchEvent( event );
+
     },
     
     onDisable: function () {
@@ -53,33 +50,25 @@ cc.Class({
         var listener = {
             event: cc.EventListener.KEYBOARD, 
             onKeyPressed: function(keyCode, event) {
-                switch(keyCode) {
-                    case cc.KEY.a:
-                    case cc.KEY.left:
-                        self.mLeft();
-                        break;
-                    case cc.KEY.d:
-                    case cc.KEY.right:
-                        self.mRight();
-                        break;
-                    case cc.KEY.j:
-                        self.mJump();
-                        break;
+                if(keyCode == cc.KEY.a || keyCode == cc.KEY.left){
+                    self.mLeft();
+                }
+                else if(keyCode == cc.KEY.d || keyCode == cc.KEY.right){
+                    self.mRight();
+                }
+                else if(keyCode == cc.KEY.j){
+                    self.mJump();
                 }
             },
             onKeyReleased: function(keyCode, event) {
-                switch(keyCode) {
-                    case cc.KEY.a:
-                    case cc.KEY.left:
-                        self.mLeftStop();
-                        break;
-                    case cc.KEY.d:
-                    case cc.KEY.right:
-                        self.mRightStop();
-                        break;
-                    case cc.KEY.j:
-                        self.mFalldown();
-                        break;
+                if(keyCode == cc.KEY.a || keyCode == cc.KEY.left){
+                    self.mLeftStop();
+                }
+                else if(keyCode == cc.KEY.d || keyCode == cc.KEY.right){
+                    self.mRightStop();
+                }
+                else if(keyCode == cc.KEY.j){
+                    self.mJumpStop();
                 }
             },
         }
@@ -88,10 +77,16 @@ cc.Class({
         cc.eventManager.addListener(listener, self.node);
     },
     
+    //control
+    // ActorMove: 0,
+    // ActorMoveStop: 1,
+    // ActorJump: 2,
+    // ActorJumpStop: 3,
+    
     mLeft: function() {
-        var event = new cc.Event.EventCustom(EventType.aMove, true );
+        var event = new cc.Event.EventCustom(EventType.ActorMove, true );
         var userData = {};
-        userData.direction = EventType.dLeft;
+        userData.direction = DirectionType.Left;
         event.setUserData(userData);
 
         // console.log(event.type,userData.direction);
@@ -100,9 +95,9 @@ cc.Class({
     },
 
     mRight: function() {
-        var event = new cc.Event.EventCustom(EventType.aMove, true );
+        var event = new cc.Event.EventCustom(EventType.ActorMove, true );
         var userData = {};
-        userData.direction = EventType.dRight;
+        userData.direction = DirectionType.Right;
         event.setUserData(userData);
         
         // console.log(event.type,userData.direction);
@@ -111,7 +106,7 @@ cc.Class({
     },
     
     mJump: function() {
-        var event = new cc.Event.EventCustom(EventType.aJump, true );
+        var event = new cc.Event.EventCustom(EventType.ActorJump, true );
         
         // console.log(event.type);
         
@@ -119,9 +114,9 @@ cc.Class({
     },
     
     mLeftStop: function() {
-        var event = new cc.Event.EventCustom(EventType.aStop, true );
+        var event = new cc.Event.EventCustom(EventType.ActorMoveStop, true );
         var userData = {};
-        userData.direction = EventType.dLeft;
+        userData.direction = DirectionType.Left;
         event.setUserData(userData);
         
         // console.log(event.type,userData.direction);
@@ -130,9 +125,9 @@ cc.Class({
     },
     
     mRightStop: function() {
-        var event = new cc.Event.EventCustom(EventType.aStop, true );
+        var event = new cc.Event.EventCustom(EventType.ActorMoveStop, true );
         var userData = {};
-        userData.direction = EventType.dRight;
+        userData.direction = DirectionType.Right;
         event.setUserData(userData);
         
         // console.log(event.type,userData.direction);
@@ -140,8 +135,8 @@ cc.Class({
         this.actor.dispatchEvent( event );
     },
     
-    mFalldown: function() {
-        var event = new cc.Event.EventCustom(EventType.aJumpStop, true );
+    mJumpStop: function() {
+        var event = new cc.Event.EventCustom(EventType.ActorJumpStop, true );
         
         // console.log(event.type);
         

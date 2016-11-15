@@ -16,32 +16,52 @@ cc.Class({
         // },
         // ...
         gravity : 2048,
-        gEnable : true,
+        gStateType : {
+            default:StateType.Landing,
+            type:StateType,
+        },
     },
 
     // use this for initialization
     onLoad: function () {
         this.initListener();
+        this.speed = 0;
     },
     
+    // // StateType
+    // Idle: 0,
+    // //move
+    // MoveLeft:1,
+    // MoveRight:2,
+    // MoveToStop:3,
+    // //jump
+    // Landing:4,
+    // Jump:5,
+    // Jump2:6,
+    // Falling:7,
+    
     onEnable: function () {
-        this.stateType = StateType.aLanding;
+        this.stateType = this.gStateType;
+        // console.log("Gravity--->onEnable",this.stateType);
     },
     
     onDisable: function () {
 
     },
      
-
+    //gravity
+    // ActorLanding: 20,
+    // ActorFalling: 21,
+        
     initListener : function(){
-        this.node.on(EventType.aLanding, 
+        this.node.on(EventType.ActorLanding, 
             function (event) {
                 // console.log("Gravity--->",event.type);
                 this.gLanding();
             },
             this);
             
-        this.node.on(EventType.aFallDown, 
+        this.node.on(EventType.ActorFalling, 
             function (event) {
                 // console.log("Gravity--->",event.type);
                 this.gFallDown();
@@ -51,11 +71,8 @@ cc.Class({
 
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
-        if(!this.gEnable){
-            return;
-        }
-        
-        if(this.stateType === StateType.aFallDown){
+        if(this.stateType === StateType.Falling){
+            // console.log("Gravity-->update",this.stateType);
             var endSpeed = this.speed - dt * this.gravity;
             var offsetY = (endSpeed + this.speed)/2 * dt;
             
@@ -65,15 +82,15 @@ cc.Class({
     },
     
     gLanding: function() {
-         // console.log(this.stateType);
-        this.stateType = StateType.aLanding;
+        // console.log("gLanding-->",this.stateType);
+        this.stateType = StateType.Landing;
         
         this.speed = 0;
     },
     
     gFallDown: function() {
         // console.log(this.stateType);
-        this.stateType = StateType.aFallDown;
+        this.stateType = StateType.Falling;
         
         this.speed = 0;
     },

@@ -40,9 +40,9 @@ cc.Class({
             if(this.yOffset>=this.upHeight){
                 offsetY = offsetY - this.yOffset + this.upHeight;
                 this.startUp = false;
-                var event = new cc.Event.EventCustom(EventType.aFallDown, true );
+                var event = new cc.Event.EventCustom(EventType.ActorFalling, true );
                 this.node.dispatchEvent( event );
-                event = new cc.Event.EventCustom(EventType.aConlliderEnable, true );
+                event = new cc.Event.EventCustom(EventType.ConlliderEnable, true );
                 var userData = {};
                 userData.enable = true;
                 event.setUserData(userData);

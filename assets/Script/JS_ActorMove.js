@@ -1,4 +1,5 @@
 var EventType = require("EventType");
+var DirectionType = require("DirectionType");
 var StateType = require("StateType");
 
 cc.Class({
@@ -38,11 +39,53 @@ cc.Class({
     onDisable: function () {
 
     },
+    
+    //control
+    // ActorMove: 0,
+    // ActorMoveStop: 1,
+    // ActorJump: 2,
+    // ActorJumpStop: 3,
+    // ActorMotionLock: 4,
+    
+    initListener : function(){
+        this.node.on(EventType.ActorMove, 
+            function (event) {
+                //console.log(event.type);
+                this.aMove(event);
+            },
+            this);
 
+        this.node.on(EventType.ActorMoveStop, 
+            function (event) {
+                //console.log(event.type);
+                this.aStop(event);
+            },
+            this);
+ 
+         this.node.on(EventType.ActorMotionLock, 
+            function (event) {
+                //console.log(event.type);
+                this.aLock(event);
+            },
+            this);
+    },
+    
+    // // StateType
+    // Idle: 0,
+    // //move
+    // MoveLeft:1,
+    // MoveRight:2,
+    // MoveToStop:3,
+    // //jump
+    // Landing:4,
+    // Jump:5,
+    // Jump2:6,
+    // Falling:7,
+    
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
         var offsetSpeed;
-        if(this.stateType === StateType.aMovingRight){
+        if(this.stateType == StateType.MoveRight){
             if(this.rightLock === true){
                 this.speed = 0;
             }
@@ -57,7 +100,7 @@ cc.Class({
                 }
             }
         }
-        else if(this.stateType === StateType.aMovingLeft){
+        else if(this.stateType == StateType.MoveLeft){
             if(this.leftLock === true){
                 this.speed = 0;
             }
@@ -73,7 +116,7 @@ cc.Class({
             }
         }
 
-        if(this.stateType === StateType.aMoveToStop){
+        if(this.stateType == StateType.MoveToStop){
             var dragSpeed = parseInt(this.dragAccelerate*dt);
             if(this.speed > 0 ){
                 this.speed -= dragSpeed;
@@ -84,7 +127,7 @@ cc.Class({
         }
 
         if(this.speed === 0){
-            if(this.stateType === StateType.aMoveToStop){
+            if(this.stateType == StateType.MoveToStop){
                 this.mIdleState();
             }
         }
@@ -93,56 +136,50 @@ cc.Class({
         this.node.x +=this.speed*dt;
     },
     
-    initListener : function(){
-        this.node.on(EventType.aMove, 
-            function (event) {
-                //console.log(event.type);
-                this.aMove(event);
-            },
-            this);
-
-        this.node.on(EventType.aStop, 
-            function (event) {
-                //console.log(event.type);
-                this.aStop(event);
-            },
-            this);
- 
-         this.node.on(EventType.aLock, 
-            function (event) {
-                //console.log(event.type);
-                this.aLock(event);
-            },
-            this);
-    },
+    //DirectionType
+    // UpLeft:0,
+    // Up:1,
+    // UpRight:2,
+    // RightUp:3,
+    // Right:4,
+    // RightDown:5,
+    // DownRight:6,
+    // Down:7,
+    // DownLeft:8,
+    // LeftDown:9,
+    // Left:10,
+    // LeftUp:11,
 
     aMove: function(event) {
         var userData = event.getUserData();
         var direction = userData.direction;
 
-        switch(direction) {
-            case EventType.dLeft:
-                this.mMovingLeftState();
-                break;
-            case EventType.dRight:
-                this.mMovingRightState();
-                break;
+        event = new cc.Event.EventCustom(EventType.ActorMotionFree, true );
+        userData = {};
+        if(direction==DirectionType.Left) {
+            this.mMovingLeftState();
+            userData.direction  = DirectionType.Right;
+         }
+        else if(direction==DirectionType.Right){
+            this.mMovingRightState();
+            userData.direction  = DirectionType.Left;
         }
+        else{
+            return;
+        }
+        
+        event.setUserData(userData);
+        this.node.dispatchEvent( event );
     },
 
-    // aIdle: "ActorIdle",
-    // aMovingLeft: "ActorMovingLeft",
-    // aMovingRight: "ActorMovingRight",
-    // aMoveToStop: "ActorMoveToStop",
-    
     mMovingLeftState: function() {
-        this.stateType = StateType.aMovingLeft;
+        this.stateType = StateType.MoveLeft;
         
         this.node.scaleX = -1;
     },
     
     mMovingRightState: function() {
-        this.stateType = StateType.aMovingRight;
+        this.stateType = StateType.MoveRight;
         
         this.node.scaleX = 1;
     },
@@ -151,29 +188,31 @@ cc.Class({
         var userData = event.getUserData();
         var direction = userData.direction;
 
-        switch(direction) {
-            case EventType.dLeft:
-                if(this.speed < 0 ){
-                    this.mMoveToStopState();
-                }
-                break;
-            case EventType.dRight:
-                if(this.speed > 0 ){
-                    this.mMoveToStopState();
-                }
-                break;
+        if(direction==DirectionType.Left) {
+            if(this.speed < 0 ){
+                this.mMoveToStopState();
+            }
+        }
+        else if(direction==DirectionType.Right){
+            if(this.speed > 0 ){
+                this.mMoveToStopState();
+            }
+        }
+        
+        if(this.speed === 0 ){
+            this.mIdleState();
         }
     },
 
     mMoveToStopState: function() {
         
-        this.stateType = StateType.aMoveToStop;
+        this.stateType = StateType.MoveToStop;
 
     },
     
     mIdleState: function() {
         
-        this.stateType = StateType.aIdle;
+        this.stateType = StateType.Idle;
 
     },
     
@@ -184,13 +223,13 @@ cc.Class({
         
         // console.log("ActorMove--->",direction,lock);
         
-        switch(direction) {
-            case EventType.dLeft:
-                this.leftLock = lock;
-                break;
-            case EventType.dRight:
-                this.rightLock = lock;
-                break;
+        if(direction==DirectionType.Left) {
+            this.leftLock = lock;
         }
+        else if(direction==DirectionType.Right){
+            this.rightLock = lock;
+        }
+        
+        // console.log("ActorMove--->aLock",direction,lock,this.rightLock,direction==DirectionType.Right,direction===DirectionType.Right);
     },
 });
