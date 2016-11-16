@@ -16,8 +16,17 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-
-        controller : {
+        actor : {
+            default: null,
+            type: cc.Node,
+        },
+        
+        mainCamera : {
+            default: null,
+            type: cc.Node
+        },
+        
+        inpController : {
             default: null,
             type: cc.Node
         },
@@ -31,6 +40,17 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         this.initListener();
+        
+        GlobalReference.PlayerInstance = this.actor;
+        GlobalReference.GameInstance = this.node;
+        GlobalReference.InputController  = this.inpController;
+        GlobalReference.InstanceFactory  = this.insFactory;
+        GlobalReference.MainCamera  = this.mainCamera;
+        
+        // console.log("GameInstance--->onLoad",GlobalReference.PlayerInstance,
+        //                 GlobalReference.GameInstance,
+        //                 GlobalReference.InputController,
+        //                 GlobalReference.InstanceFactory);
     },
     
     initListener : function(){
@@ -47,15 +67,21 @@ cc.Class({
     },
     
     start: function () {
-        GlobalReference.GameInstance = this.node;
-        GlobalReference.GameController  = this.controller;
-        GlobalReference.InstanceFactory  = this.insFactory;
-        
+
         cc.director.setDisplayStats(true);
         
         cc.game.addPersistRootNode(this.node);
         // removePersistRootNode
-        //  console.log("JS_GameInstance.isPersistRootNode--->",cc.game.isPersistRootNode(this.node));
+        // console.log("GameInstance.isPersistRootNode--->",cc.game.isPersistRootNode(this.node));
+        // console.log("GameInstance--->start",GlobalReference.PlayerInstance);
+    },
+    
+    onEnable: function () {
+        // console.log("GameInstance--->onEnable",GlobalReference.PlayerInstance);
+    },
+    
+    onDisable: function () {
+
     },
     
     brickPush: function (event) {

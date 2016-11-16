@@ -75,11 +75,7 @@ cc.Class({
 
         this.node.on(EventType.ActorMotionLock, 
             function (event) {
-                var userData = event.getUserData();
-                var direction = userData.direction;
-                if(direction == DirectionType.Up){
-                    this.mStopUp();
-                }
+                this.mVerticalLock(event);
             },
             this);
         
@@ -122,6 +118,8 @@ cc.Class({
             return;
         }
         
+        // console.log("ActorJump-->mJump",this.stateType);
+        
         var jTime;
         var actorJHeight;
         var gravity;
@@ -149,15 +147,22 @@ cc.Class({
         this.node.dispatchEvent( event );
     },
     
-    mStopUp: function() {
-        // console.log("ActorJump-->mStopUp");
+    mVerticalLock: function(event) {
         if(this.GravityCom===null){
             return;
         }
         
-        this.mJumpLock();
-        this.speed =0;
-
+        var userData = event.getUserData();
+        var direction = userData.direction;
+        var lock = userData.bool;
+        // console.log("ActorJump-->mLockUp",direction,lock);
+        if(!lock){
+            return;
+        }
+        if(direction === DirectionType.Up){
+            this.mJumpLock();
+            this.speed =0;
+        }
     },
     
     mJumpLock: function() {

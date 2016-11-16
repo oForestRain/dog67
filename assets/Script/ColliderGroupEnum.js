@@ -1,10 +1,10 @@
 var ColliderGroupEnum =  cc.Enum({
     //ColliderGroup
-    Player: 0,
-    Enemy: 1,
-    Terrain: 2,
-    Resource: 3,
-    Default: 4,
+    Default: 0,
+    Player: 1,
+    Enemy: 2,
+    Terrain: 3,
+    Resource: 4,
 });
 
 module.exports = ColliderGroupEnum;

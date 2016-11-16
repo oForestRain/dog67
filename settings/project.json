@@ -2,47 +2,47 @@
   "collision-matrix": [
     [
       false,
-      true,
-      true,
-      true,
-      false
-    ],
-    [
-      true,
       false,
-      true,
       false,
-      false
-    ],
-    [
-      true,
-      true,
-      false,
-      true,
-      false
-    ],
-    [
-      true,
-      false,
-      true,
       false,
       false
     ],
     [
       false,
       false,
+      true,
+      true,
+      true
+    ],
+    [
       false,
+      true,
       false,
+      true,
+      false
+    ],
+    [
+      false,
+      true,
+      true,
+      true,
+      true
+    ],
+    [
+      false,
+      true,
+      false,
+      true,
       false
     ]
   ],
   "excluded-modules": [],
   "group-list": [
+    "Default",
     "Player",
     "Enemy",
     "Terrain",
-    "Resource",
-    "Default"
+    "Resource"
   ],
   "start-scene": "current"
 }

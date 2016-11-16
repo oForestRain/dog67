@@ -46,8 +46,9 @@ cc.Class({
     update: function (dt) {
         if(this.startMove){
             // console.log("EnemyAutoMove--->update",dt,cc.p(dt*this.moveStep,0));
-            var action = cc.moveBy(dt, cc.p(dt*this.moveStep,0));
-            this.node.runAction(action);
+            // var action = cc.moveBy(dt, cc.p(dt*this.moveStep,0));
+            // this.node.runAction(action);
+            this.node.x +=dt*this.moveStep;
         }
     },
     

@@ -70,7 +70,7 @@ cc.Class({
         event.setUserData(userData);
         GlobalReference.InstanceFactory.dispatchEvent(event);
         
-        console.log("InstanceFactoryEmitter-->emitInstanceFactoryEvent",emit,userData.type);
+        // console.log("InstanceFactoryEmitter-->emitInstanceFactoryEvent",emit,userData.type);
     },
 
     // called every frame, uncomment this function to activate update callback

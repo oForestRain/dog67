@@ -1,5 +1,6 @@
 var EventType = require("EventType");
 var StateType = require("StateType");
+var DirectionType = require("DirectionType");
 
 cc.Class({
     extends: cc.Component,
@@ -54,45 +55,63 @@ cc.Class({
     // ActorFalling: 21,
         
     initListener : function(){
-        this.node.on(EventType.ActorLanding, 
-            function (event) {
-                // console.log("Gravity--->",event.type);
-                this.gLanding();
-            },
-            this);
-            
         this.node.on(EventType.ActorFalling, 
             function (event) {
                 // console.log("Gravity--->",event.type);
                 this.gFallDown();
             },
             this);
+        this.node.on(EventType.ActorMotionLock, 
+            function (event) {
+                this.gLock(event);
+            },
+            this);
     },
 
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
+        // console.log("Gravity-->update",this.stateType,StateType.Falling,this.stateType === StateType.Falling);
         if(this.stateType === StateType.Falling){
-            // console.log("Gravity-->update",this.stateType);
             var endSpeed = this.speed - dt * this.gravity;
             var offsetY = (endSpeed + this.speed)/2 * dt;
             
             this.node.y += offsetY;
             this.speed = endSpeed;
+            // console.log("Gravity-->update Falling",this.speed);
         }
     },
     
     gLanding: function() {
         // console.log("gLanding-->",this.stateType);
         this.stateType = StateType.Landing;
-        
         this.speed = 0;
+        
+        var event = new cc.Event.EventCustom(EventType.ActorLanding, true );
+        this.node.dispatchEvent( event );
     },
     
     gFallDown: function() {
-        // console.log(this.stateType);
+        // console.log("gFallDown-->",this.stateType);
         this.stateType = StateType.Falling;
-        
         this.speed = 0;
+        //  console.log("gFallDown-->",this.stateType);
     },
     
+    gLock: function(event) {
+        // console.log("gLock-->",this.stateType);
+        var userData = event.getUserData();
+        var direction = userData.direction;
+        var lock = userData.bool;
+        // console.log("gLock-->",direction,DirectionType.Down,lock,direction !== DirectionType.Down,direction != DirectionType.Down);
+        if(direction != DirectionType.Down){
+            return;
+        }
+        if(lock){
+            this.gLanding();
+        }
+        else{
+            this.gFallDown();
+        }
+
+    },
 });

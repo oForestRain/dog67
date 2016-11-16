@@ -1,5 +1,6 @@
 var EventType = require("EventType");
 var DirectionType = require("DirectionType");
+var GlobalReference = require("GlobalReference");
 
 cc.Class({
     extends: cc.Component,
@@ -15,41 +16,41 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        actor: {
-            default: null,
-            type: cc.Node
-        },
+        // actor : {
+        //     default: null,
+        //     type: cc.Node,
+        // },
     },
 
     // use this for initialization
     onLoad: function () {
-
         this.initListener();
-        
-        // this.debuglog = this.getComponent(cc.Label);
-        
     },
     
     onEnable: function () {
-
+        this.actor =  GlobalReference.PlayerInstance;
+        // console.log("InputController--->onEnable",GlobalReference.PlayerInstance);
     },
     
     onDisable: function () {
 
     },
-    
+
     // called every frame, uncomment this function to activate update callback
-    update: function (dt) {
-        // this.debuglog.string = this.moveDeriction;
-    },
+    // update: function (dt) {
+        // console.log("InputController--->update",GlobalReference.PlayerInstance);
+    // },
     
     initListener : function(){
-        //add keyboard input listener to call turnLeft and turnRight
         var self = this;
-        
+        //add keyboard input listener to call turnLeft and turnRight
         var listener = {
             event: cc.EventListener.KEYBOARD, 
             onKeyPressed: function(keyCode, event) {
+                // console.log("InputController--->onKeyPressed",self.actor);
+                if(self.actor===undefined){
+                    return;
+                }
                 if(keyCode == cc.KEY.a || keyCode == cc.KEY.left){
                     self.mLeft();
                 }
@@ -61,6 +62,10 @@ cc.Class({
                 }
             },
             onKeyReleased: function(keyCode, event) {
+                // console.log("InputController--->onKeyPressed",self.actor);
+                if(self.actor===undefined){
+                    return;
+                }
                 if(keyCode == cc.KEY.a || keyCode == cc.KEY.left){
                     self.mLeftStop();
                 }
@@ -72,7 +77,6 @@ cc.Class({
                 }
             },
         }
-        
         
         cc.eventManager.addListener(listener, self.node);
     },
@@ -89,7 +93,7 @@ cc.Class({
         userData.direction = DirectionType.Left;
         event.setUserData(userData);
 
-        // console.log(event.type,userData.direction);
+        // console.log("InputController--->mLeft",this.actor,event.type,userData.direction);
         
         this.actor.dispatchEvent( event );
     },

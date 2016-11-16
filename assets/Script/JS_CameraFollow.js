@@ -1,3 +1,5 @@
+var GlobalReference = require("GlobalReference");
+
 cc.Class({
     extends: cc.Component,
 
@@ -12,24 +14,50 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        target: {
-            default: null,
-            type: cc.Node
-        },
+        pos: new cc.Vec2(-100, 0),
+        size: new cc.Vec2(3500, 1280),
     },
 
     // use this for initialization
     onLoad: function () {
-        if (!this.target) {
-            return;
-        }
 
-        var follow = cc.follow(this.target, cc.rect(0,0, 2000,2000));
-        this.node.runAction(follow);
+    },
+
+    onEnable: function () {
+        this.following = false;
+        this.follow;
+        
+        this.setFollowTarget(GlobalReference.PlayerInstance);
+        this.followTarget();
+    },
+    
+    onDisable: function () {
+
     },
 
     // called every frame, uncomment this function to activate update callback
     // update: function (dt) {
 
     // },
+    
+    setFollowTarget : function(target){
+        this.target = target;
+    },
+    
+    followTarget:function(){
+        if(this.target===undefined){
+            return;
+        }
+        this.follow = cc.follow(this.target, 
+                                cc.rect(this.pos.x,this.pos.y,
+                                            this.size.x,this.size.y));
+        this.target.parent.runAction(this.follow);
+        this.following = true;
+        // console.log("CameraFollow.followTarget--->",this.target,this.follow);
+    },
+    
+    stopFollow:function(){
+        this.node.stopAction(this.follow);
+    },
+
 });

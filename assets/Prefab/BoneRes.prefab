@@ -39,8 +39,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 141,
-      "y": 420
+      "x": 139,
+      "y": 442
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -82,7 +82,7 @@
     "_prefab": {
       "__id__": 12
     },
-    "groupIndex": 3
+    "groupIndex": 4
   },
   {
     "__type__": "cc.Sprite",
@@ -195,7 +195,7 @@
     "event": 11,
     "direction": [],
     "group": [
-      0
+      1
     ],
     "emit": 101
   },

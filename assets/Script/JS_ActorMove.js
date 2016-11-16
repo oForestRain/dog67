@@ -222,7 +222,6 @@ cc.Class({
         var lock = userData.bool;
         
         // console.log("ActorMove--->",direction,lock);
-        
         if(direction==DirectionType.Left) {
             this.leftLock = lock;
         }

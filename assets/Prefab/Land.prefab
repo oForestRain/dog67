@@ -35,12 +35,12 @@
     "_children": [],
     "_rotationX": 0,
     "_rotationY": 0,
-    "_scaleX": 20,
-    "_scaleY": 3,
+    "_scaleX": 8,
+    "_scaleY": 2,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 477,
-      "y": 58
+      "x": 1694,
+      "y": 364
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -61,7 +61,7 @@
     "_prefab": {
       "__id__": 4
     },
-    "groupIndex": 2
+    "groupIndex": 3
   },
   {
     "__type__": "cc.Sprite",

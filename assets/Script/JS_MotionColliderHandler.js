@@ -102,8 +102,9 @@ cc.Class({
         var direction = userData.direction;
         var other = userData.other.node;
         this.enterAt(direction,other);
+        
         this.colliderCheck(direction);
-        this.backToPosition(direction,userData);
+        this.backToPosition(direction, userData);
 
         // console.log("MotionColliderHandler-->enterHandler",this.leftLockCount,this.rightLockCount,this.upLockCount,this.downLockCount);
     },
@@ -172,7 +173,7 @@ cc.Class({
     },
     
     exitFrom : function( other , clearAll ){
-        console.log("MotionColliderHandler-->exitFrom",other.group,clearAll);
+        // console.log("MotionColliderHandler-->exitFrom",other.group,clearAll);
         
         var direction;
         var kArray;
@@ -199,7 +200,9 @@ cc.Class({
     },
     
     colliderCheck: function( direction ){
-        // console.log("MotionColliderHandler-->colliderCheck",direction);
+        // if(ColliderGroupMapping[userData.actor.node.group]== ColliderGroupEnum.Enemy){
+        //     console.log("MotionColliderHandler-->colliderCheck",direction);
+        // }
         var kArray;
         if(!this.lockArray[direction]){
             this.lockArray[direction] = [];
@@ -209,35 +212,30 @@ cc.Class({
         // console.log("MotionColliderHandler-->colliderCheck",direction,kArray,kArray.length);
         
         var event;
-        var data;
+        var data = {};
+        var bool = kArray.length>0;
         if(direction==DirectionType.Up){
-                if(kArray.length>0){
+                if(bool){
                     event = new cc.Event.EventCustom(EventType.ActorMotionLock, true );
-                    data = {};
                     data.direction = direction;
-                    data.bool = (kArray.length>0);
-                    event.setUserData(data);
+                    data.bool = bool;
                 }
         }
         else if(direction==DirectionType.Down){
-                if(kArray.length>0){
-                    event = new cc.Event.EventCustom(EventType.ActorLanding, true );
-                }
-                else{
-                    event = new cc.Event.EventCustom(EventType.ActorFalling, true );
-                }
-                // console.log("MotionColliderHandler-->dispatchEventDown",kArray.length);
+                event = new cc.Event.EventCustom(EventType.ActorMotionLock, true );
+                data.direction = direction;
+                data.bool = bool;
+                // console.log("MotionColliderHandler-->dispatchEventDown",data.bool);
         }
         else if(direction==DirectionType.Left || direction==DirectionType.Right){
                 event = new cc.Event.EventCustom(EventType.ActorMotionLock, true );
-                data = {};
                 data.direction = direction;
-                data.bool = (kArray.length>0);
-                event.setUserData(data);
+                data.bool = bool;
                 // console.log("MotionColliderHandler-->dispatchEventLeftRight",data.bool,kArray.length);
         }
-        
+            
         if(event){
+            event.setUserData(data);
             this.dispatchLockEvent( event );
         }
     },
@@ -259,45 +257,35 @@ cc.Class({
         }
     },
 
-    // motionFree : function(direction){
-    //     // console.log("MotionColliderHandler-->motionFree",direction);
-    //     if(!this.lockArray[direction]){
-    //         return;
-    //     }
-    //     var kArray = this.lockArray[direction];
-    //     // var node;
-
-    //     // var event = new cc.Event.EventCustom(EventType.ConlliderRemoveFromArray, true );
-    //     // var data = {};
-    //     // data.actor = this.node;
-    //     // event.setUserData(data);
-        
-    //     // for(var key in kArray){
-    //     //     node = kArray[key];
-    //     //     node.dispatchEvent(event);
-    //     // }
-    //     kArray.length = 0;
-    // },
-    
     backToPosition:function(direction,userData){
         var other = userData.other;
         var actor = userData.actor;
         var otherAabb = other.world.aabb;
         var actorAabb = actor.world.aabb;
         
+        pos = new cc.Vec2(actor.node.x,other.node.position - otherAabb.height*.5 - actorAabb.height*.5 - 1);
+        
+        var pos;
         if(direction==DirectionType.Up){
-            this.node.y = otherAabb.yMin - actorAabb.height*.5 - 1;
+            pos = new cc.Vec2(actorAabb.center.x,otherAabb.yMin - actorAabb.height*.5 - 1);
         }
         else if(direction==DirectionType.Down){
-            this.node.y = otherAabb.yMax + actorAabb.height*.5;
+            pos = new cc.Vec2(actorAabb.center.x,otherAabb.yMax + actorAabb.height*.5);
         }
         else if(direction == DirectionType.Left){
-            this.node.x = otherAabb.xMax + actorAabb.width*.5
+            pos = new cc.Vec2(otherAabb.xMax + actorAabb.width*.5,actorAabb.center.y);
         }
         else if(direction == DirectionType.Right){
-            this.node.x = otherAabb.xMin - actorAabb.width*.5;
+            pos = new cc.Vec2(otherAabb.xMin - actorAabb.width*.5,actorAabb.center.y);
         }
         
+        // console.log("MotionColliderHandler1",this.node.position);
+        // console.log("MotionColliderHandler2",actorAabb.center);
+        // console.log("MotionColliderHandler3",actor.node.position);
+        // console.log("MotionColliderHandler4",this.node.parent.convertToNodeSpace(
+        //                                 actorAabb.center));
+        
+        this.node.position =  this.node.parent.convertToNodeSpace(pos);
     },
     
     stayHandler : function( event ){

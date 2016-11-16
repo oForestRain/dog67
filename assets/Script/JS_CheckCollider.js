@@ -1,6 +1,9 @@
 var EventType = require("EventType");
 var DirectionType = require("DirectionType");
 
+var ColliderGroupMapping = require("ColliderGroupMapping");
+var ColliderGroupEnum = require("ColliderGroupEnum");
+
 cc.Class({
     extends: cc.Component,
 
@@ -31,12 +34,14 @@ cc.Class({
     
     initListener: function(){
         cc.director.getCollisionManager().enabled = true;
+        cc.director.getCollisionManager().enabledDrawBoundingBox.enabled = true; 
         cc.director.getCollisionManager().enabledDebugDraw = true;
     },
     
     onDisable: function () {
         if(this.onDisableCollisionManagerEnabled){
             cc.director.getCollisionManager().enabled = false;
+            cc.director.getCollisionManager().enabledDrawBoundingBox.enabled = false; 
             cc.director.getCollisionManager().enabledDebugDraw = false;
         }
     },
@@ -55,6 +60,11 @@ cc.Class({
         userData.other = other;
         userData.actor = self;
         
+        var otherAabb = other.world.aabb;
+        var selfAabb = self.world.aabb;
+        var otherPreAabb = other.world.preAabb;
+        var selfPreAabb = self.world.preAabb;
+
         // check part 
         var customFormDirection = this.customFormDirectionFromPart(other, self , true);
         userData.direction = customFormDirection.direction;
@@ -63,6 +73,16 @@ cc.Class({
 
         event.setUserData(userData);
         this.node.dispatchEvent(event);
+        
+        // console.log("ConlliderEnter1",this.node.position);
+        // console.log("ConlliderEnter5",self.world.aabb.center);
+        // console.log("ConlliderEnter6",this.node.parent.convertToNodeSpace(
+        //                                 self.world.aabb.center));
+                                        
+        // console.log("ConlliderEnter",other.world.aabb.center);
+        // console.log("ConlliderEnter",self.world.aabb.center);
+        // console.log("ConlliderEnter",other.world.preAabb.center);
+        // console.log("ConlliderEnter",self.world.preAabb.center);
     },
 
     checkPart: function(otherAabb,otherPreAabb,selfAabb,selfPreAabb){
@@ -98,10 +118,9 @@ cc.Class({
         var selfPreAabbClone = selfPreAabb.clone();
         otherPreAabbClone.x = otherAabb.x;
         selfPreAabbClone.x = selfAabb.x;
-        // console.log("checkPartX-->",selfPreCenter.x,selfCenter.x,otherPreCenter.x,otherCenter.x);
         if (cc.Intersection.rectRect(selfPreAabbClone,otherPreAabbClone)) {
             //left be hit
-            if (selfPreCenter.x > selfCenter.x || otherPreCenter.x < otherCenter.x) {
+            if ((selfPreCenter.x - selfCenter.x) - (otherPreCenter.x - otherCenter.x) >0) {
                 // console.log("checkPart------------>part left be hit");
                 if(otherAabb.yMin >= topBorder){
                     part = DirectionType.LeftUp;
@@ -114,7 +133,7 @@ cc.Class({
                 }
             }
             //right be hit
-            else if (selfPreCenter.x < selfCenter.x || otherPreCenter.x > otherCenter.x) {
+            else if ((selfPreCenter.x - selfCenter.x) - (otherPreCenter.x - otherCenter.x) <0) {
                 // console.log("checkPart------------>part right be hit");
                 if(otherAabb.yMin >= topBorder){
                     part = DirectionType.RightUp;
@@ -137,10 +156,9 @@ cc.Class({
         selfPreAabbClone = selfPreAabb.clone();
         otherPreAabbClone.y = otherAabb.y;
         selfPreAabbClone.y = selfAabb.y;
-        // console.log("checkPartY-->",selfPreCenter.y,selfCenter.y,otherPreCenter.y,otherCenter.y);
         if (cc.Intersection.rectRect(selfPreAabbClone,otherPreAabbClone)) {
             //top be hit
-            if (selfPreCenter.y < selfCenter.y || otherPreCenter.y > otherCenter.y) {
+            if ((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) < 0) {
                 // console.log("checkPart-->part top be hit");
                 if(otherAabb.xMax <= leftBorder){
                     part = DirectionType.UpLeft;
@@ -153,7 +171,7 @@ cc.Class({
                 }
             }
             //bottom be hit
-            else if (selfPreCenter.y > selfCenter.y || otherPreCenter.y < otherCenter.y) {
+            else if ((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) > 0) {
                 // console.log("checkPart-->part bottom be hit");
                 if(otherAabb.xMax <= leftBorder){
                     part = DirectionType.DownLeft;
@@ -175,7 +193,6 @@ cc.Class({
         if(part===undefined){
             //left
             if (selfPreCenter.x > selfCenter.x || otherPreCenter.x < otherCenter.x) {
-                // console.log("checkCorner-->left",selfPreCenter.x,selfCenter.x);
                 if(selfPreCenter.y < selfCenter.y || otherPreCenter.y > otherCenter.y){
                     part = DirectionType.UpLeft;
                 }
@@ -185,7 +202,6 @@ cc.Class({
             }
             //right
             else if (selfPreCenter.x < selfCenter.x || otherPreCenter.x > otherCenter.x) {
-                // console.log("checkCorner-->right",selfPreCenter.y,selfCenter.y);
                 if(selfPreCenter.y < selfCenter.y || otherPreCenter.y > otherCenter.y){
                     part = DirectionType.UpRight;
                 }
@@ -196,12 +212,12 @@ cc.Class({
             // console.log("part------------>3",part);
         }
         
-        if(part===undefined){
-            // console.log("part===undefined------------------------------------------------->");
-        }
-        else{
+        // if(part===undefined){
+        //     console.log("part===undefined------------------------------------------------->");
+        // }
+        // else{
             // console.log("part------------>4",part);
-        }
+        // }
         
         return part;
     },
@@ -222,7 +238,7 @@ cc.Class({
         else{
             part = this.checkPart(otherPreAabb,otherAabb,selfPreAabb,selfAabb);
         }
-        
+
         // console.log("customFormDirectionFromPart-->",part);
 
         if(part == DirectionType.Left){
@@ -321,7 +337,7 @@ cc.Class({
     },
     
     onCollisionExit: function (other, self) {
-        // console.log("onCollisionExit");
+        // console.log("onCollisionExit",other.node.group);
 
         var event = new cc.Event.EventCustom(EventType.ConlliderExit, true);
         var userData = {};
@@ -332,7 +348,7 @@ cc.Class({
         userData.direction = customFormDirection.direction;
         userData.tangent = customFormDirection.tangent;
         
-        console.log("onCollisionExit",userData.direction,userData.tangent);
+        // console.log("onCollisionExit",userData.direction,userData.tangent,this.node.group);
         
         event.setUserData(userData);
         this.node.dispatchEvent(event);

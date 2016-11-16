@@ -82,7 +82,7 @@
     "_prefab": {
       "__id__": 12
     },
-    "groupIndex": 1
+    "groupIndex": 2
   },
   {
     "__type__": "cc.Sprite",
@@ -188,7 +188,7 @@
       2
     ],
     "group": [
-      0
+      1
     ],
     "emit": 102
   },
