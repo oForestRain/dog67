@@ -22,7 +22,7 @@ cc.Class({
         rightOffsetRate : .3,
         topOffsetRate : .3,
         bottomOffsetRate : .3,
-        onDisableCollisionManagerEnabled : false,
+        activeOnEnable : true,
     },
 
     // use this for initialization
@@ -32,21 +32,35 @@ cc.Class({
 
     },
     
-    initListener: function(){
-        cc.director.getCollisionManager().enabled = true;
-        cc.director.getCollisionManager().enabledDrawBoundingBox.enabled = true; 
-        cc.director.getCollisionManager().enabledDebugDraw = true;
+    onEnable: function () {
+
+        this.enable = this.activeOnEnable;
     },
     
     onDisable: function () {
-        if(this.onDisableCollisionManagerEnabled){
-            cc.director.getCollisionManager().enabled = false;
-            cc.director.getCollisionManager().enabledDrawBoundingBox.enabled = false; 
-            cc.director.getCollisionManager().enabledDebugDraw = false;
+
+    },
+    
+    initListener: function(){
+        this.node.on(EventType.ConlliderEnable, 
+            function (event) {
+                this.componentEnable(event);
+            },
+            this);
+    },
+    
+    componentEnable : function( event ){
+        var userData = event.getUserData();
+        if(!userData.enable){
+            userData.enable = true;
         }
+        this.enable = userData.enable;
     },
     
     onCollisionEnter: function (other, self) {
+        if(this.enable!==true){
+            return;
+        }
         // console.log("onCollisionEnter");
 
         //conllider
@@ -333,12 +347,18 @@ cc.Class({
     },
     
     onCollisionStay: function (other, self) {
+        if(this.enable!==true){
+            return;
+        }
         
     },
     
     onCollisionExit: function (other, self) {
+        if(this.enable!==true){
+            return;
+        }
+        
         // console.log("onCollisionExit",other.node.group);
-
         var event = new cc.Event.EventCustom(EventType.ConlliderExit, true);
         var userData = {};
         userData.other = other;

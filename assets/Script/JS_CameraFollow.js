@@ -1,3 +1,4 @@
+var EventType = require("EventType");
 var GlobalReference = require("GlobalReference");
 
 cc.Class({
@@ -14,50 +15,103 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        pos: new cc.Vec2(-100, 0),
-        size: new cc.Vec2(3500, 1280),
+        actor : {
+            default: null,
+            type: cc.Node,
+        },
+        followers : {
+            default: [],
+            type: [cc.Node],
+        },
+        scales : {
+            default: [],
+            type: [cc.Vec2],
+        },
+        activeOnEnable:true,
     },
 
     // use this for initialization
     onLoad: function () {
+         this.initListener();
 
     },
-
+    
     onEnable: function () {
-        this.following = false;
-        this.follow;
-        
-        this.setFollowTarget(GlobalReference.PlayerInstance);
-        this.followTarget();
+        this.enable = this.activeOnEnable;
+
+        this.setActorTarget(GlobalReference.PlayerInstance);
+        if(this.actor){
+            this.setActorTarget(this.actor);
+        }
     },
     
     onDisable: function () {
 
     },
-
-    // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
     
-    setFollowTarget : function(target){
-        this.target = target;
+    initListener: function(){
+        this.node.on(EventType.CameraFollowEnable, 
+            function (event) {
+                this.componentEnable(event);
+            },
+            this);
+        this.node.on(EventType.CameraFollowTarget, 
+            function (event) {
+                this.cameraFollowTarget(event);
+            },
+            this);
     },
     
-    followTarget:function(){
-        if(this.target===undefined){
+    cameraFollowTarget : function( event ){
+        var userData = event.getUserData();
+        var target = userData.target;
+        
+        this.setActorTarget(target);
+    },
+
+    componentEnable : function( event ){
+        var userData = event.getUserData();
+        this.enable = userData.enable;
+        
+        if(this.target){
+            this.targetPos = this.target.position;
+        }
+    },
+    
+    // called every frame, uncomment this function to activate update callback
+    update: function (dt) {
+        // console.log("CameraFollow--->update");
+        if( this.enable!==true){
             return;
         }
-        this.follow = cc.follow(this.target, 
-                                cc.rect(this.pos.x,this.pos.y,
-                                            this.size.x,this.size.y));
-        this.target.parent.runAction(this.follow);
-        this.following = true;
-        // console.log("CameraFollow.followTarget--->",this.target,this.follow);
+        if(this.targetPos.equals(this.target.position)){
+            return;
+        }
+        var offset = this.targetPos.sub(this.target.position);
+        this.moveFollowers(offset);
+        this.targetPos = this.target.position;
     },
     
-    stopFollow:function(){
-        this.node.stopAction(this.follow);
+    setActorTarget : function(target){
+        this.target = target;
+        
+        if(this.enable){
+            this.targetPos = this.target.position;
+        }
     },
+
+    moveFollowers: function(offset){
+        var follower;
+        var scale;
+        for(var key in this.followers){
+            follower = this.followers[key];
+            scale = this.scales[key];
+            if(scale === undefined){
+                scale = new Vec2(1,1);
+            }
+            follower.position = follower.position.add(offset.scale(scale));
+        }
+        this.target.position = this.target.position.add(offset);
+    }
 
 });

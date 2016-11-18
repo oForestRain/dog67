@@ -17,24 +17,45 @@ var EventType =  cc.Enum({
     ActorLanding: 20,
     ActorFalling: 21,
     
-    //InstanceFactoryEvent
-    InstanceFactoryChange: 50,
-    InstanceFactoryAdd: 51,
-    InstanceFactoryDelete: 52,
+    //autoMove
+    AutoMoveReverse:30,
+    AutoMoveComplete:31,
     
-    //ObjectInteractEvent
+    //componentEnable
+    MotionColliderHandlerEnable:40,
+    CameraFollowEnable:41,
+    GravityEnable:42,
+    AutoMoveEnable:43,
+    
+    //componentTarget
+    CameraFollowTarget:50,
+    InputControllerTarget:51,
+    
+    //instanceFactoryEvent
+    InstanceFactoryChange: 60,
+    InstanceFactoryAdd: 61,
+    InstanceFactoryDelete: 62,
+    
+    //camera
+
+    //objectInteractEvent
     ObjectPush : 100,
     ObjectCollect : 101,
     ObjectHit : 102,
     
-    //GameInteractEvent
+    //gameInteractEvent
     BrickPush : 200,
     ResourceCollect : 201,
     EnemyHit : 202,
     
-    //PlayerInteractEvent
+    //playerInteractEvent
     PlayerDamage : 300,
     PlayerStep : 301,
+    
+    //emitterParameterEvent
+    EmitterParameterEmit : 400,
+    EmitterParameter1 : 401,
+    EmitterParameter2 : 402,
 });
 
 module.exports = EventType;

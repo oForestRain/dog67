@@ -25,7 +25,7 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-        
+
         inpController : {
             default: null,
             type: cc.Node
@@ -51,6 +51,11 @@ cc.Class({
         //                 GlobalReference.GameInstance,
         //                 GlobalReference.InputController,
         //                 GlobalReference.InstanceFactory);
+        
+        cc.director.getCollisionManager().enabled = true;
+        cc.director.getCollisionManager().enabledDrawBoundingBox.enabled = true; 
+        cc.director.getCollisionManager().enabledDebugDraw = true;
+
     },
     
     initListener : function(){

@@ -16,10 +16,10 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        // actor : {
-        //     default: null,
-        //     type: cc.Node,
-        // },
+        actor : {
+            default: null,
+            type: cc.Node,
+        },
     },
 
     // use this for initialization
@@ -29,6 +29,9 @@ cc.Class({
     
     onEnable: function () {
         this.actor =  GlobalReference.PlayerInstance;
+        if(this.actor){
+            this.setActorTarget(this.actor);
+        }
         // console.log("InputController--->onEnable",GlobalReference.PlayerInstance);
     },
     
@@ -48,7 +51,7 @@ cc.Class({
             event: cc.EventListener.KEYBOARD, 
             onKeyPressed: function(keyCode, event) {
                 // console.log("InputController--->onKeyPressed",self.actor);
-                if(self.actor===undefined){
+                if(self.target===undefined){
                     return;
                 }
                 if(keyCode == cc.KEY.a || keyCode == cc.KEY.left){
@@ -63,7 +66,7 @@ cc.Class({
             },
             onKeyReleased: function(keyCode, event) {
                 // console.log("InputController--->onKeyPressed",self.actor);
-                if(self.actor===undefined){
+                if(self.target===undefined){
                     return;
                 }
                 if(keyCode == cc.KEY.a || keyCode == cc.KEY.left){
@@ -79,6 +82,23 @@ cc.Class({
         }
         
         cc.eventManager.addListener(listener, self.node);
+        
+        this.node.on(EventType.InputControllerTarget, 
+            function (event) {
+                this.inputControllerTarget(event);
+            },
+            this);
+    },
+
+    inputControllerTarget : function( event ){
+        var userData = event.getUserData();
+        var target = userData.target;
+        
+        this.setActorTarget(target);
+    },
+    
+    setActorTarget : function(target){
+        this.target = target;
     },
     
     //control
@@ -93,9 +113,9 @@ cc.Class({
         userData.direction = DirectionType.Left;
         event.setUserData(userData);
 
-        // console.log("InputController--->mLeft",this.actor,event.type,userData.direction);
+        // console.log("InputController--->mLeft",this.target,event.type,userData.direction);
         
-        this.actor.dispatchEvent( event );
+        this.target.dispatchEvent( event );
     },
 
     mRight: function() {
@@ -106,7 +126,7 @@ cc.Class({
         
         // console.log(event.type,userData.direction);
         
-        this.actor.dispatchEvent( event );
+        this.target.dispatchEvent( event );
     },
     
     mJump: function() {
@@ -114,7 +134,7 @@ cc.Class({
         
         // console.log(event.type);
         
-        this.actor.dispatchEvent( event );
+        this.target.dispatchEvent( event );
     },
     
     mLeftStop: function() {
@@ -144,7 +164,7 @@ cc.Class({
         
         // console.log(event.type);
         
-        this.actor.dispatchEvent( event );
+        this.target.dispatchEvent( event );
     },
 
 });

@@ -16,10 +16,22 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        maxSpeed : 400,
-        initialSpeed:100,
-        accelerate : 300,
-        dragAccelerate : 800,
+        maxSpeed : {
+            default : 400,
+            min: 0,
+        },
+        initialSpeed:{
+            default : 100,
+            min: 0,
+        },
+        accelerate : {
+            default : 300,
+            min: 0,
+        },
+        dragAccelerate : {
+            default : 800,
+            min: 0,
+        },
     },
 
     // use this for initialization

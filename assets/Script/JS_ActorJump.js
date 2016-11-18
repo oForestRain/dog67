@@ -18,8 +18,14 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        jHeight : 128,
-        jHeight2 : 128,
+        jHeight : {
+            default : 128,
+            min: 0,
+        },
+        jHeight2 : {
+            default : 128,
+            min: 0,
+        },
     },
 
     // use this for initialization

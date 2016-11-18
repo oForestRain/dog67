@@ -1,7 +1,7 @@
 // var EventType = require("EventType");
 // var DirectionType = require("DirectionType");
 var ColliderGroupMapping = require("ColliderGroupMapping");
-var JS_InteractEmitterAssist = require("JS_InteractEmitterAssist");
+var JS_ColliderInteractEmitterAssist = require("JS_ColliderInteractEmitterAssist");
 
 cc.Class({
     extends: cc.Component,
@@ -19,7 +19,7 @@ cc.Class({
         // ...
         collider:{
                 default:[],
-                type:[JS_InteractEmitterAssist],
+                type:[JS_ColliderInteractEmitterAssist],
         },
     },
 
@@ -47,12 +47,12 @@ cc.Class({
             function (event) {
                 var userData = event.getUserData();
                 var otherGroupEnum = ColliderGroupMapping[userData.other.node.group];
-                
                 var check = this.checkGroup(otherGroupEnum,gArray);
                 if(check){
                     direction = userData.direction;
                     check = this.checkDirection(direction,dArray);
                     if(check){
+                        // console.log("InteractEmitter-->",ColliderGroupMapping[userData.other.node.group],emit);
                         this.emitObjectInteractEvent(emit,userData);
                     }
                 }

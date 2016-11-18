@@ -39,8 +39,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 622,
-      "y": 347
+      "x": -177,
+      "y": -7
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -133,7 +133,7 @@
     "rightOffsetRate": 0.3,
     "topOffsetRate": 0.3,
     "bottomOffsetRate": 0.3,
-    "onDisableCollisionManagerEnabled": false
+    "activeOnEnable": true
   },
   {
     "__type__": "49eb1osjf1OvK2fFJNSzh3p",
@@ -172,7 +172,7 @@
     "_enabled": true,
     "type": 1,
     "event": 100,
-    "emit": 50,
+    "emit": 60,
     "pool": true,
     "prefabType": 0
   },

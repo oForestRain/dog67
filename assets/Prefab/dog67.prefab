@@ -145,7 +145,7 @@
     "rightOffsetRate": 0.3,
     "topOffsetRate": 0.3,
     "bottomOffsetRate": 0.3,
-    "onDisableCollisionManagerEnabled": false
+    "activeOnEnable": true
   },
   {
     "__type__": "65387TTkNxKOINXMQr1Jgzk",
@@ -180,7 +180,8 @@
     },
     "_enabled": true,
     "gravity": 2048,
-    "gStateType": 4
+    "gStateType": 4,
+    "activeOnEnable": true
   },
   {
     "__type__": "7bcc86taIxNBYJylLsJcInh",
@@ -190,7 +191,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "colliderOnEnable": true
+    "activeOnEnable": true
   },
   {
     "__type__": "49eb1osjf1OvK2fFJNSzh3p",
@@ -250,7 +251,7 @@
     },
     "_enabled": true,
     "event": 300,
-    "emit": 50
+    "emit": 300
   },
   {
     "__type__": "4fe8a7ljZ5GRJ/fCm6d0Q6D",

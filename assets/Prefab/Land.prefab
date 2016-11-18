@@ -39,8 +39,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -3,
-      "y": -262
+      "x": 751,
+      "y": -312
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -105,8 +105,8 @@
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 64,
-      "height": 64
+      "width": 1300,
+      "height": 140
     }
   },
   {

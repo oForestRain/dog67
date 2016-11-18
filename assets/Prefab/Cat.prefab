@@ -39,8 +39,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 556,
-      "y": 221
+      "x": 1594,
+      "y": 275
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -70,17 +70,20 @@
         "__id__": 7
       },
       {
-        "__id__": 9
-      },
-      {
         "__id__": 10
       },
       {
         "__id__": 11
+      },
+      {
+        "__id__": 12
+      },
+      {
+        "__id__": 13
       }
     ],
     "_prefab": {
-      "__id__": 12
+      "__id__": 14
     },
     "groupIndex": 2
   },
@@ -142,7 +145,7 @@
     "rightOffsetRate": 0.3,
     "topOffsetRate": 0.3,
     "bottomOffsetRate": 0.3,
-    "onDisableCollisionManagerEnabled": false
+    "activeOnEnable": true
   },
   {
     "__type__": "c7e0frPLhJBVq4SN/OfUm1E",
@@ -153,7 +156,8 @@
     },
     "_enabled": true,
     "gravity": 2048,
-    "gStateType": 7
+    "gStateType": 7,
+    "activeOnEnable": true
   },
   {
     "__type__": "7bcc86taIxNBYJylLsJcInh",
@@ -163,7 +167,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "colliderOnEnable": true
+    "activeOnEnable": true
   },
   {
     "__type__": "49eb1osjf1OvK2fFJNSzh3p",
@@ -176,6 +180,9 @@
     "collider": [
       {
         "__id__": 8
+      },
+      {
+        "__id__": 9
       }
     ]
   },
@@ -193,6 +200,25 @@
     "emit": 102
   },
   {
+    "__type__": "JS_InteractEmitterAssist",
+    "event": 11,
+    "direction": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      9,
+      10,
+      11
+    ],
+    "group": [
+      3
+    ],
+    "emit": 401
+  },
+  {
     "__type__": "7358df/KbpDXLE276qyL2AI",
     "_name": "",
     "_objFlags": 0,
@@ -202,7 +228,7 @@
     "_enabled": true,
     "type": 4,
     "event": 102,
-    "emit": 52,
+    "emit": 62,
     "pool": true,
     "prefabType": 0
   },
@@ -226,8 +252,28 @@
       "__id__": 1
     },
     "_enabled": true,
-    "speed": 65,
-    "moveOnEnable": true
+    "index": 1,
+    "distance": 0,
+    "speed": 50,
+    "directionEnum": 10,
+    "activeOnEnable": true
+  },
+  {
+    "__type__": "2c0ebdt3+5G4odgXDb8wZ3C",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "event": 401,
+    "pName": [
+      "index"
+    ],
+    "pValue": [
+      1
+    ],
+    "emit": 30
   },
   {
     "__type__": "cc.PrefabInfo",

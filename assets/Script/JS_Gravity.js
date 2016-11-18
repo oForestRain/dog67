@@ -21,6 +21,7 @@ cc.Class({
             default:StateType.Landing,
             type:StateType,
         },
+        activeOnEnable : true,
     },
 
     // use this for initialization
@@ -43,6 +44,7 @@ cc.Class({
     
     onEnable: function () {
         this.stateType = this.gStateType;
+        this.enable = this.activeOnEnable;
         // console.log("Gravity--->onEnable",this.stateType);
     },
     
@@ -55,9 +57,14 @@ cc.Class({
     // ActorFalling: 21,
         
     initListener : function(){
+        this.node.on(EventType.GravityEnable, 
+            function (event) {
+                this.componentEnable(event);
+            },
+            this);
         this.node.on(EventType.ActorFalling, 
             function (event) {
-                // console.log("Gravity--->",event.type);
+                console.log("Gravity--->",event.type);
                 this.gFallDown();
             },
             this);
@@ -67,10 +74,18 @@ cc.Class({
             },
             this);
     },
+    
+    componentEnable : function( event ){
+        var userData = event.getUserData();
+        this.enable = userData.enable;
+    },
 
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
-        // console.log("Gravity-->update",this.stateType,StateType.Falling,this.stateType === StateType.Falling);
+        if(this.enable!==true){
+            return;
+        }
+        // console.log("Gravity-->update",this.stateType,StateType.Falling,this.stateType === StateType.Falling,this.stateType == StateType.Falling);
         if(this.stateType === StateType.Falling){
             var endSpeed = this.speed - dt * this.gravity;
             var offsetY = (endSpeed + this.speed)/2 * dt;
@@ -82,6 +97,9 @@ cc.Class({
     },
     
     gLanding: function() {
+        if(this.enable!==true){
+            return;
+        }
         // console.log("gLanding-->",this.stateType);
         this.stateType = StateType.Landing;
         this.speed = 0;
@@ -91,6 +109,10 @@ cc.Class({
     },
     
     gFallDown: function() {
+        // console.log("gFallDown-->",this.enable);
+        if(this.enable!==true){
+            return;
+        }
         // console.log("gFallDown-->",this.stateType);
         this.stateType = StateType.Falling;
         this.speed = 0;
@@ -98,6 +120,9 @@ cc.Class({
     },
     
     gLock: function(event) {
+        if(this.enable!==true){
+            return;
+        }
         // console.log("gLock-->",this.stateType);
         var userData = event.getUserData();
         var direction = userData.direction;

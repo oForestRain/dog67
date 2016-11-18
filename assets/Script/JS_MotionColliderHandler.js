@@ -17,7 +17,7 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        colliderOnEnable: true,
+        activeOnEnable: true,
     },
 
     // use this for initialization
@@ -32,7 +32,7 @@ cc.Class({
     onEnable: function () {
         this.lockArray.length = 0;
 
-        this.enable = this.colliderOnEnable;
+        this.enable = this.activeOnEnable;
     },
     
     onDisable: function () {
@@ -46,14 +46,14 @@ cc.Class({
     // ConlliderExit: 13,
 
     initListener : function(){
-        this.node.on(EventType.ConlliderEnable, 
+        this.node.on(EventType.MotionColliderHandlerEnable, 
             function (event) {
-                this.conlliderEnable(event);
+                this.componentEnable(event);
             },
             this);
         this.node.on(EventType.ConlliderEnter, 
             function (event) {
-                // console.log("MotionColliderHandler-->ConlliderEnter");
+                console.log("MotionColliderHandler-->ConlliderEnter");
                 if(this.checkGroup(event)){
                     this.enterHandler(event);
                 }
@@ -79,7 +79,7 @@ cc.Class({
 
     // },
     
-    conlliderEnable : function( event ){
+    componentEnable : function( event ){
         
         var userData = event.getUserData();
 
@@ -94,7 +94,7 @@ cc.Class({
     
     enterHandler : function( event ){
         // console.log("MotionColliderHandler-->enterHandler",this.enable);
-        if(!this.enable){
+        if(this.enable!==true){
             return;
         }
         
@@ -106,7 +106,7 @@ cc.Class({
         this.colliderCheck(direction);
         this.backToPosition(direction, userData);
 
-        // console.log("MotionColliderHandler-->enterHandler",this.leftLockCount,this.rightLockCount,this.upLockCount,this.downLockCount);
+        // console.log("MotionColliderHandler-->enterHandler");
     },
     
     exitHandler : function( event ){
@@ -282,14 +282,19 @@ cc.Class({
         // console.log("MotionColliderHandler1",this.node.position);
         // console.log("MotionColliderHandler2",actorAabb.center);
         // console.log("MotionColliderHandler3",actor.node.position);
-        // console.log("MotionColliderHandler4",this.node.parent.convertToNodeSpace(
-        //                                 actorAabb.center));
+
+        this.node.position =  this.node.parent.convertToNodeSpaceAR(pos);
+        // console.log("MotionColliderHandler-1",this.node.position);
+        // console.log("MotionColliderHandler4",this.node.parent.convertToNodeSpace(pos));
+        // console.log("MotionColliderHandler5",this.node.parent.position);
+        // console.log("MotionColliderHandler6",this.node.parent.width,this.node.parent.height);
+        // console.log("MotionColliderHandler6",cc.js.getClassName(this.node.parent),this.node.parent.name,this.node.parent.position);
+         
         
-        this.node.position =  this.node.parent.convertToNodeSpace(pos);
     },
     
     stayHandler : function( event ){
-        if(!this.enable){
+        if(this.enable!==true){
             return;
         }
     },
