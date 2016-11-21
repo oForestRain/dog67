@@ -48,7 +48,7 @@ cc.Class({
     },
 
     playerStepToJump:function(){
-        console.log("PlayerStep-->playerStepToJump");
+        // console.log("PlayerStep-->playerStepToJump");
         var event = new cc.Event.EventCustom(EventType.ActorLanding, true);
         // var userData={};
         // event.setUserData(userData);

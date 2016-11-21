@@ -35,6 +35,8 @@ cc.Class({
     onEnable: function () {
 
         this.enable = this.activeOnEnable;
+
+        // console.log("onEnable",this.enable,this.node.group);
     },
     
     onDisable: function () {
@@ -55,13 +57,15 @@ cc.Class({
             userData.enable = true;
         }
         this.enable = userData.enable;
+        
+        // console.log("componentEnable");
     },
     
     onCollisionEnter: function (other, self) {
         if(this.enable!==true){
             return;
         }
-        // console.log("onCollisionEnter");
+        // console.log("onCollisionEnter",self.node.group,other.node.group,this.enable);
 
         //conllider
         // ConlliderEnable : 10,
@@ -83,20 +87,135 @@ cc.Class({
         var customFormDirection = this.customFormDirectionFromPart(other, self , true);
         userData.direction = customFormDirection.direction;
         userData.tangent = customFormDirection.tangent;
-        // console.log("ConlliderEnter",userData.direction);
+        userData.part = customFormDirection.part;
+        // console.log("ConlliderEnter-->customFormDirection",userData.direction,userData.tangent,userData.part);
 
         event.setUserData(userData);
         this.node.dispatchEvent(event);
         
-        // console.log("ConlliderEnter1",this.node.position);
-        // console.log("ConlliderEnter5",self.world.aabb.center);
-        // console.log("ConlliderEnter6",this.node.parent.convertToNodeSpace(
-        //                                 self.world.aabb.center));
-                                        
+        // console.log("ConlliderEnter",other.world.aabb);
+        // console.log("ConlliderEnter",self.world.aabb);
+        // console.log("customFormDirectionFromPart------------>",otherAabb.yMax,selfAabb.yMin);
+        // console.log("customFormDirectionFromPart------------>",otherPreAabb.yMax,selfPreAabb.yMin);
+        // console.log("ConlliderEnter",other.world.preAabb);
+        // console.log("ConlliderEnter",self.world.preAabb);
         // console.log("ConlliderEnter",other.world.aabb.center);
         // console.log("ConlliderEnter",self.world.aabb.center);
         // console.log("ConlliderEnter",other.world.preAabb.center);
         // console.log("ConlliderEnter",self.world.preAabb.center);
+    },
+    
+    customFormDirectionFromPart : function(other, self ,enter){
+        var direction;
+        var tangent=false;
+        
+        var otherAabb = other.world.aabb;
+        var selfAabb = self.world.aabb;
+        var otherPreAabb = other.world.preAabb;
+        var selfPreAabb = self.world.preAabb;
+
+        var part;
+        if(enter){
+            part = this.checkPart(otherAabb,otherPreAabb,selfAabb,selfPreAabb);
+        }
+        else{
+            part = this.checkPart(otherPreAabb,otherAabb,selfPreAabb,selfAabb);
+        }
+
+        // console.log("customFormDirectionFromPart------------>",otherPreAabb.xMin,selfPreAabb.xMax);
+        // console.log("customFormDirectionFromPart------------>",otherPreAabb.xMax,selfPreAabb.xMin);
+        // console.log("customFormDirectionFromPart------------>",otherPreAabb.yMin,selfPreAabb.yMax);
+        // console.log("customFormDirectionFromPart------------>",otherPreAabb.yMax,selfPreAabb.yMin);
+
+        if(part == DirectionType.Left){
+            direction = DirectionType.Left;
+        }
+        else if(part == DirectionType.LeftUp){
+            if(otherPreAabb.yMin.toFixed(3) == selfPreAabb.yMax.toFixed(3)){//Exclude press
+                direction = DirectionType.Up;
+                tangent = true;
+            }
+            else{
+                direction = DirectionType.Left;
+            }
+        }
+        else if(part == DirectionType.LeftDown){
+            if(otherPreAabb.yMax.toFixed(3) == selfPreAabb.yMin.toFixed(3)){//Exclude landing
+                direction = DirectionType.Down;
+                tangent = true;
+            }
+            else{
+                direction = DirectionType.Left;
+            }
+        }
+        
+        if(part == DirectionType.Right){
+            direction = DirectionType.Right;
+        }
+        else if(part == DirectionType.RightUp){
+            if(otherPreAabb.yMin.toFixed(3) == selfPreAabb.yMax.toFixed(3)){
+                direction = DirectionType.Up;
+                tangent = true;
+            }
+            else{
+                direction = DirectionType.Right;
+            }
+        }
+        else if(part == DirectionType.RightDown){
+            if(otherPreAabb.yMax.toFixed(3) == selfPreAabb.yMin.toFixed(3)){
+                direction = DirectionType.Down;
+                tangent = true;
+            }
+            else{
+                direction = DirectionType.Right;
+            }
+        }
+        
+        if(part == DirectionType.Up){
+            direction = DirectionType.Up;
+        }
+        else if(part == DirectionType.UpLeft){
+            if(otherPreAabb.xMax.toFixed(3) == selfPreAabb.xMin.toFixed(3)){//Exclude left
+                direction = DirectionType.Left;
+                tangent = true;
+            }
+            else{
+                direction = DirectionType.Up;
+            }
+        }
+        else if(part == DirectionType.UpRight){
+            if(otherPreAabb.xMin.toFixed(3) == selfPreAabb.xMax.toFixed(3)){//Exclude right
+                direction = DirectionType.Right;
+                tangent = true;
+            }
+            else{
+                direction = DirectionType.Up;
+            }
+        }
+        
+        if(part == DirectionType.Down){
+            direction = DirectionType.Down;
+        }
+        else if(part == DirectionType.DownLeft){
+            if(otherPreAabb.xMax.toFixed(3) == selfPreAabb.xMin.toFixed(3)){//
+                direction = DirectionType.Left;
+                tangent = true;
+            }
+            else{
+                direction = DirectionType.Down;
+            }
+        }
+        else if(part == DirectionType.DownRight){
+            if(otherPreAabb.xMin.toFixed(3) == selfPreAabb.xMax.toFixed(3)){//
+                direction = DirectionType.Right;
+                tangent = true;
+            }
+            else{
+                direction = DirectionType.Down;
+            }
+        }
+
+        return {direction,tangent,part};
     },
 
     checkPart: function(otherAabb,otherPreAabb,selfAabb,selfPreAabb){
@@ -125,34 +244,37 @@ cc.Class({
         var topBorder = selfCenter.y+selfAabb.height*this.topOffsetRate*.5;
         var bottomBorder = selfCenter.y-selfAabb.height*this.bottomOffsetRate*.5;
         
+        // console.log("customFormDirectionFromPart-->",otherPreCenter,selfPreCenter);
+        // console.log("customFormDirectionFromPart-->",otherCenter,selfCenter);
+        // console.log("customFormDirectionFromPart-->",otherPreAabb.xMin,otherPreAabb.xMax,otherPreAabb.yMin,otherPreAabb.yMax);
+        // console.log("customFormDirectionFromPart-->",selfPreAabb.xMin,selfPreAabb.xMax,selfPreAabb.yMin,selfPreAabb.yMax);
+
         var part;
-        
         //check x-axis
         var otherPreAabbClone = otherPreAabb.clone();
         var selfPreAabbClone = selfPreAabb.clone();
         otherPreAabbClone.x = otherAabb.x;
         selfPreAabbClone.x = selfAabb.x;
         if (cc.Intersection.rectRect(selfPreAabbClone,otherPreAabbClone)) {
-            //left be hit
-            if ((selfPreCenter.x - selfCenter.x) - (otherPreCenter.x - otherCenter.x) >0) {
+            // console.log("checkPart------------>check x-axis");
+             if ((selfPreCenter.x - selfCenter.x) - (otherPreCenter.x - otherCenter.x) >0) {
                 // console.log("checkPart------------>part left be hit");
-                if(otherAabb.yMin >= topBorder){
+                if(otherAabb.yMin.toFixed(3) >= topBorder){//
                     part = DirectionType.LeftUp;
                 }
-                else if(otherAabb.yMax <= bottomBorder){
+                else if(otherAabb.yMax.toFixed(3) <= bottomBorder){//
                     part = DirectionType.LeftDown;
                 }
                 else{
                     part = DirectionType.Left;
                 }
             }
-            //right be hit
             else if ((selfPreCenter.x - selfCenter.x) - (otherPreCenter.x - otherCenter.x) <0) {
                 // console.log("checkPart------------>part right be hit");
-                if(otherAabb.yMin >= topBorder){
+                if(otherAabb.yMin.toFixed(3) >= topBorder){//
                     part = DirectionType.RightUp;
                 }
-                else if(otherAabb.yMax <= bottomBorder){
+                else if(otherAabb.yMax.toFixed(3) <= bottomBorder){//
                     part = DirectionType.RightDown;
                 }
                 else{
@@ -171,26 +293,25 @@ cc.Class({
         otherPreAabbClone.y = otherAabb.y;
         selfPreAabbClone.y = selfAabb.y;
         if (cc.Intersection.rectRect(selfPreAabbClone,otherPreAabbClone)) {
-            //top be hit
+            // console.log("checkPart------------>check y-axis");
             if ((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) < 0) {
                 // console.log("checkPart-->part top be hit");
-                if(otherAabb.xMax <= leftBorder){
+                if(otherAabb.xMax.toFixed(3) <= leftBorder){//
                     part = DirectionType.UpLeft;
                 }
-                else if(otherAabb.xMin >= rightBorder){
+                else if(otherAabb.xMin.toFixed(3) >= rightBorder){//
                     part = DirectionType.UpRight;
                 }
                 else{
                     part = DirectionType.Up;
                 }
             }
-            //bottom be hit
             else if ((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) > 0) {
                 // console.log("checkPart-->part bottom be hit");
-                if(otherAabb.xMax <= leftBorder){
+                if(otherAabb.xMax.toFixed(3) <= leftBorder){//
                     part = DirectionType.DownLeft;
                 }
-                else if(otherAabb.xMin >= rightBorder){
+                else if(otherAabb.xMin.toFixed(3) >= rightBorder){//
                     part = DirectionType.DownRight;
                 }
                 else{
@@ -205,145 +326,84 @@ cc.Class({
         
         // check corner
         if(part===undefined){
-            //left
-            if (selfPreCenter.x > selfCenter.x || otherPreCenter.x < otherCenter.x) {
-                if(selfPreCenter.y < selfCenter.y || otherPreCenter.y > otherCenter.y){
+            if ((selfPreCenter.x - selfCenter.x) - (otherPreCenter.x - otherCenter.x) >0){
+                // console.log("checkPart------------>undefined left");
+                if((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) < 0){
                     part = DirectionType.UpLeft;
                 }
-                else{
+                else if ((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) > 0){
                     part = DirectionType.DownLeft;
                 }
             }
-            //right
-            else if (selfPreCenter.x < selfCenter.x || otherPreCenter.x > otherCenter.x) {
-                if(selfPreCenter.y < selfCenter.y || otherPreCenter.y > otherCenter.y){
+            else if ((selfPreCenter.x - selfCenter.x) - (otherPreCenter.x - otherCenter.x) <0){
+                // console.log("checkPart------------>undefined right");
+                if((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) < 0){
                     part = DirectionType.UpRight;
                 }
-                else{
+                else if ((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) > 0){
                      part = DirectionType.DownRight;
                 }
+            }
+            else{
+                // console.log("checkPart------------>undefined xy static");
+                if(selfCenter.x > otherAabb.xMax){
+                    // console.log("checkPart------------>undefined xy left");
+                    if(otherAabb.yMin.toFixed(3) >= topBorder){//
+                        part = DirectionType.LeftUp;
+                    }
+                    else if(otherAabb.yMax.toFixed(3) <= bottomBorder){//
+                        part = DirectionType.LeftDown;
+                    }
+                    else{
+                        part = DirectionType.Left;
+                    }
+                }
+                else if(selfCenter.x < otherAabb.xMin){
+                    // console.log("checkPart------------>undefined xy left");
+                    if(otherAabb.yMin.toFixed(3) >= topBorder){//
+                        part = DirectionType.RightUp;
+                    }
+                    else if(otherAabb.yMax.toFixed(3) <= bottomBorder){//
+                        part = DirectionType.RightDown;
+                    }
+                    else{
+                         part = DirectionType.Right;
+                    }
+                }
+                else if(selfCenter.y < otherAabb.yMin){
+                    // console.log("checkPart------------>undefined xy up");
+                    if(otherAabb.xMax.toFixed(3) <= leftBorder){//
+                        part = DirectionType.UpLeft;
+                    }
+                    else if(otherAabb.xMin.toFixed(3) >= rightBorder){//
+                        part = DirectionType.UpRight;
+                    }
+                    else{
+                        part = DirectionType.Up;
+                    }
+                }
+                else if(selfCenter.y > otherAabb.yMax){
+                    // console.log("checkPart------------>undefined xy down");
+                    if(otherAabb.xMax.toFixed(3) <= leftBorder){//
+                        part = DirectionType.DownLeft;
+                    }
+                    else if(otherAabb.xMin.toFixed(3) >= rightBorder){//
+                        part = DirectionType.DownRight;
+                    }
+                    else{
+                        part = DirectionType.Down;
+                    }
+                }
+                // console.log("checkPart------------>undefined xy static",part);
             }
             // console.log("part------------>3",part);
         }
         
-        // if(part===undefined){
-        //     console.log("part===undefined------------------------------------------------->");
-        // }
-        // else{
-            // console.log("part------------>4",part);
-        // }
-        
+        if(part===undefined){
+            console.log("part------------------------------------------------->undefined xy static");
+        }
+
         return part;
-    },
-    
-    customFormDirectionFromPart : function(other, self ,enter){
-        var direction;
-        var tangent=false;
-        
-        var otherAabb = other.world.aabb;
-        var selfAabb = self.world.aabb;
-        var otherPreAabb = other.world.preAabb;
-        var selfPreAabb = self.world.preAabb;
-        
-        var part;
-        if(enter){
-            part = this.checkPart(otherAabb,otherPreAabb,selfAabb,selfPreAabb);
-        }
-        else{
-            part = this.checkPart(otherPreAabb,otherAabb,selfPreAabb,selfAabb);
-        }
-
-        // console.log("customFormDirectionFromPart-->",part);
-
-        if(part == DirectionType.Left){
-            direction = DirectionType.Left;
-        }
-        else if(part == DirectionType.LeftUp){
-            if(otherPreAabb.yMin == selfPreAabb.yMax || otherAabb.yMin == selfAabb.yMax){//Exclude press
-                direction = DirectionType.Up;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Left;
-            }
-        }
-        else if(part == DirectionType.LeftDown){
-            if(otherPreAabb.yMax == selfPreAabb.yMin || otherAabb.yMax == selfAabb.yMin){//Exclude landing
-                direction = DirectionType.Down;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Left;
-            }
-        }
-        
-        if(part == DirectionType.Right){
-            direction = DirectionType.Right;
-        }
-        else if(part == DirectionType.RightUp){
-            if(otherPreAabb.yMin == selfPreAabb.yMax || otherAabb.yMin == selfAabb.yMax){
-                direction = DirectionType.Up;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Right;
-            }
-        }
-        else if(part == DirectionType.RightDown){
-            if(otherPreAabb.yMax == selfPreAabb.yMin || otherAabb.yMax == selfAabb.yMin){
-                direction = DirectionType.Down;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Right;
-            }
-        }
-        
-        if(part == DirectionType.Up){
-            direction = DirectionType.Up;
-        }
-        else if(part == DirectionType.UpLeft){
-            if(otherPreAabb.xMax == selfPreAabb.xMin || otherAabb.xMax == selfAabb.xMin){//Exclude left
-                direction = DirectionType.Left;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Up;
-            }
-        }
-        else if(part == DirectionType.UpRight){
-            if(otherPreAabb.xMin == selfPreAabb.xMax || otherAabb.xMin == selfAabb.xMax){//Exclude right
-                direction = DirectionType.Right;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Up;
-            }
-        }
-        
-        if(part == DirectionType.Down){
-            direction = DirectionType.Down;
-        }
-        else if(part == DirectionType.DownLeft){
-            if(otherPreAabb.xMax == selfPreAabb.xMin || otherAabb.xMax == selfAabb.xMin){
-                direction = DirectionType.Left;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Down;
-            }
-        }
-        else if(part == DirectionType.DownRight){
-            if(otherPreAabb.xMin == selfPreAabb.xMax || otherAabb.xMin == selfAabb.xMax){
-                direction = DirectionType.Right;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Down;
-            }
-        }
-        
-        return {direction,tangent};
     },
     
     onCollisionStay: function (other, self) {
@@ -358,7 +418,7 @@ cc.Class({
             return;
         }
         
-        // console.log("onCollisionExit",other.node.group);
+        // console.log("onCollisionExit",self.node.group,other.node.group,this.enable);
         var event = new cc.Event.EventCustom(EventType.ConlliderExit, true);
         var userData = {};
         userData.other = other;
@@ -367,8 +427,8 @@ cc.Class({
         var customFormDirection = this.customFormDirectionFromPart(other, self , false);
         userData.direction = customFormDirection.direction;
         userData.tangent = customFormDirection.tangent;
-        
-        // console.log("onCollisionExit",userData.direction,userData.tangent,this.node.group);
+        userData.part = customFormDirection.part;
+        // console.log("ConlliderEnter-->customFormDirection",userData.direction,userData.tangent,userData.part,this.node.group);
         
         event.setUserData(userData);
         this.node.dispatchEvent(event);

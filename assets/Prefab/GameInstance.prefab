@@ -32,188 +32,40 @@
       "width": 0,
       "height": 0
     },
-    "_children": [
+    "_children": [],
+    "_rotationX": 0,
+    "_rotationY": 0,
+    "_scaleX": 1,
+    "_scaleY": 1,
+    "_position": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_localZOrder": 0,
+    "_globalZOrder": 0,
+    "_tag": -1,
+    "_opacityModifyRGB": false,
+    "_id": "",
+    "_active": true,
+    "_components": [
       {
         "__id__": 2
-      },
-      {
-        "__id__": 5
-      },
-      {
-        "__id__": 8
-      }
-    ],
-    "_rotationX": 0,
-    "_rotationY": 0,
-    "_scaleX": 1,
-    "_scaleY": 1,
-    "_position": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "_localZOrder": 0,
-    "_globalZOrder": 0,
-    "_tag": -1,
-    "_opacityModifyRGB": false,
-    "_id": "",
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 11
       }
     ],
     "_prefab": {
-      "__id__": 12
+      "__id__": 3
     },
     "groupIndex": 0
   },
   {
-    "__type__": "cc.Node",
-    "_name": "MainCamera",
-    "_objFlags": 0,
-    "_opacity": 255,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_cascadeOpacityEnabled": true,
-    "_parent": {
-      "__id__": 1
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
-    },
-    "_children": [],
-    "_rotationX": 0,
-    "_rotationY": 0,
-    "_scaleX": 1,
-    "_scaleY": 1,
-    "_position": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "_localZOrder": 0,
-    "_globalZOrder": 0,
-    "_tag": -1,
-    "_opacityModifyRGB": false,
-    "_id": "",
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 3
-      }
-    ],
-    "_prefab": {
-      "__id__": 4
-    },
-    "groupIndex": 0
-  },
-  {
-    "__type__": "26311ZiUO5FB5dDDftE7PBn",
+    "__type__": "2e495En79FL4pqd2iJ2RhQF",
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 2
-    },
-    "_enabled": true,
-    "pos": {
-      "__type__": "cc.Vec2",
-      "x": -100,
-      "y": 0
-    },
-    "size": {
-      "__type__": "cc.Vec2",
-      "x": 3500,
-      "y": 1280
-    }
-  },
-  {
-    "__type__": "cc.PrefabInfo",
-    "root": {
       "__id__": 1
-    },
-    "asset": {
-      "__uuid__": "29f3c209-7540-4332-91ff-79dae4d870d2"
-    },
-    "fileId": "9f58egJfzhA84LoeG91AaYq",
-    "sync": false
-  },
-  {
-    "__type__": "cc.Node",
-    "_name": "InputController",
-    "_objFlags": 0,
-    "_opacity": 255,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_cascadeOpacityEnabled": true,
-    "_parent": {
-      "__id__": 1
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
-    },
-    "_children": [],
-    "_rotationX": 0,
-    "_rotationY": 0,
-    "_scaleX": 1,
-    "_scaleY": 1,
-    "_position": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "_localZOrder": 0,
-    "_globalZOrder": 0,
-    "_tag": -1,
-    "_opacityModifyRGB": false,
-    "_id": "",
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 6
-      }
-    ],
-    "_prefab": {
-      "__id__": 7
-    },
-    "groupIndex": 0
-  },
-  {
-    "__type__": "3136fsDLX5OB5M7U6+VrH3p",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 5
     },
     "_enabled": true
   },
@@ -223,138 +75,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "29f3c209-7540-4332-91ff-79dae4d870d2"
+      "__uuid__": "9a3495a1-a62b-4013-9b05-75aa377327d5"
     },
-    "fileId": "57eb41rHeROz5emOlMbFnuu",
-    "sync": false
-  },
-  {
-    "__type__": "cc.Node",
-    "_name": "InstanceFactory",
-    "_objFlags": 0,
-    "_opacity": 255,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_cascadeOpacityEnabled": true,
-    "_parent": {
-      "__id__": 1
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 160,
-      "height": 40
-    },
-    "_children": [],
-    "_rotationX": 0,
-    "_rotationY": 0,
-    "_scaleX": 1,
-    "_scaleY": 1,
-    "_position": {
-      "__type__": "cc.Vec2",
-      "x": 618,
-      "y": 274
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "_localZOrder": 0,
-    "_globalZOrder": 0,
-    "_tag": -1,
-    "_opacityModifyRGB": false,
-    "_id": "",
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 9
-      }
-    ],
-    "_prefab": {
-      "__id__": 10
-    },
-    "groupIndex": 0
-  },
-  {
-    "__type__": "524f0cXnZpDMZgrORUtvod1",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 8
-    },
-    "_enabled": true,
-    "prefabType": [
-      0,
-      1,
-      2,
-      3,
-      4
-    ],
-    "prefab": [
-      {
-        "__uuid__": "8c36d187-1868-4720-bdc7-96c3732350ce"
-      },
-      {
-        "__uuid__": "3dd5efee-7663-458b-bb55-d8d0bc1e339e"
-      },
-      {
-        "__uuid__": "c820d08d-c0d5-41e2-8d32-38442198648a"
-      },
-      {
-        "__uuid__": "2c8284cc-2ee3-44eb-ad7c-a2f78730f0b2"
-      },
-      {
-        "__uuid__": "ad50c463-da8c-439e-a72d-c6bdb6ef6362"
-      }
-    ],
-    "preInstanceNum": []
-  },
-  {
-    "__type__": "cc.PrefabInfo",
-    "root": {
-      "__id__": 1
-    },
-    "asset": {
-      "__uuid__": "29f3c209-7540-4332-91ff-79dae4d870d2"
-    },
-    "fileId": "4606arf/7JGQLLPI3sLwJJJ",
-    "sync": false
-  },
-  {
-    "__type__": "2e495En79FL4pqd2iJ2RhQF",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "actor": null,
-    "mainCamera": {
-      "__id__": 2
-    },
-    "inpController": {
-      "__id__": 5
-    },
-    "insFactory": {
-      "__id__": 8
-    }
-  },
-  {
-    "__type__": "cc.PrefabInfo",
-    "root": {
-      "__id__": 1
-    },
-    "asset": {
-      "__uuid__": "29f3c209-7540-4332-91ff-79dae4d870d2"
-    },
-    "fileId": "44919X1cBxNkav0/Q+elGXc",
+    "fileId": "a01e88FOVZDhr+Ckp2RJa4T",
     "sync": false
   }
 ]

@@ -32,6 +32,10 @@ cc.Class({
             default : 800,
             min: 0,
         },
+        stopLimit : {
+            default : 20,
+            min: 1,
+        },
     },
 
     // use this for initialization
@@ -43,6 +47,7 @@ cc.Class({
     },
     
     onEnable: function () {
+        this.stateType = StateType.Idle;
         this.leftLock = false;
         this.rightLock = false;
         this.speed = 0;
@@ -100,42 +105,24 @@ cc.Class({
         if(this.stateType == StateType.MoveRight){
             if(this.rightLock === true){
                 this.speed = 0;
+                return;
             }
             else{
-                if(this.speed < this.initialSpeed){
-                    this.speed = this.initialSpeed;
-                }
-                offsetSpeed = parseInt(this.accelerate*dt);
-                this.speed += offsetSpeed;
-                if(this.speed > this.maxSpeed){
-                    this.speed = this.maxSpeed;
-                }
+                this.movingSpeed(1,dt);
             }
         }
         else if(this.stateType == StateType.MoveLeft){
             if(this.leftLock === true){
                 this.speed = 0;
+                return;
             }
             else{
-                if(this.speed > -this.initialSpeed){
-                    this.speed = -this.initialSpeed;
-                }
-                offsetSpeed = parseInt(this.accelerate*dt);
-                this.speed -= offsetSpeed;
-                if(this.speed < -this.maxSpeed){
-                    this.speed = -this.maxSpeed;
-                }
+                this.movingSpeed(-1,dt);
             }
         }
 
         if(this.stateType == StateType.MoveToStop){
-            var dragSpeed = parseInt(this.dragAccelerate*dt);
-            if(this.speed > 0 ){
-                this.speed -= dragSpeed;
-            }
-            else if(this.speed < 0 ){
-                this.speed += dragSpeed;
-            }
+           this.stoppingSpeed(dt);
         }
 
         if(this.speed === 0){
@@ -144,8 +131,38 @@ cc.Class({
             }
         }
         
-        // console.log(this.stateType,this.speed," : ",this.maxSpeed);
+        // console.log("ActorMove--->update",this.stateType,this.speed," : ",this.maxSpeed);
         this.node.x +=this.speed*dt;
+    },
+    
+    movingSpeed:function(direction,dt){
+        if(Math.abs(this.speed) < this.initialSpeed || this.speed*direction < 0){
+            this.speed = this.initialSpeed*direction;
+        }
+        else{
+            this.speed += parseInt(this.accelerate*dt)*direction;
+        }
+        
+        if(Math.abs(this.speed) > this.maxSpeed){
+            this.speed = this.maxSpeed*direction;
+        }
+        
+        // console.log("ActorMove--->movingSpeed",this.speed,direction);
+    },
+    
+    stoppingSpeed:function(dt){
+        var direction;
+        if(Math.abs(this.speed) < this.stopLimit ){
+            this.speed = 0;
+        }
+        else{
+            if(this.speed > 0){
+                this.speed -= parseInt(this.dragAccelerate)*dt;
+            }
+            else{
+                this.speed += parseInt(this.dragAccelerate)*dt;
+            }
+        }
     },
     
     //DirectionType

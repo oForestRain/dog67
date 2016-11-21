@@ -32,8 +32,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-         this.initListener();
-
+        this.initListener();
     },
     
     onEnable: function () {
@@ -46,7 +45,7 @@ cc.Class({
     },
     
     onDisable: function () {
-
+        this.enable = false;
     },
     
     initListener: function(){
@@ -87,7 +86,10 @@ cc.Class({
         if(this.targetPos.equals(this.target.position)){
             return;
         }
+        
+        // console.log("CameraFollow--->update",this.targetPos - this.target.position);
         var offset = this.targetPos.sub(this.target.position);
+
         this.moveFollowers(offset);
         this.targetPos = this.target.position;
     },
@@ -101,6 +103,7 @@ cc.Class({
     },
 
     moveFollowers: function(offset){
+        // console.log("CameraFollow--->moveFollowers",offsetx,offsety);
         var follower;
         var scale;
         for(var key in this.followers){
@@ -109,9 +112,10 @@ cc.Class({
             if(scale === undefined){
                 scale = new Vec2(1,1);
             }
-            follower.position = follower.position.add(offset.scale(scale));
+            // console.log("CameraFollow--->follower.position1",follower.position);
+            follower.position = follower.position.add(new cc.Vec2(offset.x * scale.x,offset.y * scale.y));
+            // console.log("CameraFollow--->follower.position2",follower.position,offset.x * scale.x,offset.y * scale.y);
         }
-        this.target.position = this.target.position.add(offset);
     }
 
 });

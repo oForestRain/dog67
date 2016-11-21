@@ -64,7 +64,7 @@ cc.Class({
             event = new cc.Event.EventCustom(emit, true);
             event.setUserData(userData);
             this.node.dispatchEvent(event);
-            console.log("AutoMoveEmitter-->emitInstanceFactoryEvent",emit);
+            // console.log("AutoMoveEmitter-->emitInstanceFactoryEvent",emit);
         }
     },
 

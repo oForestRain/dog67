@@ -64,7 +64,7 @@ cc.Class({
             this);
         this.node.on(EventType.ActorFalling, 
             function (event) {
-                console.log("Gravity--->",event.type);
+                // console.log("Gravity--->",event.type);
                 this.gFallDown();
             },
             this);

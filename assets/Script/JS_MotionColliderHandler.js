@@ -53,7 +53,7 @@ cc.Class({
             this);
         this.node.on(EventType.ConlliderEnter, 
             function (event) {
-                console.log("MotionColliderHandler-->ConlliderEnter");
+                // console.log("MotionColliderHandler-->ConlliderEnter");
                 if(this.checkGroup(event)){
                     this.enterHandler(event);
                 }
@@ -106,11 +106,10 @@ cc.Class({
         this.colliderCheck(direction);
         this.backToPosition(direction, userData);
 
-        // console.log("MotionColliderHandler-->enterHandler");
+        // console.log("MotionColliderHandler-->enterHandler",userData.actor.node.group,other.group,other.name);
     },
     
     exitHandler : function( event ){
-        // console.log("MotionColliderHandler-->exitHandler");
         var userData = event.getUserData();
         var other = userData.other.node;
         var tangent  = userData.tangent;
@@ -120,6 +119,8 @@ cc.Class({
         if(direction){
             this.colliderCheck(direction);
         }
+        
+        // console.log("MotionColliderHandler-->exitHandler",userData.actor.node.group,other.group,other.name);
     },
     
     //DirectionType
@@ -162,27 +163,28 @@ cc.Class({
         lArray = this.lockArray[direction];
         lArray.push(other);
         
-        var event = new cc.Event.EventCustom(EventType.ConlliderAddToArray, true );
-        var data = {};
-        data.actor = this.node;
-        data.other = other;
-        event.setUserData(data);
-        other.dispatchEvent( event );
+        // var event = new cc.Event.EventCustom(EventType.ConlliderAddToArray, true );
+        // var data = {};
+        // data.actor = this.node;
+        // data.other = other;
+        // event.setUserData(data);
+        // other.dispatchEvent( event );
         
         // console.log("enterAt-->",direction,this.lockArray[direction].length,other.group);
     },
     
     exitFrom : function( other , clearAll ){
         // console.log("MotionColliderHandler-->exitFrom",other.group,clearAll);
-        
+
         var direction;
         var kArray;
         for(var key in this.lockArray){
             // console.log("MotionColliderHandler-->exitFrom key",key,this.lockArray.length);
             kArray = this.lockArray[key];
             for(var j in kArray){
+                // console.log("MotionColliderHandler-->exitFrom j1",j,kArray.length,kArray[j]);
                 if(kArray[j]===other){
-                    // console.log("MotionColliderHandler-->exitFrom j1",key,j,kArray.length);
+                    // console.log("MotionColliderHandler-->exitFrom j1",j,kArray.length,kArray[j]);
                     direction = key;
                     if(clearAll===false){
                         kArray.splice(j,1);
@@ -190,7 +192,7 @@ cc.Class({
                     else{
                         kArray.length = 0;
                     }
-                    // console.log("MotionColliderHandler-->exitFrom j2",key,j,kArray.length,kArray[j]);
+                    // console.log("MotionColliderHandler-->exitFrom j2",j,kArray.length,kArray[j]);
                     return direction;
                 }
             }
@@ -200,9 +202,6 @@ cc.Class({
     },
     
     colliderCheck: function( direction ){
-        // if(ColliderGroupMapping[userData.actor.node.group]== ColliderGroupEnum.Enemy){
-        //     console.log("MotionColliderHandler-->colliderCheck",direction);
-        // }
         var kArray;
         if(!this.lockArray[direction]){
             this.lockArray[direction] = [];
@@ -220,6 +219,7 @@ cc.Class({
                     data.direction = direction;
                     data.bool = bool;
                 }
+                // console.log("MotionColliderHandler-->dispatchEventUp",data.bool);
         }
         else if(direction==DirectionType.Down){
                 event = new cc.Event.EventCustom(EventType.ActorMotionLock, true );
@@ -241,13 +241,17 @@ cc.Class({
     },
     
     dispatchLockEvent : function(event){
-        if(event){
-            this.node.dispatchEvent( event );
-        }
-        
+        this.node.dispatchEvent( event );
+
         var lockcount = 0;
-        for(var kArray in this.lockArray){
-            lockcount +=kArray.length;
+        for(var key in this.lockArray){
+            var keyArr = this.lockArray[key];
+            // console.log("MotionColliderHandler-->dispatchLockEvent",key,keyArr.length,keyArr);
+            // for(var keyj in keyArr){
+            //     var nodej = keyArr[keyj];
+            //     console.log("MotionColliderHandler-->dispatchLockEvent",keyj,nodej,nodej.group,nodej.name);
+            // }
+            lockcount +=keyArr.length;
         }
         if(lockcount){
             this.node.color = cc.Color.RED;
@@ -255,6 +259,7 @@ cc.Class({
         else{
             this.node.color = cc.Color.WHITE;
         }
+        // console.log("MotionColliderHandler-->dispatchLockEvent",lockcount);
     },
 
     backToPosition:function(direction,userData){
@@ -263,11 +268,11 @@ cc.Class({
         var otherAabb = other.world.aabb;
         var actorAabb = actor.world.aabb;
         
-        pos = new cc.Vec2(actor.node.x,other.node.position - otherAabb.height*.5 - actorAabb.height*.5 - 1);
+        // console.log("MotionColliderHandler-->backToPosition",this.node.position);
         
         var pos;
         if(direction==DirectionType.Up){
-            pos = new cc.Vec2(actorAabb.center.x,otherAabb.yMin - actorAabb.height*.5 - 1);
+            pos = new cc.Vec2(actorAabb.center.x,otherAabb.yMin - actorAabb.height*.5);// - 1);
         }
         else if(direction==DirectionType.Down){
             pos = new cc.Vec2(actorAabb.center.x,otherAabb.yMax + actorAabb.height*.5);

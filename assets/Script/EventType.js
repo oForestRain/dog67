@@ -36,6 +36,15 @@ var EventType =  cc.Enum({
     InstanceFactoryAdd: 61,
     InstanceFactoryDelete: 62,
     
+    //sceneEvent
+    GameLoadingScene: 70,
+    LoadingUIComplete:71,
+    LoadingScene:72,
+    SceneLoadingComplete: 73,
+    EnterScene: 74,
+    SceneEnterComplete: 75,
+
+    
     //camera
 
     //objectInteractEvent

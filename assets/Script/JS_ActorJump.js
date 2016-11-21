@@ -81,16 +81,10 @@ cc.Class({
 
         this.node.on(EventType.ActorMotionLock, 
             function (event) {
-                this.mVerticalLock(event);
+                this.mJumpLock(event);
             },
             this);
-        
-        // this.node.on(EventType.aJumpLock, 
-        //     function (event) {
-        //         this.mJumpLock();
-        //     },
-        //     this);
-            
+
         this.node.on(EventType.ActorLanding, 
             function (event) {
                 this.mLandState();
@@ -103,7 +97,6 @@ cc.Class({
         if(this.GravityCom===null){
             return;
         }
-        
         // console.log(this.stateType);
         
         if(this.GravityCom.stateType === StateType.Landing){
@@ -153,7 +146,7 @@ cc.Class({
         this.node.dispatchEvent( event );
     },
     
-    mVerticalLock: function(event) {
+    mJumpLock: function(event) {
         if(this.GravityCom===null){
             return;
         }
@@ -166,18 +159,12 @@ cc.Class({
             return;
         }
         if(direction === DirectionType.Up){
-            this.mJumpLock();
             this.speed =0;
+            console.log("ActorJump-->mJumpLock",this.stateType,StateType.Landing);
+            if(this.stateType!=StateType.Landing){
+                this.mJump2State();
+            }
         }
-    },
-    
-    mJumpLock: function() {
-        // console.log("ActorJump-->mJumpLock");
-        if(this.GravityCom===null){
-            return;
-        }
-        
-        this.mJump2State();
     },
     
     mJumpState: function() {

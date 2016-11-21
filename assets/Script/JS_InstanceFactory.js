@@ -33,7 +33,7 @@ cc.Class({
         
         var initCount;
         var instance;
-        for (i = 0; i < arrLen; i++) {
+        for(i = 0; i < arrLen; i++) {
             if(this.preInstanceNum[i]>0){
                 if(this.prefab[i]){
                     instance = cc.instantiate(this.prefab[i]);
