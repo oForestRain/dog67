@@ -15,7 +15,11 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        actor : {
+        // actor : {
+        //     default : null,
+        //     type: cc.Node,
+        // },
+        cameraWindow : {
             default: null,
             type: cc.Node,
         },
@@ -37,11 +41,9 @@ cc.Class({
     
     onEnable: function () {
         this.enable = this.activeOnEnable;
-
-        this.setActorTarget(GlobalReference.PlayerInstance);
-        if(this.actor){
-            this.setActorTarget(this.actor);
-        }
+        
+        // console.log("CameraFollow--->onEnable");
+        this.setActorTarget(this.actor);
     },
     
     onDisable: function () {
@@ -83,6 +85,10 @@ cc.Class({
         if( this.enable!==true){
             return;
         }
+        if(!this.targetPos){
+            return;
+        }
+        
         if(this.targetPos.equals(this.target.position)){
             return;
         }
@@ -95,11 +101,14 @@ cc.Class({
     },
     
     setActorTarget : function(target){
+        if(!target){
+            return;
+        }
         this.target = target;
-        
         if(this.enable){
             this.targetPos = this.target.position;
         }
+        console.log("CameraFollow--->setActorTarget",this.target,this.enable,this.targetPos);
     },
 
     moveFollowers: function(offset){

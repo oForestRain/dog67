@@ -173,11 +173,11 @@
       "__id__": 1
     },
     "_enabled": true,
-    "type": 2,
+    "type": 3,
     "event": 100,
     "emit": 61,
     "pool": true,
-    "prefabType": 3
+    "prefabType": 4
   },
   {
     "__type__": "7358df/KbpDXLE276qyL2AI",
@@ -187,11 +187,11 @@
       "__id__": 1
     },
     "_enabled": true,
-    "type": 2,
+    "type": 3,
     "event": 100,
     "emit": 60,
     "pool": true,
-    "prefabType": 1
+    "prefabType": 2
   },
   {
     "__type__": "de592s53NhKxKN46x0z0nqA",
@@ -201,7 +201,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "type": 2,
+    "type": 3,
     "event": 100,
     "emit": 200
   },

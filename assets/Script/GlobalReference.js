@@ -6,10 +6,10 @@ var GlobalReference =  {
     // },
     Loading:null,
     SceneMode:null,
+    InstanceFactory : null,
     PlayerInstance : null,
     InputController : null,
-    InstanceFactory : null,
-    MainCamera : null,
+    CameraFollow : null,
 }
 
 module.exports = GlobalReference;

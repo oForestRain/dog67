@@ -226,7 +226,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "type": 4,
+    "type": 5,
     "event": 102,
     "emit": 62,
     "pool": true,

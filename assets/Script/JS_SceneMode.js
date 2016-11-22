@@ -16,24 +16,13 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        actor : {
-            default: null,
+        // actor : {
+        //     default : null,
+        //     type: cc.Node,
+        // },
+        playerParent : {
+            default : null,
             type: cc.Node,
-        },
-        
-        mainCamera : {
-            default: null,
-            type: cc.Node
-        },
-
-        inpController : {
-            default: null,
-            type: cc.Node
-        },
-        
-        insFactory : {
-            default: null,
-            type: cc.Node
         },
     },
 
@@ -43,20 +32,9 @@ cc.Class({
         
         this.initListener();
         
-        GlobalReference.PlayerInstance = this.actor;
-        GlobalReference.MapMode = this.node;
-        GlobalReference.InputController  = this.inpController;
-        GlobalReference.InstanceFactory  = this.insFactory;
-        GlobalReference.MainCamera  = this.mainCamera;
-        
-        // console.log("GameInstance--->onLoad",GlobalReference.PlayerInstance,
-        //                 GlobalReference.GameInstance,
-        //                 GlobalReference.InputController,
-        //                 GlobalReference.InstanceFactory);
-        
         cc.director.getCollisionManager().enabled = true;
-        cc.director.getCollisionManager().enabledDrawBoundingBox.enabled = true; 
-        cc.director.getCollisionManager().enabledDebugDraw = true;
+        // cc.director.getCollisionManager().enabledDrawBoundingBox.enabled = true; 
+        // cc.director.getCollisionManager().enabledDebugDraw = true;
 
     },
     
@@ -72,23 +50,70 @@ cc.Class({
             },
             this);
     },
-    
-    start: function () {
-
-        cc.director.setDisplayStats(true);
-        
-        cc.game.addPersistRootNode(this.node);
-        // removePersistRootNode
-        // console.log("GameInstance.isPersistRootNode--->",cc.game.isPersistRootNode(this.node));
-        // console.log("GameInstance--->start",GlobalReference.PlayerInstance);
-    },
-    
+ 
     onEnable: function () {
-        // console.log("GameInstance--->onEnable",GlobalReference.PlayerInstance);
+        GlobalReference.SceneMode = this.node;
+        GlobalReference.InstanceFactory = this.node;
+        GlobalReference.InputController = this.node;
+        GlobalReference.CameraFollow = this.node;
+        
+        GlobalReference.PlayerInstance = this.actor;
+        // console.log("SceneMode-->onEnable",GlobalReference.InstanceFactory);
     },
     
     onDisable: function () {
-
+        var event = new cc.Event.EventCustom(EventType.InstancePlayerPut, true);
+        var userData={};
+        event.setUserData(userData);
+        GlobalReference.InstanceFactory.dispatchEvent(event);
+    },
+    
+    start: function () {
+        // console.log("SceneMode-->start");
+        var initData;
+        this.initPlayerInstance(initData);
+    },
+    
+    initPlayerInstance: function (initData) {
+        // console.log("SceneMode--->initPlayerInstance");
+        var event = new cc.Event.EventCustom(EventType.InstancePlayerGet, true);
+        var userData={};
+        userData.initData = initData;
+        userData.parent = this.playerParent;
+        
+        userData.delegate = this;
+        userData.callback = this.initScene;
+        event.setUserData(userData);
+        GlobalReference.InstanceFactory.dispatchEvent(event);
+    },
+    
+    initScene: function (delegate,target) {
+        // console.log("SceneMode--->initScene",target);
+        if(!target){
+            return;
+        }
+        GlobalReference.PlayerInstance = target;
+        delegate.setInputControllerTarget(target);
+        delegate.setCameraFollowTarget(target);
+        console.log("SceneMode--->initScene");
+    },
+    
+    setInputControllerTarget: function (target) {
+        // console.log("SceneMode--->setInputControllerTarget",target);
+        var event = new cc.Event.EventCustom(EventType.InputControllerTarget, true);
+        var userData={};
+        userData.target = GlobalReference.PlayerInstance;
+        event.setUserData(userData);
+        GlobalReference.SceneMode.dispatchEvent(event);
+    },
+    
+    setCameraFollowTarget: function (target) {
+        // console.log("SceneMode--->setCameraFollowTarget",target);
+        var event = new cc.Event.EventCustom(EventType.CameraFollowTarget, true);
+        var userData={};
+        userData.target = GlobalReference.PlayerInstance;
+        event.setUserData(userData);
+        GlobalReference.SceneMode.dispatchEvent(event);
     },
     
     brickPush: function (event) {
@@ -109,30 +134,4 @@ cc.Class({
     // update: function (dt) {
 
     // },
-    
-    startGame: function () {
-        cc.director.getCollisionManager().enabled = true;
-        cc.director.getCollisionManager().enabledDrawBoundingBox.enabled = true; 
-        cc.director.getCollisionManager().enabledDebugDraw = true;
-        
-        // removePersistRootNode
-        // console.log("GameInstance.isPersistRootNode--->",cc.game.isPersistRootNode(this.node));
-        // console.log("GameInstance--->start",GlobalReference.PlayerInstance);
-    },
-    
-    endGame: function () {
-        cc.director.getCollisionManager().enabled = false;
-
-        // removePersistRootNode
-        // console.log("GameInstance.isPersistRootNode--->",cc.game.isPersistRootNode(this.node));
-        // console.log("GameInstance--->start",GlobalReference.PlayerInstance);
-    },
-    
-    restartGame: function(){
-        cc.director.loadScene("MapSelect");
-    },
-
-    returnMenu: function(){
-        cc.director.loadScene("Start");
-    },
 });

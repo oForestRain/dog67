@@ -1,5 +1,6 @@
 var EventType = require("EventType");
 var PrefabType = require("PrefabType");
+var GlobalReference = require("GlobalReference");
 
 cc.Class({
     extends: cc.Component,
@@ -25,6 +26,7 @@ cc.Class({
     
     // use this for initialization
     onLoad: function () {
+        // console.log("InstanceFactory-->onLoad");
         this.poolArray = [];
         var arrLen = this.prefabType.length;
         for(var i = 0; i < arrLen; i++){
@@ -61,6 +63,16 @@ cc.Class({
                 this.putBack(event);
             },
             this);
+        this.node.on(EventType.InstancePlayerGet, 
+            function (event) { 
+                this.getPlayer(event);
+            },
+            this);
+        this.node.on(EventType.InstancePlayerPut, 
+            function (event) { 
+                this.putPlayer(event);
+            },
+            this);
     },
     
     
@@ -77,7 +89,7 @@ cc.Class({
         var prefabType = userData.prefabType;
         var pool = userData.pool;
         
-        // console.log("InstanceFactory-->changeToPrefab",targetType,target,prefabType,target.position);
+        console.log("InstanceFactory-->changeToPrefab",targetType,target,prefabType,target.position);
         
         var prefabInstance = this.getPrefab(prefabType);
         prefabInstance.position =  target.position;
@@ -97,14 +109,13 @@ cc.Class({
         var prefabType = userData.prefabType;
         var position = userData.position;
 
-        // console.log("InstanceFactory-->addPrefab",target,prefabType,position);
+        console.log("InstanceFactory-->addPrefab",target,prefabType,position);
         
         var prefabInstance = this.getPrefab(prefabType);
         prefabInstance.position =  position;
         prefabInstance.parent = target.parent;
         
         // console.log("InstanceFactory-->addPrefab",prefabInstance.position,prefabInstance.parent);
-        
     },
     
     putBack: function (event) {
@@ -149,16 +160,52 @@ cc.Class({
     
     putBackPrefab: function (type,instance) {
         if(type >= this.prefabType.length || type >= this.poolArray.length){
-            console.log("InstanceFactory-->putBackPrefab undefined");
+            // console.log("InstanceFactory-->putBackPrefab undefined");
             return;
         }
         if(this.poolArray[type]===undefined){
-            console.log("InstanceFactory-->putBackPrefab undefined",type);
+            // console.log("InstanceFactory-->putBackPrefab undefined",type);
             return;  
         }
 
         this.poolArray[type].put(instance);
         
         // console.log("InstanceFactory-->putBackPrefab",this.poolArray[type].size(),type,instance);
-    }
+    },
+
+    getPlayer: function (event) {
+        console.log("InstanceFactory-->getPlayer");
+        var userData = event.getUserData();
+        var initData = userData.initData;
+        var parent = userData.parent;
+        var prefabType = PrefabType.Player;
+        var position = new cc.Vec2(0,0);
+        var callback = userData.callback;
+        var delegate = userData.delegate;
+
+        // console.log("InstanceFactory-->getPlayer",parent,prefabType,position);
+        
+        var prefabInstance = this.getPrefab(prefabType);
+        prefabInstance.position = position;
+        prefabInstance.parent = parent;
+        
+        // console.log("InstanceFactory-->getPlayer",prefabInstance.position,prefabInstance.parent);
+        callback(delegate,prefabInstance);
+        // console.log("InstanceFactory-->getPlayer");
+    },
+    
+    putPlayer: function (event) {
+        var target = GlobalReference.PlayerInstance;
+        var targetType = PrefabType.Player;
+        var pool = true;
+        
+        // console.log("InstanceFactory-->putPlayer",targetType,target,pool);
+        
+        if(pool){
+            this.putBackPrefab(targetType,target);
+        }
+        else{
+            target.destroy();
+        }
+    },
 });

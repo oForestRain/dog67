@@ -61,7 +61,7 @@ cc.Class({
         userData.other;
         
         event.setUserData(userData);
-        GlobalReference.GameInstance.dispatchEvent(event);
+        GlobalReference.SceneMode.dispatchEvent(event);
         
         // console.log("GameInstanceEmitter-->emitInstanceFactoryEvent",emit);
     },

@@ -26,15 +26,20 @@ var EventType =  cc.Enum({
     CameraFollowEnable:41,
     GravityEnable:42,
     AutoMoveEnable:43,
+    InputControllerEnable:44,
     
     //componentTarget
     CameraFollowTarget:50,
     InputControllerTarget:51,
     
-    //instanceFactoryEvent
+    //instanceFactory
     InstanceFactoryChange: 60,
     InstanceFactoryAdd: 61,
     InstanceFactoryDelete: 62,
+    InstancePlayerGet: 63,
+    InstancePlayerPut: 64,
+    InstanceUIGet: 65,
+    InstanceUIPut: 66,
     
     //sceneEvent
     GameLoadingScene: 70,
@@ -44,7 +49,6 @@ var EventType =  cc.Enum({
     EnterScene: 74,
     SceneEnterComplete: 75,
 
-    
     //camera
 
     //objectInteractEvent

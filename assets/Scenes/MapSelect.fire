@@ -403,7 +403,7 @@
     },
     "component": "JS_SceneSelect",
     "handler": "selectScene",
-    "customEventData": "MapTest1-1"
+    "customEventData": "Test1-1"
   },
   {
     "__type__": "cc.Canvas",

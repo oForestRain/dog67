@@ -16,27 +16,34 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        actor : {
-            default: null,
-            type: cc.Node,
-        },
+        // actor : {
+        //     default : null,
+        //     type: cc.Node,
+        // },
+        activeOnEnable:true,
     },
 
     // use this for initialization
     onLoad: function () {
+        console.log("InputController--->onLoad");
         this.initListener();
     },
     
     onEnable: function () {
-        this.actor =  GlobalReference.PlayerInstance;
-        if(this.actor){
-            this.setActorTarget(this.actor);
-        }
-        // console.log("InputController--->onEnable",GlobalReference.PlayerInstance);
+        this.enable = this.activeOnEnable;
+        
+        this.setActorTarget(this.actor);
+        
+        console.log("InputController--->onEnable");
     },
     
     onDisable: function () {
 
+    },
+    
+    start: function () {
+
+        console.log("InputController--->start");
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -83,11 +90,21 @@ cc.Class({
         
         cc.eventManager.addListener(listener, self.node);
         
+        this.node.on(EventType.InputControllerEnable, 
+            function (event) {
+                this.componentEnable(event);
+            },
+            this);
         this.node.on(EventType.InputControllerTarget, 
             function (event) {
                 this.inputControllerTarget(event);
             },
             this);
+    },
+    
+    componentEnable : function( event ){
+        var userData = event.getUserData();
+        this.enable = userData.enable;
     },
 
     inputControllerTarget : function( event ){
@@ -98,6 +115,9 @@ cc.Class({
     },
     
     setActorTarget : function(target){
+        if(!target){
+            return;
+        }
         this.target = target;
     },
     
@@ -145,7 +165,7 @@ cc.Class({
         
         // console.log(event.type,userData.direction);
         
-        this.actor.dispatchEvent( event );
+        this.target.dispatchEvent( event );
     },
     
     mRightStop: function() {
@@ -156,7 +176,7 @@ cc.Class({
         
         // console.log(event.type,userData.direction);
         
-        this.actor.dispatchEvent( event );
+        this.target.dispatchEvent( event );
     },
     
     mJumpStop: function() {

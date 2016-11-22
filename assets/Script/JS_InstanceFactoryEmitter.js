@@ -51,7 +51,7 @@ cc.Class({
                 // console.log("InstanceFactoryEmitter-->addEachListener",event);
                 var userData = event.getUserData();
                 this.emitInstanceFactoryEvent(this.emit,userData);
-                 return;
+                return;
             },
         this);
     },

@@ -158,7 +158,8 @@
     "maxSpeed": 400,
     "initialSpeed": 100,
     "accelerate": 300,
-    "dragAccelerate": 800
+    "dragAccelerate": 800,
+    "stopLimit": 20
   },
   {
     "__type__": "43da5y26tVMs5fieNb+rIYl",

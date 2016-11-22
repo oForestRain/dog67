@@ -200,11 +200,11 @@
       "__id__": 1
     },
     "_enabled": true,
-    "type": 3,
+    "type": 4,
     "event": 101,
     "emit": 62,
     "pool": true,
-    "prefabType": 3
+    "prefabType": 0
   },
   {
     "__type__": "de592s53NhKxKN46x0z0nqA",
@@ -214,7 +214,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "type": 3,
+    "type": 4,
     "event": 101,
     "emit": 201
   },

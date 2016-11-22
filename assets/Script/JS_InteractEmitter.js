@@ -1,7 +1,7 @@
 // var EventType = require("EventType");
 // var DirectionType = require("DirectionType");
 var ColliderGroupMapping = require("ColliderGroupMapping");
-var JS_ColliderInteractEmitterAssist = require("JS_ColliderInteractEmitterAssist");
+var JS_InteractEmitterAssist = require("JS_InteractEmitterAssist");
 
 cc.Class({
     extends: cc.Component,
@@ -19,7 +19,7 @@ cc.Class({
         // ...
         collider:{
                 default:[],
-                type:[JS_ColliderInteractEmitterAssist],
+                type:[JS_InteractEmitterAssist],
         },
     },
 
