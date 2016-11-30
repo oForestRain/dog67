@@ -17,11 +17,7 @@ cc.Class({
         //    displayName: 'Foo', // optional
         //    readonly: false,    // optional, default is false
         // },
-        // ...rightOffsetRate 
-        leftOffsetRate : .3,
-        rightOffsetRate : .3,
-        topOffsetRate : .3,
-        bottomOffsetRate : .3,
+        // ...rightOffsetRate
         activeOnEnable : true,
     },
 
@@ -65,344 +61,336 @@ cc.Class({
         if(this.enable!==true){
             return;
         }
-        // console.log("onCollisionEnter",self.node.group,other.node.group,this.enable);
+        
+        // console.log("CheckCollider--->onCollisionEnter",self.node.group,other.node.group,this.enable);
+        // console.log("CheckCollider--->onCollisionEnter");
 
         //conllider
         // ConlliderEnable : 10,
         // ConlliderEnter : 11,
         // ConlliderStay : 12,
         // ConlliderExit : 13,
-        
+
         var event = new cc.Event.EventCustom(EventType.ConlliderEnter, true);
         var userData = {};
         userData.other = other;
         userData.actor = self;
-        
-        var otherAabb = other.world.aabb;
-        var selfAabb = self.world.aabb;
-        var otherPreAabb = other.world.preAabb;
-        var selfPreAabb = self.world.preAabb;
 
-        // check part 
-        var customFormDirection = this.customFormDirectionFromPart(other, self , true);
-        userData.direction = customFormDirection.direction;
-        userData.tangent = customFormDirection.tangent;
-        userData.part = customFormDirection.part;
+        // check part
+        var customCollider = this.customCollider(other, self , true);
+        userData.direction = customCollider.direction;
+        userData.part= customCollider.part;
+        userData.actorPos = customCollider.actorPos;
         // console.log("ConlliderEnter-->customFormDirection",userData.direction,userData.tangent,userData.part);
+        
+        // if(userData.direction === undefined && this.node.group == "Player"){
+        //     console.log("ConlliderEnter--> direction undefined",this.node.group);
+        // }
 
         event.setUserData(userData);
         this.node.dispatchEvent(event);
-        
-        // console.log("ConlliderEnter",other.world.aabb);
-        // console.log("ConlliderEnter",self.world.aabb);
-        // console.log("customFormDirectionFromPart------------>",otherAabb.yMax,selfAabb.yMin);
-        // console.log("customFormDirectionFromPart------------>",otherPreAabb.yMax,selfPreAabb.yMin);
-        // console.log("ConlliderEnter",other.world.preAabb);
-        // console.log("ConlliderEnter",self.world.preAabb);
-        // console.log("ConlliderEnter",other.world.aabb.center);
-        // console.log("ConlliderEnter",self.world.aabb.center);
-        // console.log("ConlliderEnter",other.world.preAabb.center);
-        // console.log("ConlliderEnter",self.world.preAabb.center);
     },
     
-    customFormDirectionFromPart : function(other, self ,enter){
-        var direction;
-        var tangent=false;
-        
+    customCollider : function(other, self ,enter){
+        // console.log("CheckCollider--->customCollider enter",enter);
         var otherAabb = other.world.aabb;
         var selfAabb = self.world.aabb;
         var otherPreAabb = other.world.preAabb;
         var selfPreAabb = self.world.preAabb;
+        
+        var collider = this.calculateCollider(otherAabb,otherPreAabb,selfAabb,selfPreAabb,enter);
 
-        var part;
-        if(enter){
-            part = this.checkPart(otherAabb,otherPreAabb,selfAabb,selfPreAabb);
+        var direction = collider.direction;
+        var part= collider.part;
+        var actorPos = collider.actorPos;
+        
+        if(direction == DirectionType.ConerA){
+            part= DirectionType.Left;
+        }
+        else if(direction == DirectionType.ConerB){
+            part= DirectionType.Right;
+        }
+        else if(direction == DirectionType.ConerC){
+            part= DirectionType.Down;
+        }
+        else if(direction == DirectionType.ConerD){
+            part= DirectionType.Down;
+        }
+        
+        if(direction == DirectionType.Left || direction == DirectionType.Right){
+            if(otherPreAabb.yMax.toFixed(3) == selfPreAabb.yMin.toFixed(3)){//Exclude landing
+                part= DirectionType.Down;
+            }
+            else if(otherPreAabb.yMin.toFixed(3) == selfPreAabb.yMax.toFixed(3)){//Exclude press
+                part= DirectionType.Up;
+            }
+        }
+        // else if(direction == DirectionType.Up || direction == DirectionType.Down){
+        //     if(otherPreAabb.xMax.toFixed(3) == selfPreAabb.xMin.toFixed(3)){//Exclude left
+        //         part= DirectionType.Left;
+        //     }
+        //     else if(otherPreAabb.xMin.toFixed(3) == selfPreAabb.xMax.toFixed(3)){//Exclude right
+        //         part= DirectionType.Right;
+        //     }
+        // }
+        
+        // if(self.node.group == "Player"){
+        //     console.log("CheckCollider--->customCollider",direction,part,actorPos);
+        // }
+        // console.log("CheckCollider--->customCollider",direction,part,actorPos);
+        return {direction,part,actorPos};
+    },
+    
+    calculateCollider : function(otherAabb,otherPreAabb,actorAabb,actorPreAabb,enter){
+        //speed
+        var speed = this.calculateSpeed(otherAabb,otherPreAabb,actorAabb,actorPreAabb,enter);
+        var otherSpeed = speed.otherSpeed;
+        var actorSpeed = speed.actorSpeed;
+
+        var otherXSpeed = otherSpeed.x;
+        var otherYSpeed = otherSpeed.y;
+        var actorXSpeed = actorSpeed.x;
+        var actorYSpeed = actorSpeed.y;
+        // console.log("CheckCollider--->calculateCollider speed",otherSpeed,actorSpeed);
+    
+        //colliderOffset
+        var colliderOffsetX;
+        var colliderOffsetY;
+        if(actorXSpeed !== 0){
+            if(actorXSpeed > 0){
+                colliderOffsetX = actorAabb.xMax - otherAabb.xMin;
+            }
+            else{
+                colliderOffsetX = actorAabb.xMin - otherAabb.xMax;
+            }
+        }
+        else if(otherXSpeed !== 0){
+            if(otherXSpeed > 0){
+                colliderOffsetX = actorAabb.xMin - otherAabb.xMax;
+            }
+            else{
+                colliderOffsetX = actorAabb.xMax - otherAabb.xMin;
+            }
         }
         else{
-            part = this.checkPart(otherPreAabb,otherAabb,selfPreAabb,selfAabb);
-        }
-
-        // console.log("customFormDirectionFromPart------------>",otherPreAabb.xMin,selfPreAabb.xMax);
-        // console.log("customFormDirectionFromPart------------>",otherPreAabb.xMax,selfPreAabb.xMin);
-        // console.log("customFormDirectionFromPart------------>",otherPreAabb.yMin,selfPreAabb.yMax);
-        // console.log("customFormDirectionFromPart------------>",otherPreAabb.yMax,selfPreAabb.yMin);
-
-        if(part == DirectionType.Left){
-            direction = DirectionType.Left;
-        }
-        else if(part == DirectionType.LeftUp){
-            if(otherPreAabb.yMin.toFixed(3) == selfPreAabb.yMax.toFixed(3)){//Exclude press
-                direction = DirectionType.Up;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Left;
-            }
-        }
-        else if(part == DirectionType.LeftDown){
-            if(otherPreAabb.yMax.toFixed(3) == selfPreAabb.yMin.toFixed(3)){//Exclude landing
-                direction = DirectionType.Down;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Left;
-            }
+            colliderOffsetX = 0;
         }
         
-        if(part == DirectionType.Right){
-            direction = DirectionType.Right;
-        }
-        else if(part == DirectionType.RightUp){
-            if(otherPreAabb.yMin.toFixed(3) == selfPreAabb.yMax.toFixed(3)){
-                direction = DirectionType.Up;
-                tangent = true;
+        if(actorYSpeed !== 0){
+            if(actorYSpeed > 0){
+                colliderOffsetY = actorAabb.yMax - otherAabb.yMin;
             }
             else{
-                direction = DirectionType.Right;
+                colliderOffsetY = actorAabb.yMin - otherAabb.yMax;
             }
         }
-        else if(part == DirectionType.RightDown){
-            if(otherPreAabb.yMax.toFixed(3) == selfPreAabb.yMin.toFixed(3)){
-                direction = DirectionType.Down;
-                tangent = true;
+        else if(otherYSpeed !== 0){
+            if(otherYSpeed > 0){
+                colliderOffsetY = actorAabb.yMin - otherAabb.yMax;
             }
             else{
-                direction = DirectionType.Right;
+                colliderOffsetY = actorAabb.yMax - otherAabb.yMin;
             }
         }
+        else{
+            colliderOffsetY = 0;
+        }
+        // console.log("CheckCollider--->calculateCollider colliderOffset",colliderOffsetX,colliderOffsetY);
         
-        if(part == DirectionType.Up){
-            direction = DirectionType.Up;
-        }
-        else if(part == DirectionType.UpLeft){
-            if(otherPreAabb.xMax.toFixed(3) == selfPreAabb.xMin.toFixed(3)){//Exclude left
-                direction = DirectionType.Left;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Up;
-            }
-        }
-        else if(part == DirectionType.UpRight){
-            if(otherPreAabb.xMin.toFixed(3) == selfPreAabb.xMax.toFixed(3)){//Exclude right
-                direction = DirectionType.Right;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Up;
-            }
-        }
-        
-        if(part == DirectionType.Down){
-            direction = DirectionType.Down;
-        }
-        else if(part == DirectionType.DownLeft){
-            if(otherPreAabb.xMax.toFixed(3) == selfPreAabb.xMin.toFixed(3)){//
-                direction = DirectionType.Left;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Down;
-            }
-        }
-        else if(part == DirectionType.DownRight){
-            if(otherPreAabb.xMin.toFixed(3) == selfPreAabb.xMax.toFixed(3)){//
-                direction = DirectionType.Right;
-                tangent = true;
-            }
-            else{
-                direction = DirectionType.Down;
-            }
-        }
-
-        return {direction,tangent,part};
-    },
-
-    checkPart: function(otherAabb,otherPreAabb,selfAabb,selfPreAabb){
-        //DirectionType
-        // UpLeft:0,
-        // Up:1,
-        // UpRight:2,
-        // RightUp:3,
-        // Right:4,
-        // RightDown:5,
-        // DownRight:6,
-        // Down:7,
-        // DownLeft:8,
-        // LeftDown:9,
-        // Left:10,
-        // LeftUp:11,
-
-        var otherCenter = otherAabb.center;
-        var selfCenter = selfAabb.center;
-        
-        var otherPreCenter = otherPreAabb.center;
-        var selfPreCenter = selfPreAabb.center;
-        
-        var leftBorder = selfCenter.x-selfAabb.width*this.leftOffsetRate*.5;
-        var rightBorder = selfCenter.x+selfAabb.width*this.rightOffsetRate*.5;
-        var topBorder = selfCenter.y+selfAabb.height*this.topOffsetRate*.5;
-        var bottomBorder = selfCenter.y-selfAabb.height*this.bottomOffsetRate*.5;
-        
-        // console.log("customFormDirectionFromPart-->",otherPreCenter,selfPreCenter);
-        // console.log("customFormDirectionFromPart-->",otherCenter,selfCenter);
-        // console.log("customFormDirectionFromPart-->",otherPreAabb.xMin,otherPreAabb.xMax,otherPreAabb.yMin,otherPreAabb.yMax);
-        // console.log("customFormDirectionFromPart-->",selfPreAabb.xMin,selfPreAabb.xMax,selfPreAabb.yMin,selfPreAabb.yMax);
-
-        var part;
-        //check x-axis
+        //check axis
         var otherPreAabbClone = otherPreAabb.clone();
-        var selfPreAabbClone = selfPreAabb.clone();
+        var actorPreAabbClone = actorPreAabb.clone();
         otherPreAabbClone.x = otherAabb.x;
-        selfPreAabbClone.x = selfAabb.x;
-        if (cc.Intersection.rectRect(selfPreAabbClone,otherPreAabbClone)) {
-            // console.log("checkPart------------>check x-axis");
-             if ((selfPreCenter.x - selfCenter.x) - (otherPreCenter.x - otherCenter.x) >0) {
-                // console.log("checkPart------------>part left be hit");
-                if(otherAabb.yMin.toFixed(3) >= topBorder){//
-                    part = DirectionType.LeftUp;
-                }
-                else if(otherAabb.yMax.toFixed(3) <= bottomBorder){//
-                    part = DirectionType.LeftDown;
-                }
-                else{
-                    part = DirectionType.Left;
-                }
-            }
-            else if ((selfPreCenter.x - selfCenter.x) - (otherPreCenter.x - otherCenter.x) <0) {
-                // console.log("checkPart------------>part right be hit");
-                if(otherAabb.yMin.toFixed(3) >= topBorder){//
-                    part = DirectionType.RightUp;
-                }
-                else if(otherAabb.yMax.toFixed(3) <= bottomBorder){//
-                    part = DirectionType.RightDown;
-                }
-                else{
-                     part = DirectionType.Right;
-                }
-            }
-            // console.log("part------------>1",part);
-            if(part!==undefined){
-                return part;
-            }
-        }
+        actorPreAabbClone.x = actorAabb.x;
+        var checkX = cc.Intersection.rectRect(actorPreAabbClone,otherPreAabbClone);
         
-        //check y-axis
+        // if(this.node.group=="Player"&&!xaxis&&!yaxis&&!coner){
+        //     console.log("CheckCollider--->calculateDirection",checkX,enter,
+        //                                         cc.Intersection.rectRect(otherPreAabb,actorPreAabb),
+        //                                         cc.Intersection.rectRect(otherPreAabbClone,actorPreAabbClone));
+        // }
+        
         otherPreAabbClone = otherPreAabb.clone();
-        selfPreAabbClone = selfPreAabb.clone();
+        actorPreAabbClone = actorPreAabb.clone();
         otherPreAabbClone.y = otherAabb.y;
-        selfPreAabbClone.y = selfAabb.y;
-        if (cc.Intersection.rectRect(selfPreAabbClone,otherPreAabbClone)) {
-            // console.log("checkPart------------>check y-axis");
-            if ((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) < 0) {
-                // console.log("checkPart-->part top be hit");
-                if(otherAabb.xMax.toFixed(3) <= leftBorder){//
-                    part = DirectionType.UpLeft;
+        actorPreAabbClone.y = actorAabb.y;
+        var checkY = cc.Intersection.rectRect(actorPreAabbClone,otherPreAabbClone);
+
+        var xaxis = enter&&checkX&&!checkY || !enter&&!checkX&&checkY;
+        var yaxis = enter&&!checkX&&checkY || !enter&&checkX&&!checkY;
+        var coner = enter&&!checkX&&!checkY || !enter&&!checkX&&!checkY;
+        // console.log("CheckCollider--->calculateCollider checkAxis",xaxis,yaxis,coner);
+        
+        // if(this.node.group=="Player"&&!xaxis&&!yaxis&&!coner){
+        //     console.log("CheckCollider--->calculateDirection",checkY,enter,
+        //                                         cc.Intersection.rectRect(otherPreAabb,actorPreAabb),
+        //                                         cc.Intersection.rectRect(otherPreAabbClone,actorPreAabbClone));
+        // }
+
+        //backTime
+        var xBackTime;
+        var yBackTime;
+        var backTime;
+        if (enter&&!checkY || !enter&&checkY) {
+            xBackTime = Math.abs(colliderOffsetX/(actorXSpeed - otherXSpeed));
+        }
+        if (enter&&!checkX || !enter&&checkX){
+            yBackTime = Math.abs(colliderOffsetY/(actorYSpeed - otherYSpeed));
+        }
+        // console.log("CheckCollider--->calculateCollider backTime",xBackTime,yBackTime);
+        
+        if (xaxis) {
+        //x-axis
+            // console.log("CheckCollider--->calculateCollider x-axis");
+            backTime = xBackTime;
+        }
+        else if (yaxis) {
+        //y-axis
+            // console.log("CheckCollider--->calculateCollider y-axis");
+            backTime = yBackTime;
+        }
+        else if (coner){
+        //xy-axis
+            // console.log("CheckCollider--->calculateCollider xy-axis");
+            backTime = xBackTime <= yBackTime ? xBackTime : yBackTime;
+        }
+        // console.log("CheckCollider--->calculateCollider backTime",backTime,xBackTime,yBackTime);
+        
+        var direction = this.calculateDirection(xaxis,yaxis,coner,speed);
+        // console.log("CheckCollider--->calculateCollider direction",direction);
+        var part = this.calculatepart(coner,direction,xBackTime,yBackTime);
+        // console.log("CheckCollider--->calculateCollider part",part);
+        
+        if(this.node.group=="Player"&&direction===undefined){
+            console.log("CheckCollider--->calculateDirection",checkX,checkY,enter,
+                                                otherPreAabb,actorPreAabb,
+                                                otherAabb,actorAabb);
+        }
+        
+        // if(this.node.group=="Player"){
+        //     console.log("CheckCollider--->calculateCollider direction",direction);
+        // }
+
+        //colliderPosition
+        // console.log("CheckCollider--->calculateCollider colliderPosition",actorAabb.center,actorXSpeed,actorYSpeed,backTime);
+        var otherPos = otherAabb.center.sub(new cc.Vec2(otherXSpeed,otherYSpeed).mul(backTime));
+        var actorPos = actorAabb.center.sub(new cc.Vec2(actorXSpeed,actorYSpeed).mul(backTime));
+        // console.log("CheckCollider--->calculateCollider colliderPosition",actorPos,otherPos);
+        
+        //test
+        var otherAabbClone = otherAabb.clone();
+        var actorAabbClone = actorAabb.clone();
+        // console.log("CheckCollider--->calculateCollider 1",otherAabbClone,actorAabbClone);
+        otherAabbClone.x = otherPos.x;
+        otherAabbClone.y = otherPos.y;
+        actorAabbClone.x = actorPos.x;
+        actorAabbClone.y = actorPos.y;
+        // console.log("CheckCollider--->calculateCollider 2",otherAabbClone,actorAabbClone);
+        var check = cc.Intersection.rectRect(actorAabbClone,otherAabbClone);
+        // console.log("CheckCollider--->calculateCollider",check);
+        
+        // console.log("CheckCollider--->calculateCollider",direction,part,actorPos,enter);
+        return {direction,part,actorPos};
+    },
+    
+    calculateSpeed : function(otherAabb,otherPreAabb,actorAabb,actorPreAabb){
+        var otherCenter = otherAabb.center;
+        var actorCenter = actorAabb.center;
+        var otherPreCenter = otherPreAabb.center;
+        var actorPreCenter = actorPreAabb.center;
+        
+        var otherSpeed = otherCenter.sub(otherPreCenter);
+        var actorSpeed = actorCenter.sub(actorPreCenter);
+        
+        // console.log("CheckCollider--->calculateSpeed",otherSpeed,actorSpeed);
+        return {otherSpeed,actorSpeed};
+    },
+    
+    calculateDirection : function(xaxis,yaxis,coner,speed){
+        var otherXSpeed = speed.otherSpeed.x;
+        var otherYSpeed = speed.otherSpeed.y;
+        var actorXSpeed = speed.actorSpeed.x;
+        var actorYSpeed = speed.actorSpeed.y;
+
+        var direction;
+        if(xaxis) {
+            if(actorXSpeed - otherXSpeed > 0){
+                direction = DirectionType.Right;
+            }
+            else if(actorXSpeed - otherXSpeed < 0){
+                direction = DirectionType.Left;
+            }
+        }
+        else if (yaxis) {
+            if(actorYSpeed - otherYSpeed > 0){
+                direction = DirectionType.Up;
+            }
+            else if(actorYSpeed - otherYSpeed < 0){
+                direction = DirectionType.Down;
+            }
+        }
+        else if (coner){
+            if(actorXSpeed - otherXSpeed > 0){
+                if(actorYSpeed - otherYSpeed > 0){
+                    direction= DirectionType.ConerB;//break
                 }
-                else if(otherAabb.xMin.toFixed(3) >= rightBorder){//
-                    part = DirectionType.UpRight;
-                }
-                else{
-                    part = DirectionType.Up;
+                else if(actorYSpeed - otherYSpeed < 0){
+                    direction = DirectionType.ConerC;
                 }
             }
-            else if ((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) > 0) {
-                // console.log("checkPart-->part bottom be hit");
-                if(otherAabb.xMax.toFixed(3) <= leftBorder){//
-                    part = DirectionType.DownLeft;
+            else if(actorXSpeed - otherXSpeed < 0){
+                if(actorYSpeed - otherYSpeed > 0){
+                    direction = DirectionType.ConerA;
                 }
-                else if(otherAabb.xMin.toFixed(3) >= rightBorder){//
-                    part = DirectionType.DownRight;
+                else if(actorYSpeed - otherYSpeed < 0){
+                    direction = DirectionType.ConerD;
                 }
-                else{
-                    part = DirectionType.Down;
-                }
-            }
-            // console.log("part------------>2",part);
-            if(part!==undefined){
-                return part;
             }
         }
         
-        // check corner
-        if(part===undefined){
-            if ((selfPreCenter.x - selfCenter.x) - (otherPreCenter.x - otherCenter.x) >0){
-                // console.log("checkPart------------>undefined left");
-                if((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) < 0){
-                    part = DirectionType.UpLeft;
-                }
-                else if ((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) > 0){
-                    part = DirectionType.DownLeft;
-                }
-            }
-            else if ((selfPreCenter.x - selfCenter.x) - (otherPreCenter.x - otherCenter.x) <0){
-                // console.log("checkPart------------>undefined right");
-                if((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) < 0){
-                    part = DirectionType.UpRight;
-                }
-                else if ((selfPreCenter.y - selfCenter.y) - (otherPreCenter.y - otherCenter.y) > 0){
-                     part = DirectionType.DownRight;
-                }
-            }
-            else{
-                // console.log("checkPart------------>undefined xy static");
-                if(selfCenter.x > otherAabb.xMax){
-                    // console.log("checkPart------------>undefined xy left");
-                    if(otherAabb.yMin.toFixed(3) >= topBorder){//
-                        part = DirectionType.LeftUp;
-                    }
-                    else if(otherAabb.yMax.toFixed(3) <= bottomBorder){//
-                        part = DirectionType.LeftDown;
-                    }
-                    else{
-                        part = DirectionType.Left;
-                    }
-                }
-                else if(selfCenter.x < otherAabb.xMin){
-                    // console.log("checkPart------------>undefined xy left");
-                    if(otherAabb.yMin.toFixed(3) >= topBorder){//
-                        part = DirectionType.RightUp;
-                    }
-                    else if(otherAabb.yMax.toFixed(3) <= bottomBorder){//
-                        part = DirectionType.RightDown;
-                    }
-                    else{
-                         part = DirectionType.Right;
-                    }
-                }
-                else if(selfCenter.y < otherAabb.yMin){
-                    // console.log("checkPart------------>undefined xy up");
-                    if(otherAabb.xMax.toFixed(3) <= leftBorder){//
-                        part = DirectionType.UpLeft;
-                    }
-                    else if(otherAabb.xMin.toFixed(3) >= rightBorder){//
-                        part = DirectionType.UpRight;
-                    }
-                    else{
-                        part = DirectionType.Up;
-                    }
-                }
-                else if(selfCenter.y > otherAabb.yMax){
-                    // console.log("checkPart------------>undefined xy down");
-                    if(otherAabb.xMax.toFixed(3) <= leftBorder){//
-                        part = DirectionType.DownLeft;
-                    }
-                    else if(otherAabb.xMin.toFixed(3) >= rightBorder){//
-                        part = DirectionType.DownRight;
-                    }
-                    else{
-                        part = DirectionType.Down;
-                    }
-                }
-                // console.log("checkPart------------>undefined xy static",part);
-            }
-            // console.log("part------------>3",part);
-        }
-        
-        if(part===undefined){
-            console.log("part------------------------------------------------->undefined xy static");
+        if(this.node.group=="Player" && direction === undefined ){
+            console.log("CheckCollider--->calculateDirection",direction,xaxis,yaxis,coner,
+                                            actorXSpeed - otherXSpeed,actorYSpeed - otherYSpeed);
         }
 
+        // console.log("CheckCollider--->calculateDirection",direction,xaxis,yaxis,coner);
+        return direction;
+    },
+    
+    calculatepart: function(coner,direction,xBackTime,yBackTime){
+        var part= direction;
+        if (coner){
+            if(xBackTime > yBackTime){
+                if(part=== DirectionType.ConerA){
+                    part= DirectionType.Up;
+                }
+                else if(part=== DirectionType.ConerB){
+                    part= DirectionType.Up;
+                }
+                else if(part=== DirectionType.ConerC){
+                    part= DirectionType.Down;
+                }
+                else if(part=== DirectionType.ConerD){
+                    part= DirectionType.Down;
+                }
+            }
+            else if(xBackTime < yBackTime){
+                if(part=== DirectionType.ConerA){
+                    part= DirectionType.Right;
+                }
+                else if(part=== DirectionType.ConerB){
+                    part= DirectionType.Left;
+                }
+                else if(part=== DirectionType.ConerC){
+                    part= DirectionType.Right;
+                }
+                else if(part=== DirectionType.ConerD){
+                    part= DirectionType.Left;
+                }
+            }
+        }
+        
+        // console.log("CheckCollider--->calculatepart",part,xaxis,yaxis,coner);
         return part;
     },
     
@@ -424,11 +412,19 @@ cc.Class({
         userData.other = other;
         userData.actor = self;
         
-        var customFormDirection = this.customFormDirectionFromPart(other, self , false);
-        userData.direction = customFormDirection.direction;
-        userData.tangent = customFormDirection.tangent;
-        userData.part = customFormDirection.part;
-        // console.log("ConlliderEnter-->customFormDirection",userData.direction,userData.tangent,userData.part,this.node.group);
+        var customCollider = this.customCollider(other, self , false);
+        userData.direction = customCollider.direction;
+        userData.part= customCollider.part;
+        userData.actorPos = customCollider.actorPos;
+        // console.log("CheckCollider--->onCollisionExit-->",userData.direction,userData.tangent,userData.part,this.node.group);
+        
+        // if(self.node.group == "Player"){
+        //     console.log("CheckCollider--->onCollisionExit-->",userData.direction,userData.tangent,userData.part);
+        // }
+        
+        // if(userData.direction === undefined  && this.node.group == "Player"){
+        //     console.log("onCollisionExit--> direction undefined",this.node.group);
+        // }
         
         event.setUserData(userData);
         this.node.dispatchEvent(event);

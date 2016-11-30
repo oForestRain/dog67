@@ -15,7 +15,7 @@ var JS_InteractEmitterAssist = cc.Class({
             default : EventType.ConlliderEnter,
             type: EventType,
         },
-        direction:{
+        part:{
             default : [],
             type: [DirectionType],
         },

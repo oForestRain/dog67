@@ -89,7 +89,7 @@ cc.Class({
         var prefabType = userData.prefabType;
         var pool = userData.pool;
         
-        console.log("InstanceFactory-->changeToPrefab",targetType,target,prefabType,target.position);
+        // console.log("InstanceFactory-->changeToPrefab",targetType,target,prefabType,target.position);
         
         var prefabInstance = this.getPrefab(prefabType);
         prefabInstance.position =  target.position;
@@ -109,7 +109,7 @@ cc.Class({
         var prefabType = userData.prefabType;
         var position = userData.position;
 
-        console.log("InstanceFactory-->addPrefab",target,prefabType,position);
+        // console.log("InstanceFactory-->addPrefab",target,prefabType,position);
         
         var prefabInstance = this.getPrefab(prefabType);
         prefabInstance.position =  position;
@@ -124,7 +124,7 @@ cc.Class({
         var targetType = userData.type;
         var pool = userData.pool;
         
-        console.log("InstanceFactory-->putBack",targetType,target);
+        // console.log("InstanceFactory-->putBack",targetType,target);
         
         if(pool){
             this.putBackPrefab(targetType,target);
@@ -139,7 +139,7 @@ cc.Class({
             // console.log("InstanceFactory-->getPrefab undefined");
             return;
         }
-        if(!this.prefab[type] || !this.poolArray[type]){
+        if(this.prefab[type]===undefined || this.poolArray[type]===undefined){
             // console.log("InstanceFactory-->getPrefab undefined",type);
             return;  
         }

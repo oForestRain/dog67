@@ -141,10 +141,6 @@
       "__id__": 1
     },
     "_enabled": true,
-    "leftOffsetRate": 0.3,
-    "rightOffsetRate": 0.3,
-    "topOffsetRate": 0.3,
-    "bottomOffsetRate": 0.3,
     "activeOnEnable": false
   },
   {

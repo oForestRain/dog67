@@ -1,6 +1,7 @@
 var EventType = require("EventType");
 var DirectionType = require("DirectionType");
 var StateType = require("StateType");
+var GlobalReference = require("GlobalReference");
 
 cc.Class({
     extends: cc.Component,
@@ -122,7 +123,15 @@ cc.Class({
         }
 
         if(this.stateType == StateType.MoveToStop){
-           this.stoppingSpeed(dt);
+            if(this.speed > 0 && this.rightLock === true){
+                this.speed = 0;
+            }
+            else if(this.leftLock === true){
+                this.speed = 0;
+            }
+            else{
+                this.stoppingSpeed(dt);
+            }
         }
 
         if(this.speed === 0){
@@ -204,13 +213,27 @@ cc.Class({
     mMovingLeftState: function() {
         this.stateType = StateType.MoveLeft;
         
+        var event = new cc.Event.EventCustom(EventType.MoveState, true );
+        var userData = {};
+        userData.state  = this.stateType;
+        event.setUserData(userData);
+        GlobalReference.CameraFollow.dispatchEvent( event );
         this.node.scaleX = -1;
+        
+        // console.log("ActorMove--->mMovingLeftState");
     },
     
     mMovingRightState: function() {
         this.stateType = StateType.MoveRight;
         
+        var event = new cc.Event.EventCustom(EventType.MoveState, true );
+        var userData = {};
+        userData.state  = this.stateType;
+        event.setUserData(userData);
+        GlobalReference.CameraFollow.dispatchEvent( event );
         this.node.scaleX = 1;
+        
+        // console.log("ActorMove--->mMovingRightState");
     },
     
     aStop: function(event) {

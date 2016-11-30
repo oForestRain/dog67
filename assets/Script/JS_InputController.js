@@ -115,7 +115,7 @@ cc.Class({
     },
     
     setActorTarget : function(target){
-        if(!target){
+        if(target===undefined){
             return;
         }
         this.target = target;

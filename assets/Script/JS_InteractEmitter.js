@@ -38,19 +38,19 @@ cc.Class({
     
     addEachListener:function(emitterAssist){
         var event = emitterAssist.event;
-        var dArray = emitterAssist.direction;
+        var dArray = emitterAssist.part;
         var gArray = emitterAssist.group;
         var emit = emitterAssist.emit;
         var group;
-        var direction;
+        var part;
         this.node.on(event, 
             function (event) {
                 var userData = event.getUserData();
                 var otherGroupEnum = ColliderGroupMapping[userData.other.node.group];
                 var check = this.checkGroup(otherGroupEnum,gArray);
                 if(check){
-                    direction = userData.direction;
-                    check = this.checkDirection(direction,dArray);
+                    part = userData.part;
+                    check = this.checkPart(part,dArray);
                     if(check){
                         // console.log("InteractEmitter-->",ColliderGroupMapping[userData.other.node.group],emit);
                         this.emitObjectInteractEvent(emit,userData);
@@ -75,14 +75,14 @@ cc.Class({
         return false;
     },
     
-    checkDirection:function(direction,dArray){
-        // console.log("InteractEmitter-->checkDirection",direction);
+    checkPart:function(part,dArray){
+        // console.log("InteractEmitter-->checkPart",part);
         if(dArray.length===0){
             return true;
         }
         
         for(var i=0;i<dArray.length;i++){
-            if(direction==dArray[i]){
+            if(part==dArray[i]){
                 return true;
             }
         }

@@ -123,7 +123,11 @@ cc.Class({
         var actorJHeight;
         var gravity;
         if(this.stateType === StateType.Landing){
-            // this.startY = this.node.y;
+            //test
+            // this.node.x +=100;
+            // this.node.y +=100;
+            //test
+            
             gravity = this.GravityCom.gravity;
             jTime = Math.sqrt(2*this.jHeight / gravity);
             this.speed = jTime * gravity;
@@ -160,7 +164,7 @@ cc.Class({
         }
         if(direction === DirectionType.Up){
             this.speed =0;
-            console.log("ActorJump-->mJumpLock",this.stateType,StateType.Landing);
+            // console.log("ActorJump-->mJumpLock",this.stateType,StateType.Landing);
             if(this.stateType!=StateType.Landing){
                 this.mJump2State();
             }
@@ -189,6 +193,5 @@ cc.Class({
         // console.log("ActorJump-->mLandState");
         this.stateType = StateType.Landing;
         this.speed =0;
-        
     },
 });

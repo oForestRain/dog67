@@ -129,10 +129,6 @@
       "__id__": 1
     },
     "_enabled": true,
-    "leftOffsetRate": 0.3,
-    "rightOffsetRate": 0.3,
-    "topOffsetRate": 0.3,
-    "bottomOffsetRate": 0.3,
     "activeOnEnable": true
   },
   {
@@ -152,10 +148,8 @@
   {
     "__type__": "JS_InteractEmitterAssist",
     "event": 11,
-    "direction": [
-      6,
-      7,
-      8
+    "part": [
+      3
     ],
     "group": [
       1

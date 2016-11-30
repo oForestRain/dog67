@@ -50,6 +50,9 @@ var EventType =  cc.Enum({
     SceneEnterComplete: 75,
 
     //camera
+    
+    //AnimationState
+    MoveState:90,
 
     //objectInteractEvent
     ObjectPush : 100,

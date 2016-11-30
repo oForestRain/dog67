@@ -34,7 +34,7 @@ cc.Class({
         
         cc.director.getCollisionManager().enabled = true;
         // cc.director.getCollisionManager().enabledDrawBoundingBox.enabled = true; 
-        // cc.director.getCollisionManager().enabledDebugDraw = true;
+        cc.director.getCollisionManager().enabledDebugDraw = true;
 
     },
     
@@ -89,7 +89,7 @@ cc.Class({
     
     initScene: function (delegate,target) {
         // console.log("SceneMode--->initScene",target);
-        if(!target){
+        if(target===undefined){
             return;
         }
         GlobalReference.PlayerInstance = target;

@@ -110,20 +110,22 @@ cc.Class({
     
     gFallDown: function() {
         // console.log("gFallDown-->",this.enable);
-        if(this.enable!==true){
+        if(this.enable!==true&&this.stateType!=StateType.Falling){
             return;
         }
         // console.log("gFallDown-->",this.stateType);
         this.stateType = StateType.Falling;
         this.speed = 0;
         //  console.log("gFallDown-->",this.stateType);
+        // if(this.node.group=="Player"){
+        //     console.log("Gravity-->gFallDown");
+        // }
     },
     
     gLock: function(event) {
         if(this.enable!==true){
             return;
         }
-        // console.log("gLock-->",this.stateType);
         var userData = event.getUserData();
         var direction = userData.direction;
         var lock = userData.bool;
@@ -131,6 +133,10 @@ cc.Class({
         if(direction != DirectionType.Down){
             return;
         }
+        // if(this.node.group == "Player"){
+        //     console.log("gLock-->",this.stateType,lock);    
+        // }
+        // console.log("gLock-->",this.stateType,lock);
         if(lock){
             this.gLanding();
         }

@@ -141,10 +141,6 @@
       "__id__": 1
     },
     "_enabled": true,
-    "leftOffsetRate": 0.3,
-    "rightOffsetRate": 0.3,
-    "topOffsetRate": 0.3,
-    "bottomOffsetRate": 0.3,
     "activeOnEnable": true
   },
   {
@@ -189,10 +185,8 @@
   {
     "__type__": "JS_InteractEmitterAssist",
     "event": 11,
-    "direction": [
-      0,
-      1,
-      2
+    "part": [
+      1
     ],
     "group": [
       1
@@ -202,16 +196,9 @@
   {
     "__type__": "JS_InteractEmitterAssist",
     "event": 11,
-    "direction": [
+    "part": [
       0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      9,
-      10,
-      11
+      2
     ],
     "group": [
       3
@@ -255,7 +242,7 @@
     "index": 1,
     "distance": 0,
     "speed": 50,
-    "directionEnum": 10,
+    "directionEnum": 0,
     "activeOnEnable": true
   },
   {
