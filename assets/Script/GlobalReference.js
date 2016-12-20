@@ -4,12 +4,18 @@ var GlobalReference =  {
     //     default: null,
     //     type: JS_GameInstance,
     // },
+    
+    SceneManager:null,
     Loading:null,
-    SceneMode:null,
     InstanceFactory : null,
-    PlayerInstance : null,
+    UIManager : null,
+    GameStateManager:null,
+    
+    SceneMode:null,
     InputController : null,
     CameraFollow : null,
+    PlayerInstance : null,
+    NextScene:null,
 }
 
 module.exports = GlobalReference;

@@ -261,11 +261,11 @@ cc.Class({
         var part = this.calculatepart(coner,direction,xBackTime,yBackTime);
         // console.log("CheckCollider--->calculateCollider part",part);
         
-        if(this.node.group=="Player"&&direction===undefined){
-            console.log("CheckCollider--->calculateDirection",checkX,checkY,enter,
-                                                otherPreAabb,actorPreAabb,
-                                                otherAabb,actorAabb);
-        }
+        // if(this.node.group=="Player"&&direction===undefined){
+        //     console.log("CheckCollider--->calculateCollider",checkX,checkY,enter,
+        //                                         otherPreAabb,actorPreAabb,
+        //                                         otherAabb,actorAabb);
+        // }
         
         // if(this.node.group=="Player"){
         //     console.log("CheckCollider--->calculateCollider direction",direction);

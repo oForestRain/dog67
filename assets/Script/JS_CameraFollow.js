@@ -44,6 +44,8 @@ cc.Class({
     },
     
     onEnable: function () {
+        GlobalReference.CameraFollow = this.node;
+        
         this.enable = this.activeOnEnable;
         
         // console.log("CameraFollow--->onEnable");

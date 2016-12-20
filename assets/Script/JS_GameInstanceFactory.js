@@ -26,7 +26,8 @@ cc.Class({
     
     // use this for initialization
     onLoad: function () {
-        // console.log("InstanceFactory-->onLoad");
+        // console.log("GameInstanceFactory-->onLoad");
+        
         this.poolArray = [];
         var arrLen = this.prefabType.length;
         for(var i = 0; i < arrLen; i++){
@@ -45,6 +46,11 @@ cc.Class({
         }
         
         this.initListener();
+    },
+    
+    onEnable: function () {
+        // console.log("GameInstanceFactory-->onEnable");
+        GlobalReference.InstanceFactory = this.node;
     },
     
     initListener : function(){
@@ -84,16 +90,18 @@ cc.Class({
     
     changeToPrefab: function (event) {
         var userData = event.getUserData();
+        var root = userData.root;
         var target = userData.target;
+        var position = userData.position;
         var targetType = userData.type;
         var prefabType = userData.prefabType;
         var pool = userData.pool;
         
-        // console.log("InstanceFactory-->changeToPrefab",targetType,target,prefabType,target.position);
+        // console.log("GameInstanceFactory-->changeToPrefab",targetType,target,prefabType,target.position);
         
         var prefabInstance = this.getPrefab(prefabType);
-        prefabInstance.position =  target.position;
-        prefabInstance.parent = target.parent;
+        prefabInstance.position =  position;
+        prefabInstance.parent = root;
 
         if(pool){
             this.putBackPrefab(targetType,target);
@@ -105,29 +113,29 @@ cc.Class({
     
     addPrefab: function (event) {
         var userData = event.getUserData();
-        var target = userData.target;
+        var root = userData.root;
         var prefabType = userData.prefabType;
         var position = userData.position;
 
-        // console.log("InstanceFactory-->addPrefab",target,prefabType,position);
+        // console.log("GameInstanceFactory-->addPrefab",target,prefabType,position);
         
         var prefabInstance = this.getPrefab(prefabType);
         prefabInstance.position =  position;
-        prefabInstance.parent = target.parent;
+        prefabInstance.parent = root;
         
-        // console.log("InstanceFactory-->addPrefab",prefabInstance.position,prefabInstance.parent);
+        // console.log("GameInstanceFactory-->addPrefab",prefabInstance.position,prefabInstance.parent);
     },
     
     putBack: function (event) {
         var userData = event.getUserData();
         var target = userData.target;
-        var targetType = userData.type;
+        var prefabType = userData.type;
         var pool = userData.pool;
         
-        // console.log("InstanceFactory-->putBack",targetType,target);
+        // console.log("GameInstanceFactory-->putBack",prefabType,target);
         
         if(pool){
-            this.putBackPrefab(targetType,target);
+            this.putBackPrefab(prefabType,target);
         }
         else{
             target.destroy();
@@ -136,15 +144,15 @@ cc.Class({
     
     getPrefab: function (type) {
         if(type >= this.prefabType.length || type >= this.poolArray.length){
-            // console.log("InstanceFactory-->getPrefab undefined");
+            // console.log("GameInstanceFactory-->getPrefab undefined");
             return;
         }
         if(this.prefab[type]===undefined || this.poolArray[type]===undefined){
-            // console.log("InstanceFactory-->getPrefab undefined",type);
+            // console.log("GameInstanceFactory-->getPrefab undefined",type);
             return;  
         }
 
-        // console.log("InstanceFactory-->getPrefab",this.poolArray[type].size(),type);
+        // console.log("GameInstanceFactory-->getPrefab",this.poolArray[type].size(),type);
         var instance = null;
         
         if (this.poolArray[type].size() > 0){
@@ -153,56 +161,56 @@ cc.Class({
         else{
             instance = cc.instantiate(this.prefab[type]);
         }
-        // console.log("InstanceFactory-->getPrefab",this.poolArray[type].size(),type,instance);
+        // console.log("GameInstanceFactory-->getPrefab",this.poolArray[type].size(),type,instance);
 
         return instance;
     },
     
     putBackPrefab: function (type,instance) {
         if(type >= this.prefabType.length || type >= this.poolArray.length){
-            // console.log("InstanceFactory-->putBackPrefab undefined");
+            // console.log("GameInstanceFactory-->putBackPrefab undefined");
             return;
         }
         if(this.poolArray[type]===undefined){
-            // console.log("InstanceFactory-->putBackPrefab undefined",type);
+            // console.log("GameInstanceFactory-->putBackPrefab undefined",type);
             return;  
         }
 
         this.poolArray[type].put(instance);
         
-        // console.log("InstanceFactory-->putBackPrefab",this.poolArray[type].size(),type,instance);
+        // console.log("GameInstanceFactory-->putBackPrefab",this.poolArray[type].size(),type,instance);
     },
 
     getPlayer: function (event) {
-        console.log("InstanceFactory-->getPlayer");
+        console.log("GameInstanceFactory-->getPlayer");
         var userData = event.getUserData();
         var initData = userData.initData;
-        var parent = userData.parent;
+        var root = userData.parent;
         var prefabType = PrefabType.Player;
         var position = new cc.Vec2(0,0);
         var callback = userData.callback;
         var delegate = userData.delegate;
 
-        // console.log("InstanceFactory-->getPlayer",parent,prefabType,position);
+        // console.log("GameInstanceFactory-->getPlayer",parent,prefabType,position);
         
         var prefabInstance = this.getPrefab(prefabType);
         prefabInstance.position = position;
-        prefabInstance.parent = parent;
+        prefabInstance.parent = root;
         
-        // console.log("InstanceFactory-->getPlayer",prefabInstance.position,prefabInstance.parent);
+        // console.log("GameInstanceFactory-->getPlayer",prefabInstance.position,prefabInstance.parent);
         callback(delegate,prefabInstance);
-        // console.log("InstanceFactory-->getPlayer");
+        // console.log("GameInstanceFactory-->getPlayer");
     },
     
     putPlayer: function (event) {
         var target = GlobalReference.PlayerInstance;
-        var targetType = PrefabType.Player;
+        var prefabType = PrefabType.Player;
         var pool = true;
         
-        // console.log("InstanceFactory-->putPlayer",targetType,target,pool);
+        // console.log("GameInstanceFactory-->putPlayer",prefabType,target,pool);
         
         if(pool){
-            this.putBackPrefab(targetType,target);
+            this.putBackPrefab(prefabType,target);
         }
         else{
             target.destroy();

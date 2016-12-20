@@ -41,7 +41,7 @@ var EventType =  cc.Enum({
     InstanceUIGet: 65,
     InstanceUIPut: 66,
     
-    //sceneEvent
+    //sceneEnterEvent
     GameLoadingScene: 70,
     LoadingUIComplete:71,
     LoadingScene:72,
@@ -72,6 +72,25 @@ var EventType =  cc.Enum({
     EmitterParameterEmit : 400,
     EmitterParameter1 : 401,
     EmitterParameter2 : 402,
+    
+    //UIManager
+    ManagerInteractUI: 500,
+    ManagerCloseAllUI: 501,
+    
+    //GameEvent
+    GameEvent: 600,
+    GameState: 601,
+    
+    //SceneEvent
+    ScenePause: 700,
+    SceneResume: 701,
+    SceneSelect: 702,
+    SceneRestart: 703,
+    SceneNext: 704,
+    SceneMapSelect: 705,
+    SceneShowUI: 706,
+    SceneHideUI: 707,
+    
 });
 
 module.exports = EventType;

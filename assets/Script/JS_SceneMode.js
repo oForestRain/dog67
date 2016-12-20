@@ -53,11 +53,8 @@ cc.Class({
  
     onEnable: function () {
         GlobalReference.SceneMode = this.node;
-        GlobalReference.InstanceFactory = this.node;
-        GlobalReference.InputController = this.node;
-        GlobalReference.CameraFollow = this.node;
-        
-        GlobalReference.PlayerInstance = this.actor;
+        // GlobalReference.InputController = this.node;
+        // GlobalReference.CameraFollow = this.node;
         // console.log("SceneMode-->onEnable",GlobalReference.InstanceFactory);
     },
     
@@ -95,7 +92,7 @@ cc.Class({
         GlobalReference.PlayerInstance = target;
         delegate.setInputControllerTarget(target);
         delegate.setCameraFollowTarget(target);
-        console.log("SceneMode--->initScene");
+        // console.log("SceneMode--->initScene");
     },
     
     setInputControllerTarget: function (target) {

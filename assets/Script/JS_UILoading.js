@@ -30,11 +30,13 @@ cc.Class({
             type: cc.Label
         },
 
-        
+        rate: 0.1,
     },
 
     // use this for initialization
     onLoad: function () {
+        // console.log("LoadingUI--->onLoad");
+        
         this.initListener();
         this.progressBar.progress = 0;
     },
@@ -55,7 +57,7 @@ cc.Class({
     
     onEnable: function () {
         GlobalReference.Loading = this.node;
-        console.log("LoadingUI--->onEnable");
+        // console.log("LoadingUI--->onEnable");
         var event = new cc.Event.EventCustom(EventType.LoadingUIComplete, true );
         var userData={};
         event.setUserData(userData);
@@ -68,27 +70,25 @@ cc.Class({
     },
     
     testShowLoadingUIpreloadScene: function (event) {
-        console.log("LoadingUI--->testShowLoadingUIpreloadScene");
+        // console.log("LoadingUI--->testShowLoadingUIpreloadScene");
         var load = function(){
             this.progressBar.progress += 0.1;
             if(this.progressBar.progress > 0.9){
                 this.preloadScene(event);
             }
         }
-        this.schedule(load,.5);
+        this.schedule(load,this.rate);
     },
     
     preloadScene: function (event) {
-        
-        
         var userData = event.getUserData();
-        console.log("LoadingUI--->preloadScene",userData.sceneName);
+        // console.log("LoadingUI--->preloadScene",userData.sceneName);
         cc.director.preloadScene(userData.sceneName, this.preloadComplete(event));
     },
     
     preloadComplete: function (event) {
         var userData = event.getUserData();
-        console.log("LoadingUI--->preloadComplete",userData.sceneName);
+        // console.log("LoadingUI--->preloadComplete",userData.sceneName);
         event = new cc.Event.EventCustom(EventType.SceneLoadingComplete, true );
         var data={};
         data.sceneName = userData.sceneName;
@@ -100,7 +100,7 @@ cc.Class({
     
     enterScene: function (event) {
         var userData = event.getUserData();
-        console.log("LoadingUI--->enterScene",userData.sceneName);
+        // console.log("LoadingUI--->enterScene",userData.sceneName);
          cc.director.loadScene(userData.sceneName);
     },
 

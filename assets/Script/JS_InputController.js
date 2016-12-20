@@ -25,16 +25,18 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        console.log("InputController--->onLoad");
+        // console.log("InputController--->onLoad");
         this.initListener();
     },
     
     onEnable: function () {
+        GlobalReference.InputController = this.node;
+        
         this.enable = this.activeOnEnable;
         
         this.setActorTarget(this.actor);
         
-        console.log("InputController--->onEnable");
+        // console.log("InputController--->onEnable");
     },
     
     onDisable: function () {
@@ -43,7 +45,7 @@ cc.Class({
     
     start: function () {
 
-        console.log("InputController--->start");
+        // console.log("InputController--->start");
     },
 
     // called every frame, uncomment this function to activate update callback
@@ -105,6 +107,8 @@ cc.Class({
     componentEnable : function( event ){
         var userData = event.getUserData();
         this.enable = userData.enable;
+        
+        // console.log("InputController--->componentEnable",this.enable);
     },
 
     inputControllerTarget : function( event ){
@@ -128,6 +132,10 @@ cc.Class({
     // ActorJumpStop: 3,
     
     mLeft: function() {
+        // console.log("InputController--->mLeft",this.enable);
+        if(this.enable===false){
+            return;
+        }
         var event = new cc.Event.EventCustom(EventType.ActorMove, true );
         var userData = {};
         userData.direction = DirectionType.Left;
@@ -139,6 +147,9 @@ cc.Class({
     },
 
     mRight: function() {
+        if(this.enable===false){
+            return;
+        }
         var event = new cc.Event.EventCustom(EventType.ActorMove, true );
         var userData = {};
         userData.direction = DirectionType.Right;
@@ -150,6 +161,9 @@ cc.Class({
     },
     
     mJump: function() {
+        if(this.enable===false){
+            return;
+        }
         var event = new cc.Event.EventCustom(EventType.ActorJump, true );
         
         // console.log(event.type);

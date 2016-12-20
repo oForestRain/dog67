@@ -62,6 +62,7 @@ cc.Class({
         }
         
         var event = new cc.Event.EventCustom(emit, true);
+        userData.root = this.node.parent;
         userData.target = this.node;
         userData.type = this.type;
         userData.pool = this.pool;
