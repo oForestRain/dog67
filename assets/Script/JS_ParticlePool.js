@@ -46,12 +46,12 @@ cc.Class({
     
     putBackPool:function(){
         // console.log("ParticlePool-->putBackPool");
-        var event = new cc.Event.EventCustom(EventType.InstanceFactoryDelete, true);
+        var event = new cc.Event.EventCustom(EventType.InstanceDelete, true);
         var userData = {};
         userData.target = this.node;
         userData.type = this.type;
         userData.pool = this.pool;
         event.setUserData(userData);
-        GlobalReference.InstanceFactory.dispatchEvent(event);
+        GlobalReference.GameInstance.dispatchEvent(event);
     },
 });

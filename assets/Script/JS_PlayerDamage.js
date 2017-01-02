@@ -21,7 +21,7 @@ cc.Class({
             type: EventType,
         },
         emit:{
-            default : EventType.InstanceFactoryChange,
+            default : EventType.InstanceChange,
             type: EventType,
         },
     },

@@ -44,22 +44,22 @@ cc.Class({
                 for(var key in this.pName){
                     userData[this.pName[key]] = this.pValue[key];
                 }
-                this.emitInstanceFactoryEvent(this.emit,userData);
+                this.emitInstanceManagerEvent(this.emit,userData);
                  return;
             },
         this);
     },
     
-    emitInstanceFactoryEvent:function(emit,userData){
+    emitInstanceManagerEvent:function(emit,userData){
         if(emit===undefined){
             return;
         }
         
-        // console.log("EmitterNumParameterAssist-->emitInstanceFactoryEvent",userData.index,userData.sss);
+        // console.log("EmitterNumParameterAssist-->emitInstanceManagerEvent",userData.index,userData.sss);
         var event = new cc.Event.EventCustom(emit, true);
         event.setUserData(userData);
         this.node.dispatchEvent(event);
-        // console.log("EmitterNumParameterAssist-->emitInstanceFactoryEvent",emit,userData.type);
+        // console.log("EmitterNumParameterAssist-->emitInstanceManagerEvent",emit,userData.type);
     },
 
     // called every frame, uncomment this function to activate update callback

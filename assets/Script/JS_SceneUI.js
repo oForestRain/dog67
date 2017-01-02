@@ -1,5 +1,4 @@
 var EventType = require("EventType");
-var InteractUIType = require("InteractUIType");
 var GlobalReference = require("GlobalReference");
 
 cc.Class({
@@ -45,15 +44,17 @@ cc.Class({
         // console.log("SceneUI-->showUI");
         var userData = event.getUserData();
         event = new cc.Event.EventCustom(EventType.ManagerInteractUI, true );
+        userData.show = true;
         event.setUserData(userData);
-        GlobalReference.UIManager.dispatchEvent(event);
+        GlobalReference.GameInstance.dispatchEvent(event);
     },
 
     hideUI : function (event) {
         // console.log("SceneUI-->hideUI");
         var userData = event.getUserData();
         event = new cc.Event.EventCustom(EventType.ManagerInteractUI, true );
+        userData.show = false;
         event.setUserData(userData);
-        GlobalReference.UIManager.dispatchEvent(event);
+        GlobalReference.GameInstance.dispatchEvent(event);
     },
 });

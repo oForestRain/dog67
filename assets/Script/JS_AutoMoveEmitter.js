@@ -46,13 +46,13 @@ cc.Class({
                 var userData = event.getUserData();
                 // console.log("AutoMoveEmitter-->addEachListener",event,userData,userData.index,this.index);
                 if(this.index == userData.index){
-                    this.emitInstanceFactoryEvent(this.emits,userData);
+                    this.emitInstanceManagerEvent(this.emits,userData);
                 }
             },
         this);
     },
 
-    emitInstanceFactoryEvent:function(emits,userData){
+    emitInstanceManagerEvent:function(emits,userData){
         if(emits===undefined){
             return;
         }
@@ -64,7 +64,7 @@ cc.Class({
             event = new cc.Event.EventCustom(emit, true);
             event.setUserData(userData);
             this.node.dispatchEvent(event);
-            // console.log("AutoMoveEmitter-->emitInstanceFactoryEvent",emit);
+            // console.log("AutoMoveEmitter-->emitInstanceManagerEvent",emit);
         }
     },
 

@@ -1,5 +1,3 @@
-var EventType = require("EventType");
-var PrefabType = require("PrefabType");
 var GlobalReference = require("GlobalReference");
 
 cc.Class({
@@ -16,119 +14,37 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
-        // actor : {
-        //     default : null,
-        //     type: cc.Node,
-        // },
-        playerParent : {
-            default : null,
-            type: cc.Node,
-        },
     },
 
     // use this for initialization
     onLoad: function () {
-        cc.director.setDisplayStats(true);
-        
         this.initListener();
-        
-        cc.director.getCollisionManager().enabled = true;
-        // cc.director.getCollisionManager().enabledDrawBoundingBox.enabled = true; 
-        cc.director.getCollisionManager().enabledDebugDraw = true;
-
-    },
-    
-    initListener : function(){
-        this.node.on(EventType.BrickPush, 
-            function (event) { 
-                this.brickPush(event);
-            },
-            this);
-        this.node.on(EventType.ResourceCollect, 
-            function (event) { 
-                this.resCollect(event);
-            },
-            this);
     },
  
     onEnable: function () {
+        // console.log("JS_SceneMode-->start");
         GlobalReference.SceneMode = this.node;
-        // GlobalReference.InputController = this.node;
-        // GlobalReference.CameraFollow = this.node;
-        // console.log("SceneMode-->onEnable",GlobalReference.InstanceFactory);
+        // this.initListener();
     },
     
     onDisable: function () {
-        var event = new cc.Event.EventCustom(EventType.InstancePlayerPut, true);
-        var userData={};
-        event.setUserData(userData);
-        GlobalReference.InstanceFactory.dispatchEvent(event);
+        // this.removeListener();
     },
     
     start: function () {
-        // console.log("SceneMode-->start");
-        var initData;
-        this.initPlayerInstance(initData);
+        console.log("JS_SceneMode-->start",GlobalReference.SceneMode);
     },
-    
-    initPlayerInstance: function (initData) {
-        // console.log("SceneMode--->initPlayerInstance");
-        var event = new cc.Event.EventCustom(EventType.InstancePlayerGet, true);
-        var userData={};
-        userData.initData = initData;
-        userData.parent = this.playerParent;
-        
-        userData.delegate = this;
-        userData.callback = this.initScene;
-        event.setUserData(userData);
-        GlobalReference.InstanceFactory.dispatchEvent(event);
-    },
-    
-    initScene: function (delegate,target) {
-        // console.log("SceneMode--->initScene",target);
-        if(target===undefined){
-            return;
-        }
-        GlobalReference.PlayerInstance = target;
-        delegate.setInputControllerTarget(target);
-        delegate.setCameraFollowTarget(target);
-        // console.log("SceneMode--->initScene");
-    },
-    
-    setInputControllerTarget: function (target) {
-        // console.log("SceneMode--->setInputControllerTarget",target);
-        var event = new cc.Event.EventCustom(EventType.InputControllerTarget, true);
-        var userData={};
-        userData.target = GlobalReference.PlayerInstance;
-        event.setUserData(userData);
-        GlobalReference.SceneMode.dispatchEvent(event);
-    },
-    
-    setCameraFollowTarget: function (target) {
-        // console.log("SceneMode--->setCameraFollowTarget",target);
-        var event = new cc.Event.EventCustom(EventType.CameraFollowTarget, true);
-        var userData={};
-        userData.target = GlobalReference.PlayerInstance;
-        event.setUserData(userData);
-        GlobalReference.SceneMode.dispatchEvent(event);
-    },
-    
-    brickPush: function (event) {
-        var userData = event.getUserData();
-        var actor = userData.actor;
-        var target = userData.other;
+
+    initListener: function () {
         
     },
-    
-    resCollect: function (event) {
-        var userData = event.getUserData();
-        var actor = userData.actor;
-        var target = userData.other;
-        
+
+    removeListener: function () {
+        this.targetOff(this);
     },
 
     // called every frame, uncomment this function to activate update callback
     // update: function (dt) {
-
+       
     // },
 });

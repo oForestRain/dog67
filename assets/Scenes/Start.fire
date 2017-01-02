@@ -1515,7 +1515,7 @@
     "target": {
       "__id__": 9
     },
-    "component": "JS_UIStart",
+    "component": "JS_S_Start",
     "handler": "btnStart",
     "customEventData": "MapSelect"
   },
@@ -1561,7 +1561,7 @@
     "_fitHeight": false
   },
   {
-    "__type__": "3d6edMQ+VBEJK4seQuut9Z7",
+    "__type__": "51ab3VcXG1A3bk9e4CuKadT",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -1570,7 +1570,7 @@
     "_enabled": true
   },
   {
-    "__type__": "cc662ZfqblG1rjFUQwk28OI",
+    "__type__": "966abH6LQdGI5zpVuaBYsMY",
     "_name": "",
     "_objFlags": 0,
     "node": {

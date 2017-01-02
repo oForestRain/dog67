@@ -404,9 +404,9 @@
     "target": {
       "__id__": 2
     },
-    "component": "JS_UIMapSelect",
+    "component": "JS_S_MapSelect",
     "handler": "btnSelect",
-    "customEventData": "Test1-1"
+    "customEventData": "LayerTest"
   },
   {
     "__type__": "cc.Canvas",
@@ -425,7 +425,7 @@
     "_fitHeight": true
   },
   {
-    "__type__": "4d90bRndcFGkIfDkyTnhPEo",
+    "__type__": "8aac0b7QxxIcbpRwLPAV7Wx",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -434,7 +434,7 @@
     "_enabled": true
   },
   {
-    "__type__": "cc662ZfqblG1rjFUQwk28OI",
+    "__type__": "966abH6LQdGI5zpVuaBYsMY",
     "_name": "",
     "_objFlags": 0,
     "node": {

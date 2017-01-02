@@ -32,14 +32,15 @@ var EventType =  cc.Enum({
     CameraFollowTarget:50,
     InputControllerTarget:51,
     
-    //instanceFactory
-    InstanceFactoryChange: 60,
-    InstanceFactoryAdd: 61,
-    InstanceFactoryDelete: 62,
+    //instanceManager
+    InstanceChange: 60,
+    InstanceAdd: 61,
+    InstanceDelete: 62,
     InstancePlayerGet: 63,
     InstancePlayerPut: 64,
     InstanceUIGet: 65,
     InstanceUIPut: 66,
+    InstanceSetData: 67,
     
     //sceneEnterEvent
     GameLoadingScene: 70,
@@ -67,6 +68,8 @@ var EventType =  cc.Enum({
     //playerInteractEvent
     PlayerDamage : 300,
     PlayerStep : 301,
+    PlayerLose : 302,
+    PlayerWin : 303,
     
     //emitterParameterEvent
     EmitterParameterEmit : 400,
@@ -80,17 +83,20 @@ var EventType =  cc.Enum({
     //GameEvent
     GameEvent: 600,
     GameState: 601,
+    ClientToSceneDataSynchronize: 602,
+    SceneToClientDataSynchronize: 603,
     
     //SceneEvent
-    ScenePause: 700,
-    SceneResume: 701,
+    SceneStart: 700,
+    ScenePause: 701,
     SceneSelect: 702,
     SceneRestart: 703,
     SceneNext: 704,
     SceneMapSelect: 705,
     SceneShowUI: 706,
     SceneHideUI: 707,
-    
+    SceneEnd: 708,
+    SceneWin: 709,
 });
 
 module.exports = EventType;

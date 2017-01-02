@@ -25,7 +25,7 @@ cc.Class({
             type: EventType,
         },
         emit:{
-            default : EventType.InstanceFactoryChange,
+            default : EventType.InstanceChange,
             type: EventType,
         },
         pool:true,
@@ -41,22 +41,22 @@ cc.Class({
     },
     
     initListener : function(){
-        // console.log("InstanceFactoryEmitter-->initListener",this.event);
+        // console.log("InstanceManagerEmitter-->initListener",this.event);
         this.addEachListener(this.event);
     },
     
     addEachListener:function(event){
         this.node.on(event, 
             function (event) {
-                // console.log("InstanceFactoryEmitter-->addEachListener",event);
+                // console.log("InstanceManagerEmitter-->addEachListener",event);
                 var userData = event.getUserData();
-                this.emitInstanceFactoryEvent(this.emit,userData);
+                this.emitInstanceManagerEvent(this.emit,userData);
                 return;
             },
         this);
     },
 
-    emitInstanceFactoryEvent:function(emit,userData){
+    emitInstanceManagerEvent:function(emit,userData){
         if(emit===undefined){
             return;
         }
@@ -69,9 +69,9 @@ cc.Class({
         userData.prefabType = this.prefabType;
         userData.position = this.node.position;
         event.setUserData(userData);
-        GlobalReference.InstanceFactory.dispatchEvent(event);
+        GlobalReference.GameInstance.dispatchEvent(event);
         
-        // console.log("InstanceFactoryEmitter-->emitInstanceFactoryEvent",emit,userData.type);
+        // console.log("InstanceManagerEmitter-->emitInstanceManagerEvent",emit,userData.type);
     },
 
     // called every frame, uncomment this function to activate update callback

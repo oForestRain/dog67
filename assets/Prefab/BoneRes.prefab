@@ -39,8 +39,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 3,
-      "y": 86
+      "x": 0,
+      "y": 0
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -77,13 +77,10 @@
       },
       {
         "__id__": 11
-      },
-      {
-        "__id__": 12
       }
     ],
     "_prefab": {
-      "__id__": 13
+      "__id__": 12
     },
     "groupIndex": 4
   },
@@ -182,7 +179,7 @@
   {
     "__type__": "JS_InteractEmitterAssist",
     "event": 11,
-    "direction": [],
+    "part": [],
     "group": [
       1
     ],
@@ -201,18 +198,6 @@
     "emit": 62,
     "pool": true,
     "prefabType": 0
-  },
-  {
-    "__type__": "de592s53NhKxKN46x0z0nqA",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "type": 4,
-    "event": 101,
-    "emit": 201
   },
   {
     "__type__": "ffb8cgDAmBJ4aIoMAGc0vST",

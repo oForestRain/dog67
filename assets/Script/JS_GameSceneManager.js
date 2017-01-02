@@ -56,8 +56,6 @@ cc.Class({
     },
     
     onEnable: function () {
-        GlobalReference.SceneManager = this.node;
-        
         // console.log("GameSceneManager--->onEnable");
     },
     
@@ -69,17 +67,7 @@ cc.Class({
 
     // },
     
-    resumeGame :function(){
-        var event = new cc.Event.EventCustom(EventType.GameState, true );
-        var userData={};
-        userData.type = GameStateType.Resume;
-        event.setUserData(userData);
-        GlobalReference.GameStateManager.dispatchEvent(event);
-    },
-    
-    gameLoadingScene:function(event){
-        this.resumeGame();
-        
+    gameLoadingScene:function(event){        
         var userData = event.getUserData();
         var loadingName = this.sceneName[SceneType.Loading];
         cc.director.loadScene(loadingName);

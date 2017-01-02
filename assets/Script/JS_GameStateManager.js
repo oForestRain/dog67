@@ -1,6 +1,5 @@
 var EventType = require("EventType");
 var GameStateType = require("GameStateType");
-var UIType = require("UIType");
 var GlobalReference = require("GlobalReference");
 
 cc.Class({
@@ -35,8 +34,6 @@ cc.Class({
     },
     
      onEnable: function () {
-        GlobalReference.GameStateManager = this.node;
-        
         // console.log("GameStateManager--->onEnable");
     },
 
@@ -53,36 +50,31 @@ cc.Class({
         if(type == GameStateType.Pause){
             this.pauseGame();
         }
-        else if(type == GameStateType.Resume){
+        else if(type == GameStateType.Gaming){
             this.resumeGame();
         }
+        else if(type == GameStateType.Over){
+            this.overGame();
+        }
+    },
+
+    startGame : function () {
+        // console.log("GameStateManager-->resumeGame");
+        
     },
     
     pauseGame : function () {
         // console.log("GameStateManager-->pauseGame");
-        if(cc.game.isPaused()===true){
-            return;
-        }
         
-        this.enableInput(false);
-        cc.game.pause();
     },
 
     resumeGame : function () {
         // console.log("GameStateManager-->resumeGame");
-        if(cc.game.isPaused()===false){
-            return;
-        }
         
-        this.enableInput(true);
-        cc.game.resume();
     },
-    
-    enableInput : function (enable) {
-        var event = new cc.Event.EventCustom(EventType.InputControllerEnable, true );
-        var userData = {};
-        userData.enable = enable;
-        event.setUserData(userData);
-        GlobalReference.InputController.dispatchEvent(event);
+
+    overGame : function () {
+        // console.log("GameStateManager-->resumeGame");
+        
     },
 });

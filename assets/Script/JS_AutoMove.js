@@ -1,7 +1,6 @@
 var EventType = require("EventType");
 var DirectionType = require("DirectionType");
 
-
 cc.Class({
     extends: cc.Component,
 

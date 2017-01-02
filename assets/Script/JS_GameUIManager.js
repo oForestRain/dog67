@@ -1,6 +1,6 @@
 var EventType = require("EventType");
 var UIType = require("UIType");
-var InteractUIType = require("InteractUIType");
+var InteractUIGroup = require("InteractUIGroup");
 var GlobalReference = require("GlobalReference");
 
 cc.Class({
@@ -62,7 +62,6 @@ cc.Class({
     
     onEnable: function () {
         // console.log("GameUIManager-->onEnable");
-        GlobalReference.UIManager = this.node;
     },
     
     // called every frame, uncomment this function to activate update callback
@@ -72,17 +71,18 @@ cc.Class({
     
     managerInteractUI: function (event) {
         var userData = event.getUserData();
-        var interactUIType = userData.interactUIType;
+        var interactUIGroup = userData.interactUIGroup;
         var show = userData.show;
         var uiType;
         var data;
-        // console.log("GameUIManager-->managerInteractUI",interactUIType);
-        if(interactUIType==InteractUIType.GamePause){
+        // console.log("GameUIManager-->managerInteractUI",interactUIGroup);
+        if(interactUIGroup==InteractUIGroup.GamePause){
             if(show===undefined||show===true){
                 data = {};
                 data.prefabType = UIType.SceneOver;
                 data.root = cc.find("Canvas");
                 data.position = new cc.Vec2(0,0);
+                data.state = interactUIGroup;
                 this.showUI(data);
             }
             else if(show===false){
@@ -92,8 +92,24 @@ cc.Class({
                 this.hideUI(data);
             }
         }
-        else if(interactUIType==InteractUIType.GameResume){
+        else if(interactUIGroup==InteractUIGroup.GameRun){
             if(show===undefined||show===true){
+                data = {};
+                data.prefabType = UIType.SceneOver;
+                data.pool = true;
+                this.hideUI(data);
+            }
+        }
+        else if(interactUIGroup==InteractUIGroup.GameOver){
+            if(show===undefined||show===true){
+                data = {};
+                data.prefabType = UIType.SceneOver;
+                data.root = cc.find("Canvas");
+                data.position = new cc.Vec2(0,0);
+                data.state = interactUIGroup;
+                this.showUI(data);
+            }
+            else if(show===false){
                 data = {};
                 data.prefabType = UIType.SceneOver;
                 data.pool = true;
@@ -103,7 +119,7 @@ cc.Class({
     },
     
     managerCloseAll: function (event) {
-        // console.log("GameUIManager-->managerCloseAll",interactUIType);
+        // console.log("GameUIManager-->managerCloseAll",InteractUIGroup);
         var len = this.showUIArray.length;
         var userData = {};
         for(var i=0;i<len;i++){
@@ -117,6 +133,7 @@ cc.Class({
         var root = userData.root;
         var prefabType = userData.prefabType;
         var position = userData.position;
+        var state = userData.state;
 
         // console.log("GameUIManager-->showUI",target,prefabType,position);
         
@@ -129,7 +146,7 @@ cc.Class({
         }
         
         prefabInstance.parent = root;
-        
+
         this.showUIArray[prefabType] = prefabInstance;
         // console.log("GameUIManager-->showUI",prefabInstance.position,prefabInstance.parent);
     },
@@ -139,10 +156,8 @@ cc.Class({
         var prefabType = userData.prefabType;
         var pool = userData.pool;
         
-        // var spliceArray = this.showUIArray.splice(prefabType,1);
-        // var prefabInstance = spliceArray[0];
-        var prefabInstance = this.showUIArray.splice(prefabType,1)[0];
-        // console.log("GameUIManager-->hideUI",prefabInstance,spliceArray);
+        var prefabInstance = this.showUIArray[prefabType];
+        // console.log("GameUIManager-->hideUI",prefabInstance);
         
         if(pool){
             this.putBackPrefab(prefabType,prefabInstance);
@@ -150,6 +165,8 @@ cc.Class({
         else{
             target.destroy();
         }
+
+        this.showUIArray[prefabType] = null;
     },
     
     getPrefab: function (type) {

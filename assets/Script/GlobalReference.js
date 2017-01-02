@@ -5,11 +5,11 @@ var GlobalReference =  {
     //     type: JS_GameInstance,
     // },
     
-    SceneManager:null,
+    // SceneManager:null,
     Loading:null,
-    InstanceFactory : null,
-    UIManager : null,
-    GameStateManager:null,
+    // InstanceManager : null,
+    // UIManager : null,
+    // GameStateManager:null,
     
     SceneMode:null,
     InputController : null,

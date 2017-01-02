@@ -168,15 +168,14 @@ cc.Class({
         this.speed = new cc.Vec2(0,0);
         this.anchorPosition = {x:false,y:false};
         this.ifFocusing = {x:false,y:false};
-        
-        this.setActorTarget(this.actor);
+
         // console.log("CameraFollow--->initParameter",this.boundary,this.focusBasePos);
     },
     
     // called every frame, uncomment this function to activate update callback
     update: function (dt) {
         // console.log("CameraFollow--->update");
-        if( this.enable!==true){
+        if(this.enable===false||this.target===undefined){
             return;
         }
         

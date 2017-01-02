@@ -30,12 +30,9 @@ cc.Class({
     },
     
     onEnable: function () {
-        GlobalReference.InputController = this.node;
+        // GlobalReference.InputController = this.node;
         
-        this.enable = this.activeOnEnable;
-        
-        this.setActorTarget(this.actor);
-        
+        this.enable = this.activeOnEnable;        
         // console.log("InputController--->onEnable");
     },
     
@@ -133,7 +130,7 @@ cc.Class({
     
     mLeft: function() {
         // console.log("InputController--->mLeft",this.enable);
-        if(this.enable===false){
+        if(this.enable===false||this.target===undefined){
             return;
         }
         var event = new cc.Event.EventCustom(EventType.ActorMove, true );
@@ -141,13 +138,12 @@ cc.Class({
         userData.direction = DirectionType.Left;
         event.setUserData(userData);
 
-        // console.log("InputController--->mLeft",this.target,event.type,userData.direction);
-        
+        // console.log("InputController--->mLeft",this.target,event.type,userData.direction);        
         this.target.dispatchEvent( event );
     },
 
     mRight: function() {
-        if(this.enable===false){
+        if(this.enable===false||this.target===undefined){
             return;
         }
         var event = new cc.Event.EventCustom(EventType.ActorMove, true );
@@ -161,7 +157,7 @@ cc.Class({
     },
     
     mJump: function() {
-        if(this.enable===false){
+        if(this.enable===false||this.target===undefined){
             return;
         }
         var event = new cc.Event.EventCustom(EventType.ActorJump, true );
@@ -172,32 +168,38 @@ cc.Class({
     },
     
     mLeftStop: function() {
+        if(this.enable===false||this.target===undefined){
+            return;
+        }
         var event = new cc.Event.EventCustom(EventType.ActorMoveStop, true );
         var userData = {};
         userData.direction = DirectionType.Left;
         event.setUserData(userData);
         
-        // console.log(event.type,userData.direction);
-        
+        // console.log(event.type,userData.direction);        
         this.target.dispatchEvent( event );
     },
     
     mRightStop: function() {
+        if(this.enable===false||this.target===undefined){
+            return;
+        }
         var event = new cc.Event.EventCustom(EventType.ActorMoveStop, true );
         var userData = {};
         userData.direction = DirectionType.Right;
         event.setUserData(userData);
         
-        // console.log(event.type,userData.direction);
-        
+        // console.log(event.type,userData.direction);        
         this.target.dispatchEvent( event );
     },
     
     mJumpStop: function() {
+        if(this.enable===false||this.target===undefined){
+            return;
+        }
         var event = new cc.Event.EventCustom(EventType.ActorJumpStop, true );
         
-        // console.log(event.type);
-        
+        // console.log(event.type);        
         this.target.dispatchEvent( event );
     },
 
