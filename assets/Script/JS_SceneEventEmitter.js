@@ -53,8 +53,9 @@ cc.Class({
         }
         
         var event = new cc.Event.EventCustom(emit, true);
+        userData.node = this.node;
         event.setUserData(userData);
-        GlobalReference.SceneMode.dispatchEvent(event);        
+        GlobalReference.SceneMode.dispatchEvent(event);
         // console.log("JS_SceneEventEmitter-->emitSceneModeEvent",emit,event,GlobalReference.SceneMode);
     },
 

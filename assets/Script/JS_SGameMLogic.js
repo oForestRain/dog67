@@ -33,6 +33,21 @@ cc.Class({
                 this.resCollect(event);
             },
             this);
+        this.node.on(EventType.PlayerDie, 
+            function (event) {
+                this.playerDie(event);
+            },
+            this);
+        this.node.on(EventType.VictoryFlag, 
+            function (event) { 
+                this.victoryFlag(event);
+            },
+            this);
+        this.node.on(EventType.SceneCheckpoint, 
+            function (event) {
+                this.setChekcpoint(event);
+            },
+            this);
     },
  
     onEnable: function () {
@@ -60,5 +75,27 @@ cc.Class({
         var actor = userData.actor;
         var target = userData.other;
         
-    },    
+    },
+
+    playerDie: function (event) {
+        var userData = event.getUserData();
+        var event = new cc.Event.EventCustom(EventType.SceneEnd, true);
+        event.setUserData(userData);
+        GlobalReference.SceneMode.dispatchEvent(event);
+    },
+
+    victoryFlag: function (event) {
+        var userData = event.getUserData();
+        var event = new cc.Event.EventCustom(EventType.SceneWin, true);
+        event.setUserData(userData);
+        GlobalReference.SceneMode.dispatchEvent(event);
+    },
+
+    setChekcpoint: function (event) {
+        var userData = event.getUserData();
+        var checkpoint = userData.node;
+        GlobalReference.Checkpoint = checkpoint;
+    },
+
+    
 });

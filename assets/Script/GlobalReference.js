@@ -16,6 +16,7 @@ var GlobalReference =  {
     CameraFollow : null,
     PlayerInstance : null,
     NextScene:null,
+    Checkpoint:null,
 }
 
 module.exports = GlobalReference;

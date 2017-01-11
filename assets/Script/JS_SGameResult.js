@@ -65,5 +65,14 @@ cc.Class({
 
     sceneWin : function (event) {
         // console.log("JS_SGameResult-->sceneWin");
+        var userData = {};
+        var event = new cc.Event.EventCustom(EventType.SceneShowUI, true );
+        userData.interactUIGroup = InteractUIGroup.GameOver;
+        event.setUserData(userData);
+        GlobalReference.SceneMode.dispatchEvent(event);
+        
+        event = new cc.Event.EventCustom(EventType.ScenePause, true );
+        // event.setUserData(userData);
+        GlobalReference.SceneMode.dispatchEvent(event);
     },
 });

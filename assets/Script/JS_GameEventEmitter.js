@@ -53,6 +53,7 @@ cc.Class({
         }
         
         var event = new cc.Event.EventCustom(emit, true);
+        userData.node = this.node;
         event.setUserData(userData);
         GlobalReference.GameInstance.dispatchEvent(event);        
     },

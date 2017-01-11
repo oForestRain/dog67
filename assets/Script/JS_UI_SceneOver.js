@@ -86,6 +86,20 @@ cc.Class({
         this.sceneResume();
     },
     
+    btnContinue : function(event,data){
+        // console.log("UISceneOver--->btnContinue",data);
+        var userData = {};
+        event = new cc.Event.EventCustom(EventType.SceneShowUI, true );
+        userData.interactUIGroup = InteractUIGroup.GameRun;
+        event.setUserData(userData);
+        GlobalReference.SceneMode.dispatchEvent(event);
+        event = new cc.Event.EventCustom(EventType.PlayerRespawn, true );
+        event.setUserData(userData);
+        GlobalReference.SceneMode.dispatchEvent(event);
+
+        this.sceneResume();
+    },
+    
     btnNext : function(event,data){
         // console.log("UISceneOver--->btnNext",data);
         this.sceneResume();

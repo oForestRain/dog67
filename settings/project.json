@@ -5,11 +5,13 @@
       false,
       false,
       false,
+      false,
       false
     ],
     [
       false,
       false,
+      true,
       true,
       true,
       true
@@ -19,11 +21,21 @@
       true,
       false,
       true,
+      false,
+      true
+    ],
+    [
+      false,
+      true,
+      true,
+      false,
+      true,
       false
     ],
     [
       false,
       true,
+      false,
       true,
       false,
       true
@@ -31,9 +43,10 @@
     [
       false,
       true,
+      true,
       false,
       true,
-      false
+      true
     ]
   ],
   "excluded-modules": [],
@@ -42,7 +55,8 @@
     "Player",
     "Enemy",
     "Terrain",
-    "Resource"
+    "Resource",
+    "Trigger"
   ],
   "start-scene": "current"
 }

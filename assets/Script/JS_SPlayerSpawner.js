@@ -30,11 +30,15 @@ cc.Class({
     },
     
     initListener : function(){
-
+        this.node.on(EventType.PlayerRespawn, 
+            function (event) { 
+                this.resetAtCheckpoint(event);
+            },
+            this);
     },
  
     onEnable: function () {
-
+        GlobalReference.Checkpoint = this.playerSpawnLayer;
     },
     
     onDisable: function () {
@@ -49,11 +53,20 @@ cc.Class({
     start: function () {
         // console.log("JS_SPlayerSpawner-->start");
         var initData;
-        this.initPlayerInstance(initData);
+        this.spawnPlayerInstance(initData);        
     },
-    
-    initPlayerInstance: function (initData) {
-        // console.log("JS_SPlayerSpawner--->initPlayerInstance");
+
+    resetAtCheckpoint: function (event) {
+        // console.log("JS_SPlayerSpawner-->resetAtCheckpoint");
+        var initData;
+        var checkpoint = GlobalReference.Checkpoint;
+        var checkpointPosWorld = checkpoint.parent.convertToWorldSpaceAR(checkpoint.position);
+        var playerCheckpointPos = this.playerSpawnLayer.convertToNodeSpaceAR(checkpointPosWorld);
+        GlobalReference.PlayerInstance.position = playerCheckpointPos;
+    },
+
+    spawnPlayerInstance: function (initData) {
+        // console.log("JS_SPlayerSpawner--->spawnPlayerInstance");
         var event = new cc.Event.EventCustom(EventType.InstancePlayerGet, true);
         var userData={};
         userData.initData = initData;

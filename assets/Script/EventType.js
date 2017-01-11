@@ -97,6 +97,10 @@ var EventType =  cc.Enum({
     SceneHideUI: 707,
     SceneEnd: 708,
     SceneWin: 709,
+    PlayerDie: 710,
+    VictoryFlag: 711,
+    SceneCheckpoint: 712,
+    PlayerRespawn: 713,
 });
 
 module.exports = EventType;
